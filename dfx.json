@@ -1,0 +1,40 @@
+{
+    "dfx": "0.12.1",
+    "defaults": {
+        "build": {
+            "packtool": "npm run --silent sources"
+        }
+    },
+    "canisters": {
+        "joinedafrica": {
+          "main": "joinedafrica/main.mo",
+          "type": "motoko"
+        },
+        "post_assets":{
+          "type": "assets",
+          "source": []
+        },
+        "frontend": {
+            "dependencies": [
+                "joinedafrica",
+                "internet_identity",
+                "post_assets"
+              ],
+            "type": "assets",
+            "frontend": {
+                "entrypoint": "dist/index.html"
+            },
+            "source": ["dist/"]
+      },
+      "internet_identity": {
+        "type": "custom",
+        "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+        "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm",
+        "remote": {
+          "id": {
+            "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+          }
+        }
+      }
+    }
+}
