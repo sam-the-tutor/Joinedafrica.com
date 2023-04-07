@@ -6,6 +6,11 @@ import { defineConfig } from 'vite';
 const localNetwork = 'local';
 const network = process.env['DFX_NETWORK'] || localNetwork;
 
+const internetIdentityUrl =
+  network === "local"
+    ? `http://localhost:4943?canisterId=rrkah-fqaaa-aaaaa-aaaaq-cai`
+    : "https://identity.ic0.app/#authorize";  
+
 let canisterIdPath: string;
 if (network === localNetwork) {
   // Local replica canister IDs
@@ -22,12 +27,14 @@ if (!existsSync(canisterIdPath)) {
 }
 const canisterIds = JSON.parse(readFileSync(canisterIdPath, 'utf8'));
 
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   define: {
     global: 'window',
     'process.env.DFX_NETWORK': JSON.stringify(process.env.DFX_NETWORK),
+    'process.env.INTERNET_IDENTITY_URL': JSON.stringify(internetIdentityUrl),
     // Expose canister IDs provided by `dfx deploy`
     ...Object.fromEntries(
       Object.entries(canisterIds).map(([name, ids]) => [

@@ -16,10 +16,12 @@ import {
   SearchIconCmp,
 } from "../../styling/appStructure/Header";
 import { Link } from "react-router-dom";
-import { InternetIdentityAuthentication } from "../../util/auth";
+import {
+  InternetIdentityAuthentication,
+  getAuthenticatedUser,
+} from "../../util/auth";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
-import { joinedafrica } from "../../declarations/joinedafrica";
 
 export default function Header() {
   //users principal
@@ -37,9 +39,11 @@ export default function Header() {
       //making sure the actor isn't null.
       if (principal.length > 0) {
         setIsLoading(true);
-        let result = await joinedafrica.getUserProfile();
+        const authenticatedUser = await getAuthenticatedUser();
+        let result = await authenticatedUser.getUserProfile();
+        console.log(result);
         if (result?.err) {
-          alert(result.err);
+          alert("User not found");
         } else {
           const profile = { ...result.ok };
           //encrypt the users email, principalId and profilePicture only as they are confidential.

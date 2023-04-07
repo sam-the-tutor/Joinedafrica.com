@@ -64,6 +64,7 @@ module {
                 case (?list) List.toArray(list);
             };
         };
+
         //based on the category and sub category, add this post id in the list
         func publishPost(post : Post) : Result.Result<(), Error> {
             //getting the correct category the post is associated to

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Container, TextField, Box, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { InternetIdentityAuthentication } from "../../util/auth";
+import {
+  InternetIdentityAuthentication,
+  getAuthenticatedUser,
+} from "../../util/auth";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { useNavigate } from "react-router-dom";
 import {
@@ -62,14 +65,16 @@ export default function CreateProfile() {
     setSessionStorage("profilePicture", key, true);
     setSessionStorage("isLoggedIn", "true", false);
 
-    let result = await joinedafrica.createUserProfile(createdProfile);
+    const authenticatedUser = await getAuthenticatedUser();
+    let result = await authenticatedUser.createUserProfile(createdProfile);
+
     if (result?.err) {
       //the user is trying to create an account with the same identity
       sessionStorage.clear();
       //remove the image we just saved from the post canister
       await removeFileFromPostAssetCanister(key);
       //handle the error
-      alert(result.err);
+      alert("User already exists");
     } else {
       navigate("/home");
     }

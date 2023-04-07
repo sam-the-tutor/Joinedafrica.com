@@ -1,5 +1,6 @@
 import React from "react";
 import { AES, enc } from "crypto-js";
+
 /**
  * Exact produduct specification extacts the product specification details provided by the user
  * @param {*} response Response is the post we get from the backend

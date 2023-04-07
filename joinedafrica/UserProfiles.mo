@@ -36,12 +36,16 @@ module {
                 case (?profile) #ok(profile);
             };
         };
-        func userHasCreatedProfile(caller : UserId) : Bool {
+        public func userHasCreatedProfile(caller : UserId) : Bool {
             switch (Trie.get(userProfiles, key(caller), Principal.equal)) {
                 case null false;
                 case (?profile) true;
             };
 
+        };
+        //test method
+        public func getAllUsers() : [UserId]{
+            Trie.toArray<UserId, Profile, UserId>(userProfiles, func(k, v) = k);
         };
         //system method for saving user id and thier profile in stable memory before upgrading the canister
         public func preupgrade() : [(UserId, Profile)] {

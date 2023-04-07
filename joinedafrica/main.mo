@@ -24,8 +24,6 @@ shared ({ caller = initializer }) actor class () {
   type Subcategory = Type.Subcategory;
   type Error = Type.Error;
 
-  stable var deployerOfCanister : UserId = initializer;
-
   /**
     All data structures 
   */
@@ -45,13 +43,17 @@ shared ({ caller = initializer }) actor class () {
 
   //new users have to create their profile to gain more access to the site.
   public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
+    Debug.print("creating user profile");
+    Debug.print(debug_show(caller));
     userProfiles.createUserProfile(profile, caller);
   };
 
   public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-    if (not (utils.isUserAuthorized(caller, deployerOfCanister))) {
-      return #err(#UnAuthorizedUser);
-    };
+        Debug.print("geeting user profile");
+  Debug.print(debug_show(caller));
+    // if (not (utils.isUserAuthorized(caller))) {
+    //   return #err(#UnAuthorizedUser);
+    // };
     userProfiles.getUserProfile(caller);
   };
 
@@ -59,9 +61,7 @@ shared ({ caller = initializer }) actor class () {
   The methods below are for my Postings.
 */
   public shared ({ caller }) func createPost(post : Post) : async Result<(), Error> {
-    // assert Principal.equal(caller, deployerOfCanister);
-    // assert not Principal.isAnonymous(caller);
-    if (not (utils.isUserAuthorized(caller, deployerOfCanister))) {
+    if (not (utils.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     posts.createPost(post, caller);
@@ -69,21 +69,19 @@ shared ({ caller = initializer }) actor class () {
 
   };
   public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    // assert Principal.equal(caller, deployerOfCanister);
-    // assert not Principal.isAnonymous(caller);
-    if (not (utils.isUserAuthorized(caller, deployerOfCanister))) {
+    if (not (utils.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     #ok(posts.getAllMyPostings(caller));
   };
   public shared query ({ caller }) func getPost(id : PostId) : async Result<Post, Error> {
-      if (not (utils.isUserAuthorized(caller, deployerOfCanister))) {
+      if (not (utils.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
      posts.getPostById(id);
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
-    if (not (utils.isUserAuthorized(caller, deployerOfCanister))) {
+    if (not (utils.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     posts.markPostAsPublished(updatedPost, caller);
@@ -119,6 +117,9 @@ shared ({ caller = initializer }) actor class () {
   };
   public shared query ({ caller }) func getAllPostIds() : async [PostId] {
     posts.getAllPostIds(caller);
+  };
+  public  shared query func getAllUsersId() : async [UserId] {
+    userProfiles.getAllUsers();
   };
 
   //system method. Saving all the posts and user profiles in stable memory whenever we upgrade our canister.
