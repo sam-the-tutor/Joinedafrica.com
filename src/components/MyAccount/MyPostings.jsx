@@ -7,7 +7,7 @@ import {
   getFromSessionStorage,
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { getAuthenticatedUser } from "../../util/auth";
 //display all my postings
 export default function MyPostings() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +18,13 @@ export default function MyPostings() {
   useEffect(() => {
     async function getAllMyPostings() {
       setIsLoading(true);
-      const post = await joinedafrica.getAllMyPostings();
-      setMyPostings(post);
+      const authenticatedUser = await getAuthenticatedUser();
+      const post = await authenticatedUser.getAllMyPostings();
+      if (post?.err) {
+        alert("User is not authorized");
+        return;
+      }
+      setMyPostings(post.ok);
       const file = await getFileFromPostAssetCanister(
         getFromSessionStorage("profilePicture", true)
       );

@@ -488,7 +488,7 @@ export function CreatePostSpecificationForm(
           clickedValue={(type) => setType(type)}
         />
         <MultiSelect
-          name="Number of plosts"
+          name="Number of plots"
           listOfElements={filteringInformation.Number_of_Plots}
           clickedValue={(plots) => setNumberOfPlots(plots)}
         />

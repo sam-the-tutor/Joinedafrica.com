@@ -2,6 +2,11 @@
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 
+/**
+ * In order to view the post_asset canister in candid UI locally, paste this link in the browser
+ * http://127.0.0.1:4943/?canisterId=rno2w-sqaaa-aaaaa-aaacq-cai&id=rkp4c-7iaaa-aaaaa-aaaca-cai
+ * http://localhost:4943/?canisterId=<Candid_UI_CanisterId>&id=<post_asset_canisterId>
+ */
 const canisterId = process.env.POST_ASSETS_CANISTER_ID; // Canister id of the post asset canister
 const agent = new HttpAgent(); // Agent with an authorized identity
 
@@ -22,8 +27,8 @@ const assetManager = new AssetManager({
  *
  * @param {*} file The file to upload to the post asset canister
  * @param {*} pathToFile The path to the file. Every path has the structure.
- * Profile picture path starts like this "<user-principal-id>/profile/<file name>"
- * images associated with a posts starts like this "<user-principal-id>/post/<post-id>"
+ * Profile picture path starts like this "<user-principal-id>/profile/<uniqueId>/"
+ * images associated with a posts starts like this "<user-principal-id>/post/<uniqueId>/"
  *
  * after deploying locally, run this command to authorize the post_asset canister
  * dfx canister call post_assets authorize '(principal "2vxsx-fae")'
@@ -33,7 +38,10 @@ const assetManager = new AssetManager({
  * dfx canister --network ic call post_assets authorize '(principal "2vxsx-fae")'
  */
 export async function uploadFileToPostAssetCanister(file, pathToFile) {
-  const key = await assetManager.store(file, { path: pathToFile });
+  const key = await assetManager.store(file, {
+    fileName: "",
+    path: pathToFile,
+  });
   return key;
 }
 

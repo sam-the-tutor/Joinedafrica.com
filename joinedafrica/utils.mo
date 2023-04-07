@@ -4,7 +4,6 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import List "mo:base/List";
 import DatabaseStructure "DatabaseStructure";
-import profiles "UserProfiles";
 module {
     type UserId = Types.UserId;
     type Category = Types.Category;
@@ -12,11 +11,6 @@ module {
     type Database = Types.Database;
     type Post = Types.Post;
     type PostId = Types.PostId;
-
-
-    public func isUserAuthorized(caller : UserId) : Bool {
-        return profiles.UserProfiles().userHasCreatedProfile(caller) and not Principal.isAnonymous(caller);
-    };
 
     /**
         createDatabase initialises the category with another Trie and subcategory with list of post ids

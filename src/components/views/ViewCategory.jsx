@@ -17,6 +17,8 @@ import {
   TypographyCmp,
 } from "../../styling/appStructure/LeftBar";
 import Top10Posts from "./Top10Posts";
+import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
+import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
@@ -32,14 +34,38 @@ export default function ViewCategory() {
   useEffect(() => {
     async function getPostings() {
       setLoading(true);
+      // const authenticatedUser = await getAuthenticatedUser();
       const postings = await joinedafrica.getTop10SubcategoryPostingsInCategory(
         categoryName
       );
-      if (postings?.ok) {
-        setTop10Posts(postings.ok);
-      } else {
-        alert("An error occurred");
-      }
+      const nonEmptySubcategory = postings.ok.filter(
+        (posting) => posting.post.length > 0
+      );
+      const top10Subategories = [];
+      Promise.all(
+        nonEmptySubcategory.map((posting) => {
+          const subcatgory = [];
+          posting.post.map(async (createdPost) => {
+            const creatorOfPost = await joinedafrica.getUserProfilePicture(
+              createdPost.creatorOfPostId
+            );
+            const iamgeFile = await getFileFromPostAssetCanister(
+              creatorOfPost.ok.profilePicture
+            );
+            subcatgory.push({
+              ...createdPost,
+              creatorProfilePicture: createObjectURLFromArrayOfBytes(
+                iamgeFile._content
+              ),
+            });
+          });
+          top10Subategories.push({
+            subCategoryName: posting.subCategoryName,
+            post: subcatgory,
+          });
+        })
+      );
+      setTop10Posts(top10Subategories);
       setLoading(false);
     }
     getPostings();

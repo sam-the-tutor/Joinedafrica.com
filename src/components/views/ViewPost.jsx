@@ -11,6 +11,7 @@ import {
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { MessageCmp } from "../../styling/views/ViewPost";
+import { getAuthenticatedUser } from "../../util/auth";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -27,11 +28,12 @@ export default function ViewPost() {
     async function getPost() {
       setLoading(true);
       //the user might not be authenticated but may want to call getPost method
-      let response = await joinedafrica.getPost(postId);
+      const authorizedUser = await getAuthenticatedUser();
+      let response = await authorizedUser.getPost(postId);
       if (response?.ok) {
         setPost(response.ok);
       } else {
-        alert("An error occured");
+        alert("Post not found");
         return;
       }
 

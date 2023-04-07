@@ -38,6 +38,9 @@ export async function InternetIdentityAuthentication(setPrincipal) {
 }
 
 export async function getAuthenticatedUser() {
+  const days = BigInt(1);
+  const hours = BigInt(24);
+  const nanoseconds = BigInt(3600000000000);
   const authClient = await AuthClient.create();
   const identity = await authClient.getIdentity();
   return createActor(canisterId, {

@@ -59,10 +59,7 @@ module {
         };
         //this method is a testing method, and will be removed
         public func getAllPostIds(caller : UserId) : [PostId] {
-            switch (Trie.get(myPostings, hashKey(caller), Principal.equal)) {
-                case null [];
-                case (?list) List.toArray(list);
-            };
+            Trie.toArray<PostId, Post, PostId>(singlePosts, func(k, v) = k);
         };
 
         //based on the category and sub category, add this post id in the list
@@ -104,6 +101,7 @@ module {
                             while (index < arrayOfPostIds.size() and index < 11) {
                                 switch (getPostById(arrayOfPostIds[index])) {
                                     case (#ok(post)) {
+                                        
                                         top10Posts.add(post);
                                     };
                                     case (#err(failure)) return #err(#PostNotFound);

@@ -17,8 +17,7 @@ import {
   removeFileFromPostAssetCanister,
   uploadFileToPostAssetCanister,
 } from "../../util/postAssetCanisterFunctions";
-import { setSessionStorage } from "../../util/functions";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { getUniqueId, setSessionStorage } from "../../util/functions";
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -48,14 +47,14 @@ export default function CreateProfile() {
     }
     setIsLoading(true);
     const createdProfile = { ...userProfile };
-    const profileImagePath =
-      principal + "/profile/" + userProfile.profilePicture.name;
+    const profileImagePath = principal + "/profile/" + getUniqueId();
     const key = await uploadFileToPostAssetCanister(
       userProfile.profilePicture,
       profileImagePath
     );
     createdProfile.profilePicture = key;
     createdProfile.principalId = principal;
+    console.log(createdProfile);
 
     //encrypt the users email and principalId and profilePicture only as they are confidential.
     setSessionStorage("firstName", userProfile.firstName, false);

@@ -13,10 +13,10 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import { joinedafrica } from "../../declarations/joinedafrica";
 import SnackbarCmp from "./SnackbarCmp";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import { getFileFromPostAssetCanister } from "../postAssetCanisterFunctions";
+import { getAuthenticatedUser } from "../auth";
 
 /**
  * Postingcard is a container that shows the relevant details about a post
@@ -39,7 +39,12 @@ export default function PostingCard({ post, userProfile }) {
   async function markPostAsPublished() {
     setLoading(true);
     updatedPost.isPublished = true;
-    await joinedafrica.markPostAsPublished(updatedPost);
+    const authenticatedUser = await getAuthenticatedUser();
+    const post = await authenticatedUser.markPostAsPublished(updatedPost);
+    if (post?.err) {
+      alert("User is not authorized");
+      return;
+    }
     setUpdatedPost(updatedPost);
     setLoading(false);
     setShowSnackbarCmp(true);

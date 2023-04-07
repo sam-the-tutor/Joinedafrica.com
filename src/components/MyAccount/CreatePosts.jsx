@@ -18,7 +18,7 @@ import { PostImage } from "../../styling/MyAccount/CreatePosts";
 import { CreatePostSpecificationForm } from "../../util/posts/CreatePostSpecificationForm";
 import getPostSpecificationFromForm from "../../util/posts/GetPostSpecificationFromForm";
 import { Principal } from "@dfinity/principal";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { getAuthenticatedUser } from "../../util/auth";
 
 export default function CreatePost() {
   const categories = getCategoryNames();
@@ -139,7 +139,12 @@ export default function CreatePost() {
     );
 
     post.images = pathsToImages;
-    await joinedafrica.createPost(post);
+    const authenticatedUser = await getAuthenticatedUser();
+    const result = await authenticatedUser.createPost(post);
+    if (result?.err) {
+      alert("User is not authorized");
+      return;
+    }
     setIsLoading(false);
     setShowSnackbarCmp(true);
   }
