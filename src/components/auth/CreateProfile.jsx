@@ -54,7 +54,6 @@ export default function CreateProfile() {
     );
     createdProfile.profilePicture = key;
     createdProfile.principalId = principal;
-    console.log(createdProfile);
 
     //encrypt the users email and principalId and profilePicture only as they are confidential.
     setSessionStorage("firstName", userProfile.firstName, false);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Typography,
@@ -28,13 +28,13 @@ import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 export default function ViewCategory() {
   const { categoryName } = useParams();
   const [loading, setLoading] = useState(false);
-
   const [top10Posts, setTop10Posts] = useState([]);
 
   useEffect(() => {
     async function getPostings() {
       setLoading(true);
-      // const authenticatedUser = await getAuthenticatedUser();
+      //joinedafrica is making the call because the method it calls is public and doesn't
+      //need authorization
       const postings = await joinedafrica.getTop10SubcategoryPostingsInCategory(
         categoryName
       );
@@ -42,23 +42,31 @@ export default function ViewCategory() {
         (posting) => posting.post.length > 0
       );
       const top10Subategories = [];
-      Promise.all(
-        nonEmptySubcategory.map((posting) => {
+
+      //Looping through each subcategory and adding the profile picture of each posts createor in
+      //the top10Subcategories list
+      
+      await Promise.all(
+        nonEmptySubcategory.map(async (posting) => {
           const subcatgory = [];
-          posting.post.map(async (createdPost) => {
-            const creatorOfPost = await joinedafrica.getUserProfilePicture(
-              createdPost.creatorOfPostId
-            );
-            const iamgeFile = await getFileFromPostAssetCanister(
-              creatorOfPost.ok.profilePicture
-            );
-            subcatgory.push({
-              ...createdPost,
-              creatorProfilePicture: createObjectURLFromArrayOfBytes(
-                iamgeFile._content
-              ),
-            });
-          });
+          await Promise.all(
+            posting.post.map(async (createdPost) => {
+              const creatorOfPost = await joinedafrica.getUserProfilePicture(
+                createdPost.creatorOfPostId
+              );
+              console.log(creatorOfPost);
+              const iamgeFile = await getFileFromPostAssetCanister(
+                creatorOfPost.ok.profilePicture
+              );
+              subcatgory.push({
+                ...createdPost,
+                creatorProfilePicture: createObjectURLFromArrayOfBytes(
+                  iamgeFile._content
+                ),
+              });
+            })
+          );
+
           top10Subategories.push({
             subCategoryName: posting.subCategoryName,
             post: subcatgory,
@@ -100,7 +108,7 @@ export default function ViewCategory() {
                 <Top10Posts
                   key={index}
                   name={post.subCategoryName}
-                  array={post.post}
+                  posts={post.post}
                 />
               ))}
             </>

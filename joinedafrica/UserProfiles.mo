@@ -43,17 +43,17 @@ module {
             };
 
         };
-    public func isUserAuthorized(caller : UserId) : Bool {
-        return userHasCreatedProfile(caller) and not Principal.isAnonymous(caller);
-    };
+        public func isUserAuthorized(caller : UserId) : Bool {
+            return userHasCreatedProfile(caller) and not Principal.isAnonymous(caller);
+        };
 
         //test method
-        public func getAllUsers() : [UserId]{
+        public func getAllUsers() : [UserId] {
             Trie.toArray<UserId, Profile, UserId>(userProfiles, func(k, v) = k);
         };
         //test method
-        public func deleteUserProfile(user: UserId) {
-            userProfiles := Trie.remove(userProfiles, key (user), Principal.equal).0;
+        public func deleteUserProfile(user : UserId) {
+            userProfiles := Trie.remove(userProfiles, key(user), Principal.equal).0;
         };
         //system method for saving user id and thier profile in stable memory before upgrading the canister
         public func preupgrade() : [(UserId, Profile)] {

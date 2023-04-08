@@ -41,28 +41,31 @@ shared ({ caller = initializer }) actor class () {
     The methods below are for user profiles
   */
 
-  //new users have to create their profile to gain more access to the site.
+  /**
+  New users have to create their profile to gain more access to the site.
+  */
   public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
     Debug.print("creating user profile");
-    Debug.print(debug_show(caller));
+    Debug.print(debug_show (caller));
     userProfiles.createUserProfile(profile, caller);
   };
 
   public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-        Debug.print("geeting user profile");
-  Debug.print(debug_show(caller));
+    Debug.print("geeting user profile");
+    Debug.print(debug_show (caller));
     if (not (userProfiles.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     userProfiles.getUserProfile(caller);
   };
 
-//this function is only called by the canister (joined africa), 
-//all userIds are not annoymous and are in the registered list
-//we use this function to display top10Posts, and so on
-public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error>{
-      userProfiles.getUserProfile(userId);
-};
+  /**
+  This function is only called by the canister (joined africa) We use this function to display top10Posts, and so on
+*/
+  public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error> {
+    userProfiles.getUserProfile(userId);
+  };
+
   /**
   The methods below are for my Postings.
 */
@@ -75,16 +78,18 @@ public shared query func getUserProfilePicture(userId : UserId) : async Result<P
 
   };
   public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-            Debug.print("get all my postings");
-  Debug.print(debug_show(caller));
+    Debug.print("get all my postings");
+    Debug.print(debug_show (caller));
     if (not (userProfiles.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     #ok(posts.getAllMyPostings(caller));
   };
-  //this function is accessible to everybody and doens't need the caller to be authorized
+  /**
+  this function is accessible to everybody and doens't need the caller to be authorized
+  */
   public shared query func getPost(id : PostId) : async Result<Post, Error> {
-     posts.getPostById(id);
+    posts.getPostById(id);
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
     if (not (userProfiles.isUserAuthorized(caller))) {
@@ -117,18 +122,17 @@ public shared query func getUserProfilePicture(userId : UserId) : async Result<P
   /**
     The methods below are test methods
   */
-  //get the principal id of the caller
   public shared ({ caller }) func whoAmI() : async UserId {
     return caller;
   };
   public shared query ({ caller }) func getAllPostIds() : async [PostId] {
     posts.getAllPostIds(caller);
   };
-  public  shared query func getAllUsersId() : async [UserId] {
+  public shared query func getAllUsersId() : async [UserId] {
     userProfiles.getAllUsers();
   };
-  public func deleteUserProfile(user : UserId) : async(){
-        userProfiles.deleteUserProfile(user);
+  public func deleteUserProfile(user : UserId) : async () {
+    userProfiles.deleteUserProfile(user);
   };
 
   //system method. Saving all the posts and user profiles in stable memory whenever we upgrade our canister.

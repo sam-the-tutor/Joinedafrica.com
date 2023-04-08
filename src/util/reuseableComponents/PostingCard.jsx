@@ -28,7 +28,7 @@ export default function PostingCard({ post, userProfile }) {
   //sets the position of the popup for each post card
   const [popupPosition, setPopupPosition] = useState(null);
   //post can be updated by pushlishing the post and any other edit that can be made on a post
-  const [updatedPost, setUpdatedPost] = useState(null);
+  const [updatedPost, setUpdatedPost] = useState(post);
   //after marking the post as published, we want to show a success message.
   const [showSnackbarCmp, setShowSnackbarCmp] = useState(false);
 

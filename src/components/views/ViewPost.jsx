@@ -11,7 +11,6 @@ import {
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { MessageCmp } from "../../styling/views/ViewPost";
-import { getAuthenticatedUser } from "../../util/auth";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -27,18 +26,15 @@ export default function ViewPost() {
   useEffect(() => {
     async function getPost() {
       setLoading(true);
-      //the user might not be authenticated but may want to call getPost method
-      const authorizedUser = await getAuthenticatedUser();
-      let response = await authorizedUser.getPost(postId);
+      //getPost is accessible to very body, that's why we don't need to be authenticated to access it
+      let response = await joinedafrica.getPost(postId);
       if (response?.ok) {
         setPost(response.ok);
       } else {
         alert("Post not found");
         return;
       }
-
       const images = [];
-
       //loading all the images of the posting
       await Promise.all(
         response.ok.images.map(async (image) => {
