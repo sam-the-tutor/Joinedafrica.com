@@ -19,7 +19,7 @@ import {
 import Top10Posts from "./Top10Posts";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { createObjectURLFromArrayOfBytes } from "../../util/functions";
-
+import { useNavigate } from "react-router-dom";
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
  * in that category
@@ -29,7 +29,7 @@ export default function ViewCategory() {
   const { categoryName } = useParams();
   const [loading, setLoading] = useState(false);
   const [top10Posts, setTop10Posts] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function getPostings() {
       setLoading(true);
@@ -45,7 +45,7 @@ export default function ViewCategory() {
 
       //Looping through each subcategory and adding the profile picture of each posts createor in
       //the top10Subcategories list
-      
+
       await Promise.all(
         nonEmptySubcategory.map(async (posting) => {
           const subcatgory = [];
@@ -88,7 +88,9 @@ export default function ViewCategory() {
           <List>
             {getSubcategory(categoryName).map((subcategory, index) => (
               <ListItem key={index}>
-                <ListItemButton>
+                <ListItemButton
+                  onClick={() => navigate("../view/subcategory/" + subcategory)}
+                >
                   <ListItemText primary={subcategory} />
                 </ListItemButton>
               </ListItem>

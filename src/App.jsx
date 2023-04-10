@@ -10,6 +10,7 @@ import CreateProfile from "./components/auth/CreateProfile";
 import ViewPost from "./components/views/ViewPost";
 import ViewListOfPost from "./components/views/ViewListOfPost";
 import ViewCategory from "./components/views/ViewCategory";
+import ViewSubcategory from "./components/views/ViewSubcategory";
 
 export default function App() {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
@@ -29,25 +30,21 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<WelcomePage />}></Route>
-            <Route exact path="/home" element={<Body />}></Route>
-            <Route exact path="/my-account" element={<MyAccount />} />
+            <Route exact path="home" element={<Body />}></Route>
+            <Route exact path="my-account" element={<MyAccount />} />
+            <Route exact path="view/post/:postId" element={<ViewPost />} />
             <Route
               exact
-              path="/my-account/view/:postId"
-              element={<ViewPost />}
-            />
-            <Route
-              exact
-              path="/home/view/:categoryName"
+              path="view/category/:categoryName"
               element={<ViewCategory />}
             />
             <Route
               exact
-              path="/home/view/:catgoryName/:subcategoryName"
-              element={<ViewListOfPost />}
+              path="view/subcategory/:subcategoryName"
+              element={<ViewSubcategory />}
             />
 
-            <Route exact path="/create-profile" element={<CreateProfile />} />
+            <Route exact path="create-profile" element={<CreateProfile />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

@@ -11,6 +11,7 @@ export default function PopoverCmp({
   isPublished,
   postId,
   markPostAsPublished,
+  canOnlyMeSeeThisPost,
 }) {
   return (
     <Popover
@@ -26,6 +27,7 @@ export default function PopoverCmp({
         isPublished={isPublished}
         postId={postId}
         markPostAsPublished={markPostAsPublished}
+        canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
       />
     </Popover>
   );

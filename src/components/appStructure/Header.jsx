@@ -22,6 +22,7 @@ import {
 } from "../../util/auth";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
+import { getErrorMessage } from "../../util/ErrorMessages";
 
 export default function Header() {
   //users principal
@@ -41,9 +42,8 @@ export default function Header() {
         setIsLoading(true);
         const authenticatedUser = await getAuthenticatedUser();
         let result = await authenticatedUser.getUserProfile();
-        console.log(result);
         if (result?.err) {
-          alert("User not found");
+          alert(getErrorMessage(result.err));
         } else {
           const profile = { ...result.ok };
           //encrypt the users email, principalId and profilePicture only as they are confidential.
@@ -53,7 +53,6 @@ export default function Header() {
           setSessionStorage("principalId", principal, true);
           setSessionStorage("profilePicture", profile.profilePicture, true);
           setSessionStorage("isLoggedIn", "true", false);
-
           setIsUserLoggedin(true);
         }
         setIsLoading(false);

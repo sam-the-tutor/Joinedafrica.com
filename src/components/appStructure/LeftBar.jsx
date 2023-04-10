@@ -24,7 +24,9 @@ export default function LeftBar() {
       <List>
         {categories.map((category, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemButton onClick={() => navigate(`view/${category.name}`)}>
+            <ListItemButton
+              onClick={() => navigate(`../view/category/${category.name}`)}
+            >
               <ListItemIcon>{category.icon}</ListItemIcon>
               <ListItemText primary={category.name} />
             </ListItemButton>

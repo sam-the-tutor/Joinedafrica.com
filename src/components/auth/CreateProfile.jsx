@@ -18,6 +18,7 @@ import {
   uploadFileToPostAssetCanister,
 } from "../../util/postAssetCanisterFunctions";
 import { getUniqueId, setSessionStorage } from "../../util/functions";
+import { getErrorMessage } from "../../util/ErrorMessages";
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -48,6 +49,7 @@ export default function CreateProfile() {
     setIsLoading(true);
     const createdProfile = { ...userProfile };
     const profileImagePath = principal + "/profile/" + getUniqueId();
+    console.log(profileImagePath);
     const key = await uploadFileToPostAssetCanister(
       userProfile.profilePicture,
       profileImagePath
@@ -72,7 +74,7 @@ export default function CreateProfile() {
       //remove the image we just saved from the post canister
       await removeFileFromPostAssetCanister(key);
       //handle the error
-      alert("User already exists");
+      alert(getErrorMessage(result.err));
     } else {
       navigate("/home");
     }

@@ -8,6 +8,8 @@ import {
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { getAuthenticatedUser } from "../../util/auth";
+import { getErrorMessage } from "../../util/ErrorMessages";
+
 //display all my postings
 export default function MyPostings() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +23,8 @@ export default function MyPostings() {
       const authenticatedUser = await getAuthenticatedUser();
       const post = await authenticatedUser.getAllMyPostings();
       if (post?.err) {
-        alert("User is not authorized");
+        alert(getErrorMessage(post.err));
+        setIsLoading(false);
         return;
       }
       setMyPostings(post.ok);
@@ -45,7 +48,11 @@ export default function MyPostings() {
           >
             {myPostings.map((posting, index) => (
               <Grid item xs={2} sm={4} md={4} key={index}>
-                <PostingCard post={posting[0]} userProfile={userProfile} />
+                <PostingCard
+                  post={posting[0]}
+                  userProfile={userProfile}
+                  canOnlyMeSeeThisPost={true}
+                />
               </Grid>
             ))}
           </Grid>

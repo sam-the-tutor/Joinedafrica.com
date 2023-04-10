@@ -19,6 +19,7 @@ import { CreatePostSpecificationForm } from "../../util/posts/CreatePostSpecific
 import getPostSpecificationFromForm from "../../util/posts/GetPostSpecificationFromForm";
 import { Principal } from "@dfinity/principal";
 import { getAuthenticatedUser } from "../../util/auth";
+import { getErrorMessage } from "../../util/ErrorMessages";
 
 export default function CreatePost() {
   const categories = getCategoryNames();
@@ -142,7 +143,8 @@ export default function CreatePost() {
     const authenticatedUser = await getAuthenticatedUser();
     const result = await authenticatedUser.createPost(post);
     if (result?.err) {
-      alert("User is not authorized");
+      alert(getErrorMessage(result.err));
+      setIsLoading(false);
       return;
     }
     setIsLoading(false);

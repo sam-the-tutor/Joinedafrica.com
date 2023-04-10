@@ -18,6 +18,7 @@ export default function Top10Posts({ name, posts }) {
             <PostingCard
               post={posting}
               userProfile={posting.creatorProfilePicture}
+              canOnlyMeSeeThisPost={false}
             />
           </Grid>
         ))}

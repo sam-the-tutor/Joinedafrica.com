@@ -17,11 +17,16 @@ import SnackbarCmp from "./SnackbarCmp";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import { getFileFromPostAssetCanister } from "../postAssetCanisterFunctions";
 import { getAuthenticatedUser } from "../auth";
+import { getErrorMessage } from "../ErrorMessages";
 
 /**
  * Postingcard is a container that shows the relevant details about a post
  */
-export default function PostingCard({ post, userProfile }) {
+export default function PostingCard({
+  post,
+  userProfile,
+  canOnlyMeSeeThisPost,
+}) {
   //maximum length of characters for description and title
   const MAX_LENGTH_OF_DESCRIPTION = 150;
   const MAX_lENGTH_OF_TITLE = 25;
@@ -42,7 +47,8 @@ export default function PostingCard({ post, userProfile }) {
     const authenticatedUser = await getAuthenticatedUser();
     const post = await authenticatedUser.markPostAsPublished(updatedPost);
     if (post?.err) {
-      alert("User is not authorized");
+      alert(getErrorMessage(post.err));
+      setLoading(false);
       return;
     }
     setUpdatedPost(updatedPost);
@@ -131,6 +137,7 @@ export default function PostingCard({ post, userProfile }) {
             isPublished={updatedPost.isPublished}
             postId={updatedPost.postId}
             markPostAsPublished={markPostAsPublished}
+            canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
           />
           {/* show the snackbar when the user has marked the post as published */}
           {showSnackbarCmp && (

@@ -11,6 +11,7 @@ import {
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { MessageCmp } from "../../styling/views/ViewPost";
+import { getErrorMessage } from "../../util/ErrorMessages";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -31,7 +32,8 @@ export default function ViewPost() {
       if (response?.ok) {
         setPost(response.ok);
       } else {
-        alert("Post not found");
+        alert(getErrorMessage(response.err));
+        setLoading(false);
         return;
       }
       const images = [];
@@ -71,7 +73,7 @@ export default function ViewPost() {
                   <Box style={{ marginBottom: "20px" }}>
                     <Typography gutterBottom>{post.productTitle}</Typography>
                     <Typography style={{ color: "#37a864" }}>
-                      {post.amount} BTC
+                      {post.amount} ckBTC
                     </Typography>
                   </Box>
 
