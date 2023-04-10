@@ -3,11 +3,11 @@ import { MultiSelect } from "../reuseableComponents/MultiSelect";
 import { getFilteringInformation } from "./PostFiltering";
 import { TextField } from "@mui/material";
 
-  /**
-   * Create product specification based on what category and subcategory the users chooses.
-   * @returns the specification of a given category and subcategory the user chooses.
-   */
-  
+/**
+ * Create product specification based on what category and subcategory the users chooses.
+ * @returns the specification of a given category and subcategory the user chooses.
+ */
+
 export function CreatePostSpecificationForm(
   subcategoryName,
   setYearOfManufacture,

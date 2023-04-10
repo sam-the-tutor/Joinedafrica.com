@@ -1,3 +1,5 @@
+import { CheckboxCmp, RadioButtonCmp } from "../reuseableComponents/SelectCmp";
+
 export const filtering = [
   {
     Name: "Cars",
@@ -8,7 +10,7 @@ export const filtering = [
       "Volkswagen",
       "Land Rover",
       "Ford",
-      "Hondai",
+      "Honda",
       "Lexus",
       "Mercedes-Benz",
       "Others",
@@ -39,7 +41,7 @@ export const filtering = [
       "Nissan",
       "Suzuki",
       "Ford",
-      "Hondai",
+      "Honda",
       "Mercedes-Benz",
       "Others",
     ],
@@ -128,7 +130,7 @@ export const filtering = [
   },
   {
     Name: "Motocycles and bicycles",
-    Type: ["Bicycle", "Motocycle", "Scooter", "Tricycle", "Others"],
+    Type: ["Bicycle", "Motocycle", "Scooter", "Others"],
     Brand: ["TVS", "Yamaha", "Honda", "Qlink", "Bajaj", "Suzuki", "Others"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
@@ -458,13 +460,53 @@ function generateArrayOfYears() {
   const startingYear = currentYear - DURATION;
   const years = [];
   for (let i = currentYear; i >= startingYear; i--) {
-    years.push(i+"");
+    years.push(i + "");
   }
   return years;
 }
 export function getFilteringInformation(subcategoryName) {
+  // return filtering.filter((filter) => (filter.Name = subcategoryName))[0];
   for (let i = 0; i < filtering.length; i++) {
     if (filtering[i].Name == subcategoryName) return filtering[i];
   }
   return null;
+}
+
+export function getFilterForSubcategory(subcategoryName) {
+  const result = [];
+  const postDetails = getFilteringInformation(subcategoryName);
+  if (postDetails.Brand) {
+    result.push(<RadioButtonCmp list={postDetails.Brand} title="Brand" />);
+  }
+  if (postDetails.Type) {
+    result.push(<RadioButtonCmp list={postDetails.Type} title="Type" />);
+  }
+  if (postDetails.Condition) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Condition} title="Condition" />
+    );
+  }
+  if (postDetails.Is_Registered) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Is_Registered} title="Registered" />
+    );
+  }
+  if (postDetails.Transmission) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Transmission} title="Transmission" />
+    );
+  }
+  if (postDetails.Colour) {
+    result.push(<RadioButtonCmp list={postDetails.Colour} title="Colour" />);
+  }
+  if (postDetails.Year_of_manufacture) {
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Year_of_manufacture}
+        title="Year of manufacture"
+      />
+    );
+  }
+
+  return result;
 }

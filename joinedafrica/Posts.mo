@@ -117,12 +117,6 @@ module {
                 subCategoryName = subcategory;
             });
         };
-        // public func deletePost(postId : PostId): Result.Result<(), Error>{
-        //     //delete post from mypostsing
-        //     //delete postid from publishedpost
-        //     //delete postId from  singleposts
-        //     trie := /Trie.put(trie, key "bye", Text.equal, 32).0;
-        // };
         public func markPostAsPublished(post : Post, userId : UserId) : Result.Result<(), Error> {
             //replace the previous post
             singlePosts := Trie.replace<PostId, Post>(singlePosts, textHash(post.postId), Text.equal, Option.make(post)).0;

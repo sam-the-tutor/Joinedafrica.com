@@ -45,14 +45,10 @@ shared ({ caller = initializer }) actor class () {
   New users have to create their profile to gain more access to the site.
   */
   public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
-    Debug.print("creating user profile");
-    Debug.print(debug_show (caller));
     userProfiles.createUserProfile(profile, caller);
   };
 
   public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-    Debug.print("geeting user profile");
-    Debug.print(debug_show (caller));
     if (not (userProfiles.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
@@ -78,8 +74,6 @@ shared ({ caller = initializer }) actor class () {
 
   };
   public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    Debug.print("get all my postings");
-    Debug.print(debug_show (caller));
     if (not (userProfiles.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
