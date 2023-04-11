@@ -199,9 +199,18 @@ export const filtering = [
   },
   {
     Name: "Tv and dvd equipment",
-    Type: ["TVs", "Projector", "Others"],
+    Type: ["TVs", "DVDs", "Projector", "Others"],
     Condition: ["New", "Used"],
-    Brand: ["Sony", "Samsung", "LG", "Others"],
+    Brand: [
+      "Sony",
+      "Samsung",
+      "TCL",
+      "Panasonic",
+      "Toshiba",
+      "Sharp",
+      "LG",
+      "Others",
+    ],
   },
   {
     Name: "Electronic supplies",
@@ -214,6 +223,7 @@ export const filtering = [
       "Face Creamand Gels",
       "Body Oils",
       "Body Wash and Soap",
+      "Exfoliators",
       "Others",
     ],
     Gender: ["Male", "Female", "Unisex"],
@@ -312,7 +322,14 @@ export const filtering = [
     Has_Parking_Space: ["Yes", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-    Type: ["Apartment", "Block of Flats", "Duplex", "Bungalow", "Others"],
+    Type: [
+      "Apartment",
+      "Townhouse",
+      "Block of Flats",
+      "Duplex",
+      "Bungalow",
+      "Others",
+    ],
   },
   {
     Name: "Houses and apartments for sale",
@@ -321,7 +338,14 @@ export const filtering = [
     Is_Furnished: ["Yes", "Partially furnished", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-    Type: ["Apartment", "Block of Flats", "Duplex", "Bungalow", "Others"],
+    Type: [
+      "Apartment",
+      "Townhouse",
+      "Block of Flats",
+      "Duplex",
+      "Bungalow",
+      "Others",
+    ],
   },
   {
     Name: "Land and plots for sale",
@@ -348,6 +372,7 @@ export const filtering = [
       "Shoulder Bags",
       "Backpacks",
       "Wallets and purses",
+      "Others",
     ],
     Condition: ["New", "Used"],
     Gender: ["Male", "Female", "Unisex"],
@@ -401,6 +426,7 @@ export const filtering = [
       "Hublot",
       "Patek Philippe",
       "Cartier",
+      "Omega",
       "Audemars Piguet",
       "Others",
     ],
@@ -435,7 +461,15 @@ export const filtering = [
     ],
     Gender: ["Male", "Female", "Unisex"],
     Condition: ["New", "Used"],
-    Type: ["Sneakers", "Slippers", "Flat shoes", "Sandals", "Slides", "Boots"],
+    Type: [
+      "Sneakers",
+      "Slippers",
+      "Flat shoes",
+      "Sandals",
+      "Slides",
+      "Boots",
+      "Others",
+    ],
     Colour: [
       "Black",
       "Blue",
@@ -465,7 +499,6 @@ function generateArrayOfYears() {
   return years;
 }
 export function getFilteringInformation(subcategoryName) {
-  // return filtering.filter((filter) => (filter.Name = subcategoryName))[0];
   for (let i = 0; i < filtering.length; i++) {
     if (filtering[i].Name == subcategoryName) return filtering[i];
   }
@@ -491,14 +524,99 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp list={postDetails.Is_Registered} title="Registered" />
     );
   }
+  if (postDetails.Has_Parking_Space) {
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Has_Parking_Space}
+        title="Parking Space"
+      />
+    );
+  }
+  if (postDetails.Style) {
+    result.push(<RadioButtonCmp list={postDetails.Style} title="Style" />);
+  }
+  if (postDetails.Display) {
+    result.push(<RadioButtonCmp list={postDetails.Display} title="Display" />);
+  }
+  if (postDetails.Is_Furnished) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Is_Furnished} title="Furnished" />
+    );
+  }
   if (postDetails.Transmission) {
     result.push(
       <RadioButtonCmp list={postDetails.Transmission} title="Transmission" />
     );
   }
+  if (postDetails.Processor) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Processor} title="Processor" />
+    );
+  }
+  if (postDetails.Display_Type) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Display_Type} title="Display Type" />
+    );
+  }
+  if (postDetails.Bedrooms) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Bedrooms} title="Bedrooms" />
+    );
+  }
+  if (postDetails.Number_of_Plots) {
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Number_of_Plots}
+        title="Number of Plots"
+      />
+    );
+  }
+  if (postDetails.Bathrooms) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Bathrooms} title="Bathrooms" />
+    );
+  }
+  if (postDetails.Gender) {
+    result.push(<RadioButtonCmp list={postDetails.Gender} title="Gender" />);
+  }
+  if (postDetails.Formation) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Formation} title="Formation" />
+    );
+  }
+  if (postDetails.Formulation) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Formulation} title="Formulation" />
+    );
+  }
+  if (postDetails.Operating_System) {
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Operating_System}
+        title="Operating System"
+      />
+    );
+  }
+  if (postDetails.Storage_Type) {
+    result.push(
+      <RadioButtonCmp list={postDetails.Storage_Type} title="Storage Type" />
+    );
+  }
+  if (postDetails.Storage_Capacity) {
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Storage_Capacity}
+        title="Storage Capacity"
+      />
+    );
+  }
+  if (postDetails.RAM) {
+    result.push(<RadioButtonCmp list={postDetails.RAM} title="RAM" />);
+  }
   if (postDetails.Colour) {
     result.push(<RadioButtonCmp list={postDetails.Colour} title="Colour" />);
   }
+
   if (postDetails.Year_of_manufacture) {
     result.push(
       <RadioButtonCmp
