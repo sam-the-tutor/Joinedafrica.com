@@ -92,19 +92,23 @@ shared ({ caller = initializer }) actor class () {
     posts.markPostAsPublished(updatedPost, caller);
   };
 
+  public shared query func getAllPostingsInSubcategory(category : Category, subcategory : Subcategory) : async Result<[Post], Error> {
+    posts.getAllPostingsInSubcategory(category, subcategory);
+  };
+
   /**
     Returns the top 10 postings from each subcategory in a category. This method doesn't need authentication
     and can be accessed by a user without an account. The post has to be published to the market place before it
     can be viewed by other users
   */
-  public shared query ({ caller }) func getTop10SubcategoryPostingsInCategory(category : Category) : async Result<[Top10Posts], Error> {
+  public shared query ({ caller }) func getTop10PostingsInCategory(category : Category) : async Result<[Top10Posts], Error> {
 
     let top10Posts = Buffer.Buffer<Top10Posts>(0);
     //get all subcategories in a category
     let subCategories : [Subcategory] = DatabaseStructure.getSubcategory(category);
     //get the top 10 posts in a subcategory
     for (subcategory in subCategories.vals()) {
-      switch (posts.getTop10PostingsInSubcategory(category, subcategory)) {
+      switch (posts.getTop10PostingsInCategory(category, subcategory)) {
         case (#ok(posts)) top10Posts.add(posts);
         //the failure could be one of the error messages
         case (#err(failure)) return #err(failure);

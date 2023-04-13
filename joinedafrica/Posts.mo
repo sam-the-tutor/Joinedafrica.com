@@ -57,9 +57,30 @@ module {
             };
 
         };
-        //this method is a testing method, and will be removed
-        public func getAllPostIds(caller : UserId) : [PostId] {
-            Trie.toArray<PostId, Post, PostId>(singlePosts, func(k, v) = k);
+        //only joined africa calls this function
+        public func getAllPostingsInSubcategory(category : Category, subcategory : Subcategory) : Result.Result<[Post], Error> {
+            switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
+                case null return #err(#CategoryNotFound);
+                case (?subcatgoryTrie) {
+                    switch (Trie.get(subcatgoryTrie, categoryKey(subcategory), Text.equal)) {
+                        case null return #err(#SubcategoryNotFound);
+                        case (?listOfPostIds) {
+                            let result = Buffer.Buffer<Post>(0);
+                            let arrayOfPostIds = List.toArray(listOfPostIds);
+                            for (postId in arrayOfPostIds.vals()) {
+                                switch (getPostById(postId)) {
+                                    case (#err(value)) return #err(value);
+                                    case (#ok(post)) {
+                                        result.add(post);
+                                    };
+                                };
+                            };
+                            return #ok(Buffer.toArray(result));
+                        };
+
+                    };
+                };
+            };
         };
 
         //based on the category and sub category, add this post id in the list
@@ -87,7 +108,7 @@ module {
         /**
             Get the top 10 postings in a subcategory. 
         */
-        public func getTop10PostingsInSubcategory(category : Category, subcategory : Subcategory) : Result.Result<Top10Posts, Error> {
+        public func getTop10PostingsInCategory(category : Category, subcategory : Subcategory) : Result.Result<Top10Posts, Error> {
             let top10Posts = Buffer.Buffer<Post>(0);
             switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
                 case null return #err(#CategoryNotFound);
@@ -104,7 +125,7 @@ module {
 
                                         top10Posts.add(post);
                                     };
-                                    case (#err(failure)) return #err(#PostNotFound);
+                                    case (#err(failure)) return #err(failure);
                                 };
                                 index := index + 1;
                             };
@@ -132,6 +153,11 @@ module {
                 case (?post) #ok(post);
             };
         };
+        //this method is a testing method, and will be removed
+        public func getAllPostIds(caller : UserId) : [PostId] {
+            Trie.toArray<PostId, Post, PostId>(singlePosts, func(k, v) = k);
+        };
+
         //system method. Saving the usersId and post in stable memory.
         public func preupgrade() : [(UserId, Post)] {
             Trie.toArray<PostId, Post, (UserId, Post)>(singlePosts, func(k, v) = (v.creatorOfPostId, v));

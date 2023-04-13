@@ -35,7 +35,7 @@ export default function ViewCategory() {
       setLoading(true);
       //joinedafrica is making the call because the method it calls is public and doesn't
       //need authorization
-      const postings = await joinedafrica.getTop10SubcategoryPostingsInCategory(
+      const postings = await joinedafrica.getTop10PostingsInCategory(
         categoryName
       );
       const nonEmptySubcategory = postings.ok.filter(
@@ -54,7 +54,6 @@ export default function ViewCategory() {
               const creatorOfPost = await joinedafrica.getUserProfilePicture(
                 createdPost.creatorOfPostId
               );
-              console.log(creatorOfPost);
               const iamgeFile = await getFileFromPostAssetCanister(
                 creatorOfPost.ok.profilePicture
               );
@@ -89,7 +88,9 @@ export default function ViewCategory() {
             {getSubcategory(categoryName).map((subcategory, index) => (
               <ListItem key={index}>
                 <ListItemButton
-                  onClick={() => navigate("../view/subcategory/" + subcategory)}
+                  onClick={() =>
+                    navigate("../view/" + categoryName + "/" + subcategory)
+                  }
                 >
                   <ListItemText primary={subcategory} />
                 </ListItemButton>
