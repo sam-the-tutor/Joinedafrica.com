@@ -59,7 +59,7 @@ export default function ViewSubcategory() {
         <DrawerContainer variant="permanent" anchor="left">
           <Toolbar />
           <TypographyCmp variant="h6">Filter</TypographyCmp>
-          {getFilterForSubcategory(subcategoryName)}
+          {getFilterForSubcategory(subcategoryName, categoryName)}
         </DrawerContainer>
         <Box style={{ padding: "24px", width: "100%" }}>
           <Toolbar />

@@ -26,6 +26,10 @@
             },
             "source": ["dist/"]
       },
+      "conversation": {
+        "main": "conversation/main.mo",
+        "type": "motoko"
+      },
       "internet_identity": {
         "type": "custom",
         "candid": "internet_identity.did",

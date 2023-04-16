@@ -505,23 +505,47 @@ export function getFilteringInformation(subcategoryName) {
   return null;
 }
 
-export function getFilterForSubcategory(subcategoryName) {
+export function getFilterForSubcategory(subcategoryName, categoryName) {
   const result = [];
   const postDetails = getFilteringInformation(subcategoryName);
   if (postDetails.Brand) {
-    result.push(<RadioButtonCmp list={postDetails.Brand} title="Brand" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Brand}
+        title="Brand"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Type) {
-    result.push(<RadioButtonCmp list={postDetails.Type} title="Type" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Type}
+        title="Type"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Condition) {
     result.push(
-      <RadioButtonCmp list={postDetails.Condition} title="Condition" />
+      <RadioButtonCmp
+        list={postDetails.Condition}
+        title="Condition"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Is_Registered) {
     result.push(
-      <RadioButtonCmp list={postDetails.Is_Registered} title="Registered" />
+      <RadioButtonCmp
+        list={postDetails.Is_Registered}
+        title="Registered"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Has_Parking_Space) {
@@ -529,38 +553,79 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp
         list={postDetails.Has_Parking_Space}
         title="Parking Space"
+        category={categoryName}
+        subcategory={subcategoryName}
       />
     );
   }
   if (postDetails.Style) {
-    result.push(<RadioButtonCmp list={postDetails.Style} title="Style" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Style}
+        title="Style"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Display) {
-    result.push(<RadioButtonCmp list={postDetails.Display} title="Display" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Display}
+        title="Display"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Is_Furnished) {
     result.push(
-      <RadioButtonCmp list={postDetails.Is_Furnished} title="Furnished" />
+      <RadioButtonCmp
+        list={postDetails.Is_Furnished}
+        title="Furnished"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Transmission) {
     result.push(
-      <RadioButtonCmp list={postDetails.Transmission} title="Transmission" />
+      <RadioButtonCmp
+        list={postDetails.Transmission}
+        title="Transmission"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Processor) {
     result.push(
-      <RadioButtonCmp list={postDetails.Processor} title="Processor" />
+      <RadioButtonCmp
+        list={postDetails.Processor}
+        title="Processor"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Display_Type) {
     result.push(
-      <RadioButtonCmp list={postDetails.Display_Type} title="Display Type" />
+      <RadioButtonCmp
+        list={postDetails.Display_Type}
+        title="Display Type"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Bedrooms) {
     result.push(
-      <RadioButtonCmp list={postDetails.Bedrooms} title="Bedrooms" />
+      <RadioButtonCmp
+        list={postDetails.Bedrooms}
+        title="Bedrooms"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Number_of_Plots) {
@@ -568,25 +633,49 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp
         list={postDetails.Number_of_Plots}
         title="Number of Plots"
+        category={categoryName}
+        subcategory={subcategoryName}
       />
     );
   }
   if (postDetails.Bathrooms) {
     result.push(
-      <RadioButtonCmp list={postDetails.Bathrooms} title="Bathrooms" />
+      <RadioButtonCmp
+        list={postDetails.Bathrooms}
+        title="Bathrooms"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Gender) {
-    result.push(<RadioButtonCmp list={postDetails.Gender} title="Gender" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Gender}
+        title="Gender"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Formation) {
     result.push(
-      <RadioButtonCmp list={postDetails.Formation} title="Formation" />
+      <RadioButtonCmp
+        list={postDetails.Formation}
+        title="Formation"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Formulation) {
     result.push(
-      <RadioButtonCmp list={postDetails.Formulation} title="Formulation" />
+      <RadioButtonCmp
+        list={postDetails.Formulation}
+        title="Formulation"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Operating_System) {
@@ -594,12 +683,19 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp
         list={postDetails.Operating_System}
         title="Operating System"
+        category={categoryName}
+        subcategory={subcategoryName}
       />
     );
   }
   if (postDetails.Storage_Type) {
     result.push(
-      <RadioButtonCmp list={postDetails.Storage_Type} title="Storage Type" />
+      <RadioButtonCmp
+        list={postDetails.Storage_Type}
+        title="Storage Type"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
     );
   }
   if (postDetails.Storage_Capacity) {
@@ -607,14 +703,30 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp
         list={postDetails.Storage_Capacity}
         title="Storage Capacity"
+        category={categoryName}
+        subcategory={subcategoryName}
       />
     );
   }
   if (postDetails.RAM) {
-    result.push(<RadioButtonCmp list={postDetails.RAM} title="RAM" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.RAM}
+        title="RAM"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
   if (postDetails.Colour) {
-    result.push(<RadioButtonCmp list={postDetails.Colour} title="Colour" />);
+    result.push(
+      <RadioButtonCmp
+        list={postDetails.Colour}
+        title="Colour"
+        category={categoryName}
+        subcategory={subcategoryName}
+      />
+    );
   }
 
   if (postDetails.Year_of_manufacture) {
@@ -622,6 +734,8 @@ export function getFilterForSubcategory(subcategoryName) {
       <RadioButtonCmp
         list={postDetails.Year_of_manufacture}
         title="Year of manufacture"
+        category={categoryName}
+        subcategory={subcategoryName}
       />
     );
   }

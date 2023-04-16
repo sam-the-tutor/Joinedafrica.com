@@ -12,6 +12,7 @@ import {
   ListSubheader,
   FormControl,
 } from "@mui/material/";
+import { useNavigate } from "react-router-dom";
 // import List from "@mui/material/List";
 // import ListItem from "@mui/material/ListItem";
 // import ListItemButton from "@mui/material/ListItemButton";
@@ -31,19 +32,46 @@ export function CheckboxCmp({ list }) {
   );
 }
 
-export function RadioButtonCmp({ list, title }) {
-  const [checked, setChecked] = useState([0]);
+export function RadioButtonCmp({ list, title, category, subcategory }) {
+  const [checked, setChecked] = useState([]);
+  const [filter, setFilter] = useState([]);
+  // const [checked1, setChecked1] = useState([]);
+  const navigate = useNavigate();
+
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+    const newFilter = [...filter];
 
     if (currentIndex === -1) {
       newChecked.push(value);
+      newFilter.push({ title: value });
     } else {
       newChecked.splice(currentIndex, 1);
-    }
 
+      newFilter.splice(currentIndex, 1);
+    }
+    let searchKey = "filter" + title;
+    // const x = [s:value];
     setChecked(newChecked);
+    setFilter(newFilter);
+    console.log(filter);
+    // const url = new URL(window.location.href);
+    const url = "/view/" + category + "/" + subcategory + "/search?";
+    const params = new URLSearchParams(url.search);
+
+    params.append(title, value);
+    console.log(params);
+    navigate(url + params);
+
+    // setChecked([...checked, { [title]: value }]);
+    // console.log(checked);
+    // console.log(checked1);
+    // const query = { sfasdf: asdfa };
+    // console.log(window.location.href);
+    // window.
+    // navigate("view/" + title + "/" + value + "/search?" + title:value);
+    // navigate("view/" + title + "/" + value + "/search?" + title=value)
   };
   return (
     <List
@@ -54,7 +82,9 @@ export function RadioButtonCmp({ list, title }) {
         <ListItem key={index} disablePadding>
           <ListItemButton
             role={undefined}
+            // id = '"filter_"+title' : condition
             onClick={handleToggle(condition)}
+            // onClick={() => naviage("view/sdaf/sfsd/search?"+[filtertitle=condition)}
             dense
           >
             <ListItemIcon>
