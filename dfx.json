@@ -14,11 +14,21 @@
           "type": "assets",
           "source": []
         },
+        "conversation": {
+          "main": "conversation/main.mo",
+          "type": "motoko"
+        },
+        "profile" : {
+          "main": "profile/main.mo",
+          "type": "motoko"
+        },
         "frontend": {
             "dependencies": [
                 "joinedafrica",
                 "internet_identity",
-                "post_assets"
+                "post_assets",
+                "profile",
+                "conversation"
               ],
             "type": "assets",
             "frontend": {
@@ -26,10 +36,7 @@
             },
             "source": ["dist/"]
       },
-      "conversation": {
-        "main": "conversation/main.mo",
-        "type": "motoko"
-      },
+ 
       "internet_identity": {
         "type": "custom",
         "candid": "internet_identity.did",
