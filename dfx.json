@@ -11,8 +11,9 @@
           "type": "motoko"
         },
         "post_assets":{
-          "type": "assets",
-          "source": []
+          "type": "custom",
+          "candid": "did/post_assets.did",
+          "wasm" : "wasm/post_assets.wasm"
         },
         "conversation": {
           "main": "conversation/main.mo",
