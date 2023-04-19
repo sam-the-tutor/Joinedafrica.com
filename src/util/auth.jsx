@@ -1,7 +1,10 @@
 import React from "react";
 import { AuthClient } from "@dfinity/auth-client";
 import { canisterId, createActor } from "../declarations/joinedafrica";
-
+import {
+  canisterId as conversationCanisterId,
+  createActor as conversationCreateActor,
+} from "../declarations/conversation";
 //Authenticate using internet identity and store the users principal
 export async function InternetIdentityAuthentication(setPrincipal) {
   const authClient = await AuthClient.create();
@@ -23,6 +26,16 @@ export async function getAuthenticatedUser() {
   const authClient = await AuthClient.create();
   const identity = await authClient.getIdentity();
   return createActor(canisterId, {
+    agentOptions: {
+      identity,
+    },
+  });
+}
+
+export async function getAuthenticatedConversationUser() {
+  const authClient = await AuthClient.create();
+  const identity = await authClient.getIdentity();
+  return conversationCreateActor(conversationCanisterId, {
     agentOptions: {
       identity,
     },

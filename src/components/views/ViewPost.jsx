@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Box, Typography, TextField } from "@mui/material";
+import {
+  Container,
+  Button,
+  Box,
+  Typography,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import { joinedafrica } from "../../declarations/joinedafrica";
+import { conversation } from "../../declarations/conversation";
 import { useParams } from "react-router";
 import Header from "../appStructure/Header";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
@@ -8,10 +16,14 @@ import CarouselCmp from "../../util/reuseableComponents/CarouselCmp";
 import {
   createObjectURLFromArrayOfBytes,
   extractProductSpecification,
+  getFromSessionStorage,
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { MessageCmp } from "../../styling/views/ViewPost";
 import { getErrorMessage } from "../../util/ErrorMessages";
+import { Principal } from "@dfinity/principal";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { getAuthenticatedConversationUser } from "../../util/auth";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -23,7 +35,8 @@ export default function ViewPost() {
   const [loading, setLoading] = useState(false);
   const [postImages, setPostImages] = useState([]);
   const [productSpecification, setProductSpecification] = useState({});
-
+  const [sendMessageProgress, setSendMessageProgress] = useState(null);
+  const [userMessage, setUserMessage] = useState("");
   useEffect(() => {
     async function getPost() {
       setLoading(true);
@@ -51,6 +64,38 @@ export default function ViewPost() {
     }
     getPost();
   }, []);
+
+  async function sendMessage() {
+    const loggedInUserPrincipalId = getFromSessionStorage("principalId", true);
+    console.log(loggedInUserPrincipalId);
+    if (post.creatorOfPostId == loggedInUserPrincipalId) {
+      alert("You can't message youself!");
+    } else {
+      setSendMessageProgress(
+        <Box>
+          <CircularProgress size={35} />
+          <Typography>Sending...</Typography>
+        </Box>
+      );
+      const authenticatedUser = await getAuthenticatedConversationUser();
+      const result = await authenticatedUser.sendMessage({
+        messageContent: userMessage,
+        sender: Principal.fromText(loggedInUserPrincipalId),
+        receiver: post.creatorOfPostId,
+        time: new Date().toLocaleString(),
+      });
+      if (result?.err) {
+        alert("error");
+      } else {
+        setSendMessageProgress(
+          <Box>
+            <CheckCircleIcon fontSize="medium" />
+            <Typography>Message sent</Typography>
+          </Box>
+        );
+      }
+    }
+  }
 
   return (
     <Box>
@@ -108,9 +153,14 @@ export default function ViewPost() {
                   multiline
                   rows={7}
                   style={{ marginBottom: "15px" }}
+                  onChange={(event) => setUserMessage(event.target.value)}
                 />
-                <Button variant="outlined" style={{ height: "50px" }}>
-                  Send message
+                <Button
+                  variant="outlined"
+                  style={{ height: "50px" }}
+                  onClick={sendMessage}
+                >
+                  {sendMessageProgress || "Send message"}
                 </Button>
               </MessageCmp>
             </Box>
