@@ -5,6 +5,7 @@ import Result "mo:base/Result";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Debug "mo:base/Debug";
+import utils "utils";
 
 shared ({ caller = initializer }) actor class () {
 
@@ -24,17 +25,7 @@ shared ({ caller = initializer }) actor class () {
         if (Principal.isAnonymous(caller) or Principal.equal(message.sender, message.receiver)) {
             return #err(#UnAuthorizedUser);
         };
-        let callerPrincipal = Principal.toText(caller);
-        let receiverPrincipal = Principal.toText(message.receiver);
-        //sorting the principals. <lesser principal>and<greater principal> so we can identity two users in contact with
-        //each other
-        var friend : Friend = "";
-        if (caller > message.receiver) {
-            friend := receiverPrincipal # "and" #callerPrincipal;
-        } else {
-            friend := callerPrincipal # "and" # receiverPrincipal;
-        };
-
+        var friend = utils.sortPrincipals(caller, message.receiver);
         switch (Trie.get(conversations, key(friend), Text.equal)) {
             case null {
                 //caller and reciever haven't messaged each other before
@@ -45,7 +36,24 @@ shared ({ caller = initializer }) actor class () {
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, list)).0;
             };
         };
+        await addUserToFriendList(caller, message.receiver);
+        await addUserToFriendList(message.receiver, caller);
         #ok();
+    };
+
+    public func addUserToFriendList(user1 : UserId, user2 : UserId) : async () {
+        switch (Trie.get(friendList, hashKey(user1), Principal.equal)) {
+            case null {
+                friendList := Trie.put(friendList, hashKey(user1), Principal.equal, List.push(user2, List.nil())).0;
+            };
+            case (?list) {
+                //if user1 doesn't contain user2's id
+                let containsReceiver = List.some<UserId>(list, func receiverId = receiverId == user2);
+                if (not containsReceiver) {
+                    friendList := Trie.put(friendList, hashKey(user1), Principal.equal, List.push(user2, list)).0;
+                };
+            };
+        };
     };
 
     //test methods
@@ -58,6 +66,9 @@ shared ({ caller = initializer }) actor class () {
 
     func key(t : Friend) : Trie.Key<Friend> {
         { hash = Text.hash(t); key = t };
+    };
+    func hashKey(t : UserId) : Trie.Key<UserId> {
+        { hash = Principal.hash(t); key = t };
     };
 
 };
