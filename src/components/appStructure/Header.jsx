@@ -18,7 +18,7 @@ import {
 import { Link } from "react-router-dom";
 import {
   InternetIdentityAuthentication,
-  getAuthenticatedUser,
+  getAuthenticatedProfileUser,
 } from "../../util/auth";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
@@ -40,8 +40,8 @@ export default function Header() {
       //making sure the actor isn't null.
       if (principal.length > 0) {
         setIsLoading(true);
-        const authenticatedUser = await getAuthenticatedUser();
-        let result = await authenticatedUser.getUserProfile();
+        const authenticatedProfileUser = await getAuthenticatedProfileUser();
+        let result = await authenticatedProfileUser.getUserProfile();
         if (result?.err) {
           alert(getErrorMessage(result.err));
         } else {

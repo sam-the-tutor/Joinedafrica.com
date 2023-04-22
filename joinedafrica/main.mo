@@ -11,6 +11,8 @@ import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Error "mo:base/Error";
 import utils "utils";
+import ProfileCanister "canister:profile";
+import PostAssetCanister "canister:post_assets";
 
 shared ({ caller = initializer }) actor class () {
 
@@ -25,7 +27,7 @@ shared ({ caller = initializer }) actor class () {
   type Error = Type.Error;
 
   /**
-    All data structures 
+    All data structures
   */
 
   //publishedPosts contains all published posts (visible to other users)
@@ -44,37 +46,40 @@ shared ({ caller = initializer }) actor class () {
   /**
   New users have to create their profile to gain more access to the site.
   */
-  public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
-    userProfiles.createUserProfile(profile, caller);
-  };
+  // public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
+  //   userProfiles.createUserProfile(profile, caller);
+  // };
 
-  public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-    if (not (userProfiles.isUserAuthorized(caller))) {
-      return #err(#UnAuthorizedUser);
-    };
-    userProfiles.getUserProfile(caller);
-  };
+  // public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
+  //   if (not (userProfiles.isUserAuthorized(caller))) {
+  //     return #err(#UnAuthorizedUser);
+  //   };
+  //   userProfiles.getUserProfile(caller);
+  // };
 
   /**
   This function is only called by the canister (joined africa) We use this function to display top10Posts, and so on
 */
-  public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error> {
-    userProfiles.getUserProfile(userId);
-  };
+  // public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error> {
+  //   userProfiles.getUserProfile(userId);
+  // };
 
   /**
   The methods below are for my Postings.
 */
   public shared ({ caller }) func createPost(post : Post) : async Result<(), Error> {
-    if (not (userProfiles.isUserAuthorized(caller))) {
+
+    if (not (await ProfileCanister.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
+    //authorize the caller so they can upload their profile picture to it
+    await PostAssetCanister.authorize(caller);
     posts.createPost(post, caller);
     #ok();
 
   };
   public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    if (not (userProfiles.isUserAuthorized(caller))) {
+    if (not (await ProfileCanister.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     #ok(posts.getAllMyPostings(caller));
@@ -86,7 +91,7 @@ shared ({ caller = initializer }) actor class () {
     posts.getPostById(id);
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
-    if (not (userProfiles.isUserAuthorized(caller))) {
+    if (not (await ProfileCanister.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     posts.markPostAsPublished(updatedPost, caller);

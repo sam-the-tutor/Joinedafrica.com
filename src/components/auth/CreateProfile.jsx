@@ -4,7 +4,7 @@ import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   InternetIdentityAuthentication,
-  getAuthenticatedUser,
+  getAuthenticatedProfileUser,
 } from "../../util/auth";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { useNavigate } from "react-router-dom";
@@ -49,32 +49,40 @@ export default function CreateProfile() {
     setIsLoading(true);
     const createdProfile = { ...userProfile };
     const profileImagePath = principal + "/profile/" + getUniqueId();
-    const key = await uploadFileToPostAssetCanister(
-      userProfile.profilePicture,
-      profileImagePath
-    );
-    createdProfile.profilePicture = key;
+    // const key = await uploadFileToPostAssetCanister(
+    //   userProfile.profilePicture,
+    //   profileImagePath
+    // );
+    // createdProfile.profilePicture = key;
+    createdProfile.profilePicture = profileImagePath;
     createdProfile.principalId = principal;
 
-    //encrypt the users email and principalId and profilePicture only as they are confidential.
-    setSessionStorage("firstName", userProfile.firstName, false);
-    setSessionStorage("lastName", userProfile.lastName, false);
-    setSessionStorage("email", userProfile.email, true);
-    setSessionStorage("principalId", principal, true);
-    setSessionStorage("profilePicture", key, true);
-    setSessionStorage("isLoggedIn", "true", false);
-
-    const authenticatedUser = await getAuthenticatedUser();
-    let result = await authenticatedUser.createUserProfile(createdProfile);
+    const authenticatedProfileUser = await getAuthenticatedProfileUser();
+    let result = await authenticatedProfileUser.createUserProfile(
+      createdProfile,
+      {
+        key: profileImagePath,
+        content: new Unit8Array(userProfile.profilePicture),
+        content_type: "image/jpeg",
+        content_encoding: "identity",
+      }
+    );
 
     if (result?.err) {
       //the user is trying to create an account with the same identity
-      sessionStorage.clear();
+      // sessionStorage.clear();
       //remove the image we just saved from the post canister
-      await removeFileFromPostAssetCanister(key);
+      // await removeFileFromPostAssetCanister(key);
       //handle the error
       alert(getErrorMessage(result.err));
     } else {
+      //encrypt the users email and principalId and profilePicture only as they are confidential.
+      setSessionStorage("firstName", userProfile.firstName, false);
+      setSessionStorage("lastName", userProfile.lastName, false);
+      setSessionStorage("email", userProfile.email, true);
+      setSessionStorage("principalId", principal, true);
+      setSessionStorage("profilePicture", key, true);
+      setSessionStorage("isLoggedIn", "true", false);
       navigate("/home");
     }
     setIsLoading(false);

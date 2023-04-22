@@ -7,6 +7,7 @@ import {
 } from "../../styling/appStructure/LeftBar";
 import { useParams } from "react-router-dom";
 import { getFilterForSubcategory } from "../../util/posts/PostFiltering";
+import { profile } from "../../declarations/profile";
 import { joinedafrica } from "../../declarations/joinedafrica";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
@@ -32,7 +33,7 @@ export default function ViewSubcategory() {
         const modifiedPosts = [];
         await Promise.all(
           result.ok.map(async (createdPost) => {
-            const creatorOfPost = await joinedafrica.getUserProfilePicture(
+            const creatorOfPost = await profile.getUserProfilePicture(
               createdPost.creatorOfPostId
             );
             const iamgeFile = await getFileFromPostAssetCanister(

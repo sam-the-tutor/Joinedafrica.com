@@ -8,6 +8,7 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
+import { profile } from "../../declarations/profile";
 import { joinedafrica } from "../../declarations/joinedafrica";
 import { useParams } from "react-router-dom";
 import { getSubcategory } from "../../util/ListOfCategories";
@@ -51,7 +52,7 @@ export default function ViewCategory() {
           const subcatgory = [];
           await Promise.all(
             posting.post.map(async (createdPost) => {
-              const creatorOfPost = await joinedafrica.getUserProfilePicture(
+              const creatorOfPost = await profile.getUserProfilePicture(
                 createdPost.creatorOfPostId
               );
               const iamgeFile = await getFileFromPostAssetCanister(

@@ -1,6 +1,7 @@
 //disply error message based on the error type
 
 export function getErrorMessage(error) {
+  console.log(error);
   if (error.UnAuthorizedUser) {
     return "Please log in or create an account";
   }

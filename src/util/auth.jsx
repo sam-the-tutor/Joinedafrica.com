@@ -5,6 +5,10 @@ import {
   canisterId as conversationCanisterId,
   createActor as conversationCreateActor,
 } from "../declarations/conversation";
+import {
+  canisterId as profileCanisterId,
+  createActor as profileCreateActor,
+} from "../declarations/profile";
 //Authenticate using internet identity and store the users principal
 export async function InternetIdentityAuthentication(setPrincipal) {
   const authClient = await AuthClient.create();
@@ -26,6 +30,16 @@ export async function getAuthenticatedUser() {
   const authClient = await AuthClient.create();
   const identity = await authClient.getIdentity();
   return createActor(canisterId, {
+    agentOptions: {
+      identity,
+    },
+  });
+}
+
+export async function getAuthenticatedProfileUser() {
+  const authClient = await AuthClient.create();
+  const identity = await authClient.getIdentity();
+  return profileCreateActor(profileCanisterId, {
     agentOptions: {
       identity,
     },

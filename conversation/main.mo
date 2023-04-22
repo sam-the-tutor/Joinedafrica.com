@@ -56,6 +56,17 @@ shared ({ caller = initializer }) actor class () {
         };
     };
 
+    public shared query ({ caller }) func getAllMyFriends() : async Result.Result<[UserId], Error> {
+        if (Principal.isAnonymous(caller)) {
+            return #err(#UnAuthorizedUser);
+        };
+        let result = switch (Trie.get(friendList, hashKey(caller), Principal.equal)) {
+            case null [];
+            case (?list) List.toArray(list);
+        };
+        #ok(result);
+    };
+
     //test methods
     public query func getAllFriends() : async [Friend] {
         Trie.toArray<Friend, List.List<Message>, Friend>(conversations, func(friend, message) = friend);

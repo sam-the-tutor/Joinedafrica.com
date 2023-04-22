@@ -22,6 +22,7 @@ export default function MyPostings() {
       setIsLoading(true);
       const authenticatedUser = await getAuthenticatedUser();
       const post = await authenticatedUser.getAllMyPostings();
+      console.log(post);
       if (post?.err) {
         alert(getErrorMessage(post.err));
         setIsLoading(false);

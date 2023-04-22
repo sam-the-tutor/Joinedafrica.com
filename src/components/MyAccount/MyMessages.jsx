@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import { makeStyles } from "@mui/material/styles";
+
 import {
   Grid,
   Paper,
@@ -29,6 +30,7 @@ import {
 // import Fab from "@material-ui/core/Fab";
 // import SendIcon from "@material-ui/icons/Send";
 import SendIcon from "@mui/icons-material/Send";
+import { getAuthenticatedConversationUser } from "../../util/auth";
 // const useStyles = makeStyles({
 //   table: {
 //     minWidth: 650,
@@ -44,6 +46,18 @@ import SendIcon from "@mui/icons-material/Send";
 
 export default function MyMessages() {
   //   const classes = useStyles();
+  useEffect(() => {
+    async function getAllMyFriends() {
+      const authenticatedUser = await getAuthenticatedConversationUser();
+      const myFriends = await authenticatedUser.getAllMyFriends();
+      if (myFriends?.err) {
+        alert("sdfas");
+        return;
+      }
+    }
+    getAllMyFriends();
+  }, []);
+
   return (
     <div>
       <Grid

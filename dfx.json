@@ -6,6 +6,10 @@
         }
     },
     "canisters": {
+      "profile" : {
+        "main": "profile/main.mo",
+        "type": "motoko"
+      },
         "joinedafrica": {
           "main": "joinedafrica/main.mo",
           "type": "motoko"
@@ -17,10 +21,6 @@
         },
         "conversation": {
           "main": "conversation/main.mo",
-          "type": "motoko"
-        },
-        "profile" : {
-          "main": "profile/main.mo",
           "type": "motoko"
         },
         "frontend": {
