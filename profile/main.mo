@@ -6,25 +6,20 @@ import Option "mo:base/Option";
 import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Error "mo:base/Error";
-import PostAssetCanister "canister:post_assets";
 
-shared ({ caller = initializer }) actor class () {
+actor class Profile() {
     type UserId = Type.UserId;
     type Profile = Type.Profile;
     type Result<T, E> = Result.Result<T, E>;
     type Error = Type.Error;
-    type Asset = Type.Asset;
 
     var userProfiles : Trie.Trie<UserId, Profile> = Trie.empty();
     stable var stableProfiles : [(UserId, Profile)] = [];
 
-    public shared ({ caller }) func createUserProfile(profile : Profile, asset : Asset) : async Result<(), Error> {
+    public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
         //users that already have a profile shouldn't be able to create another profile with thesame identity
         if (not (userHasCreatedProfile(caller))) {
             userProfiles := Trie.put<UserId, Profile>(userProfiles, key(caller), Principal.equal, profile).0;
-            //authorize the caller so they can upload their profile picture to it
-            await PostAssetCanister.authorize(caller);
-            await PostAssetCanister.store(asset)
             #ok();
         } else {
             #err(#UserAlreadyExists);
@@ -33,7 +28,8 @@ shared ({ caller = initializer }) actor class () {
     };
 
     public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-        if (not (await isUserAuthorized(caller))) {
+        // calling isUserAuthorized method in this method creates an error because of the async
+        if (not (userHasCreatedProfile(caller) and not Principal.isAnonymous(caller))) {
             return #err(#UnAuthorizedUser);
         };
         switch (Trie.get(userProfiles, key(caller), Principal.equal)) {

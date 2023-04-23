@@ -7,13 +7,6 @@ module {
         profilePicture : Text;
         email : Text;
     };
-    //profile image asset
-    public type Asset = {
-        key : Text;
-        content : [Nat8];
-        content_type : Text;
-        content_encoding : Text;
-    };
     // all possible errors that can occur from the backend
     public type Error = {
         #UserAlreadyExists;

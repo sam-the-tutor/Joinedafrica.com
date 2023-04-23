@@ -14,7 +14,6 @@ import {
   ImageContainer,
 } from "../../styling/auth/CreateProfile";
 import {
-  removeFileFromPostAssetCanister,
   uploadFileToPostAssetCanister,
 } from "../../util/postAssetCanisterFunctions";
 import { getUniqueId, setSessionStorage } from "../../util/functions";
@@ -49,30 +48,20 @@ export default function CreateProfile() {
     setIsLoading(true);
     const createdProfile = { ...userProfile };
     const profileImagePath = principal + "/profile/" + getUniqueId();
-    // const key = await uploadFileToPostAssetCanister(
-    //   userProfile.profilePicture,
-    //   profileImagePath
-    // );
-    // createdProfile.profilePicture = key;
+
+    const key = await uploadFileToPostAssetCanister(
+      userProfile.profilePicture,
+      profileImagePath
+    );
+    createdProfile.profilePicture = key;
+
     createdProfile.profilePicture = profileImagePath;
     createdProfile.principalId = principal;
 
     const authenticatedProfileUser = await getAuthenticatedProfileUser();
-    let result = await authenticatedProfileUser.createUserProfile(
-      createdProfile,
-      {
-        key: profileImagePath,
-        content: new Unit8Array(userProfile.profilePicture),
-        content_type: "image/jpeg",
-        content_encoding: "identity",
-      }
-    );
+    let result = await authenticatedProfileUser.createUserProfile(createdProfile);
 
     if (result?.err) {
-      //the user is trying to create an account with the same identity
-      // sessionStorage.clear();
-      //remove the image we just saved from the post canister
-      // await removeFileFromPostAssetCanister(key);
       //handle the error
       alert(getErrorMessage(result.err));
     } else {

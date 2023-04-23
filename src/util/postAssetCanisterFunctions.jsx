@@ -2,13 +2,14 @@
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
 
+const agent = new HttpAgent(); // Agent with an authorized identity
+
 /**
  * In order to view the post_asset canister in candid UI locally, paste this link in the browser
  * http://127.0.0.1:4943/?canisterId=rno2w-sqaaa-aaaaa-aaacq-cai&id=rkp4c-7iaaa-aaaaa-aaaca-cai
  * http://localhost:4943/?canisterId=<Candid_UI_CanisterId>&id=<post_asset_canisterId>
  */
 const canisterId = process.env.POST_ASSETS_CANISTER_ID; // Canister id of the post asset canister
-const agent = new HttpAgent(); // Agent with an authorized identity
 
 if (process.env.DFX_NETWORK !== "ic") {
   agent.fetchRootKey().catch((err) => {

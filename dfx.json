@@ -6,18 +6,19 @@
         }
     },
     "canisters": {
+      "post_assets":{
+        "type": "assets",
+        "source": []
+      },
       "profile" : {
         "main": "profile/main.mo",
+        "dependencies": ["post_assets"],
         "type": "motoko"
       },
         "joinedafrica": {
           "main": "joinedafrica/main.mo",
+          "dependencies": ["post_assets", "profile"],
           "type": "motoko"
-        },
-        "post_assets":{
-          "type": "custom",
-          "candid": "did/post_assets.did",
-          "wasm" : "wasm/post_assets.wasm"
         },
         "conversation": {
           "main": "conversation/main.mo",
@@ -25,11 +26,11 @@
         },
         "frontend": {
             "dependencies": [
-                "joinedafrica",
                 "internet_identity",
                 "post_assets",
                 "profile",
-                "conversation"
+                "conversation",
+                "joinedafrica"
               ],
             "type": "assets",
             "frontend": {

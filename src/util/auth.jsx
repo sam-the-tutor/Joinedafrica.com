@@ -9,6 +9,10 @@ import {
   canisterId as profileCanisterId,
   createActor as profileCreateActor,
 } from "../declarations/profile";
+import {
+  canisterId as postAssetCanisterId,
+  createActor as postAssetCreateActor,
+} from "../declarations/post_assets";
 //Authenticate using internet identity and store the users principal
 export async function InternetIdentityAuthentication(setPrincipal) {
   const authClient = await AuthClient.create();
@@ -50,6 +54,16 @@ export async function getAuthenticatedConversationUser() {
   const authClient = await AuthClient.create();
   const identity = await authClient.getIdentity();
   return conversationCreateActor(conversationCanisterId, {
+    agentOptions: {
+      identity,
+    },
+  });
+}
+
+export async function getAuthenticatedPostAssetUser() {
+  const authClient = await AuthClient.create();
+  const identity = await authClient.getIdentity();
+  return postAssetCreateActor(postAssetCanisterId, {
     agentOptions: {
       identity,
     },

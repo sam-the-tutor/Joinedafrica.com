@@ -11,8 +11,7 @@ import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Error "mo:base/Error";
 import utils "utils";
-import ProfileCanister "canister:profile";
-import PostAssetCanister "canister:post_assets";
+import ProfileCanister "../profile/main";
 
 shared ({ caller = initializer }) actor class () {
 
@@ -68,18 +67,19 @@ shared ({ caller = initializer }) actor class () {
   The methods below are for my Postings.
 */
   public shared ({ caller }) func createPost(post : Post) : async Result<(), Error> {
-
-    if (not (await ProfileCanister.isUserAuthorized(caller))) {
+    let profile = await ProfileCanister.Profile();
+    if (not (await profile.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
-    //authorize the caller so they can upload their profile picture to it
-    await PostAssetCanister.authorize(caller);
     posts.createPost(post, caller);
     #ok();
 
   };
-  public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    if (not (await ProfileCanister.isUserAuthorized(caller))) {
+  //this method should be defined using query but but it will give an error because we're importing the
+  //profile canister
+  public shared ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
+    let profile = await ProfileCanister.Profile();
+    if (not (await profile.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     #ok(posts.getAllMyPostings(caller));
@@ -91,7 +91,8 @@ shared ({ caller = initializer }) actor class () {
     posts.getPostById(id);
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
-    if (not (await ProfileCanister.isUserAuthorized(caller))) {
+    let profile = await ProfileCanister.Profile();
+    if (not (await profile.isUserAuthorized(caller))) {
       return #err(#UnAuthorizedUser);
     };
     posts.markPostAsPublished(updatedPost, caller);

@@ -1,6 +1,4 @@
 import React from "react";
-
-import LeftBar from "./LeftBar";
 import Feed from "./Feed";
 import Header from "./Header";
 import {
@@ -12,7 +10,6 @@ import {
   ListItemIcon,
   Box
 } from "@mui/material";
-// import { Link } from "react-router-dom";
 import { categories } from "../../util/ListOfCategories";
 import {
   DrawerContainer,

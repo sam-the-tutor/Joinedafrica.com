@@ -65,6 +65,7 @@ export default function ViewPost() {
     getPost();
   }, []);
 
+  // sending message to the creator of the post
   async function sendMessage() {
     const loggedInUserPrincipalId = getFromSessionStorage("principalId", true);
     console.log(loggedInUserPrincipalId);
