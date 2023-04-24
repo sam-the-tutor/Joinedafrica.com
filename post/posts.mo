@@ -4,7 +4,7 @@ import Text "mo:base/Text";
 import Option "mo:base/Option";
 import List "mo:base/List";
 import Util "utils";
-import DatabaseStructure "DatabaseStructure";
+import DatabaseStructure "databasestructure";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
@@ -13,7 +13,7 @@ import Result "mo:base/Result";
 import Iter "mo:base/Iter";
 import Buffer "mo:base/Buffer";
 /**
-    This module is reponsible all published posts. 
+    This module is reponsible all published posts.
 */
 module {
     type Post = Types.Post;
@@ -106,7 +106,7 @@ module {
         };
 
         /**
-            Get the top 10 postings in a subcategory. 
+            Get the top 10 postings in a subcategory.
         */
         public func getTop10PostingsInCategory(category : Category, subcategory : Subcategory) : Result.Result<Top10Posts, Error> {
             let top10Posts = Buffer.Buffer<Post>(0);

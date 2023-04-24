@@ -15,8 +15,8 @@
         "dependencies": ["post_assets"],
         "type": "motoko"
       },
-        "joinedafrica": {
-          "main": "joinedafrica/main.mo",
+        "post": {
+          "main": "post/main.mo",
           "dependencies": ["post_assets", "profile"],
           "type": "motoko"
         },
@@ -30,7 +30,7 @@
                 "post_assets",
                 "profile",
                 "conversation",
-                "joinedafrica"
+                "post"
               ],
             "type": "assets",
             "frontend": {

@@ -7,7 +7,7 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { post } from "../../declarations/post";
 import { conversation } from "../../declarations/conversation";
 import { useParams } from "react-router";
 import Header from "../appStructure/Header";
@@ -41,7 +41,7 @@ export default function ViewPost() {
     async function getPost() {
       setLoading(true);
       //getPost is accessible to very body, that's why we don't need to be authenticated to access it
-      let response = await joinedafrica.getPost(postId);
+      let response = await post.getPost(postId);
       if (response?.ok) {
         setPost(response.ok);
       } else {

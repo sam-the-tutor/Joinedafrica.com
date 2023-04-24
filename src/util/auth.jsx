@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { canisterId, createActor } from "../declarations/joinedafrica";
+import { canisterId, createActor } from "../declarations/post";
 import {
   canisterId as conversationCanisterId,
   createActor as conversationCreateActor,

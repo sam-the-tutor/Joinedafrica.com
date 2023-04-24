@@ -9,7 +9,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { profile } from "../../declarations/profile";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { post } from "../../declarations/post";
 import { useParams } from "react-router-dom";
 import { getSubcategory } from "../../util/ListOfCategories";
 import Header from "../appStructure/Header";
@@ -36,9 +36,7 @@ export default function ViewCategory() {
       setLoading(true);
       //joinedafrica is making the call because the method it calls is public and doesn't
       //need authorization
-      const postings = await joinedafrica.getTop10PostingsInCategory(
-        categoryName
-      );
+      const postings = await post.getTop10PostingsInCategory(categoryName);
       const nonEmptySubcategory = postings.ok.filter(
         (posting) => posting.post.length > 0
       );

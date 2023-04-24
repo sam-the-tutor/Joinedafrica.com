@@ -8,7 +8,7 @@ import {
 import { useParams } from "react-router-dom";
 import { getFilterForSubcategory } from "../../util/posts/PostFiltering";
 import { profile } from "../../declarations/profile";
-import { joinedafrica } from "../../declarations/joinedafrica";
+import { post } from "../../declarations/post";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
@@ -21,7 +21,7 @@ export default function ViewSubcategory() {
   useEffect(() => {
     async function getAllPostingsInSubcategory() {
       setLoading(true);
-      const result = await joinedafrica.getAllPostingsInSubcategory(
+      const result = await post.getAllPostingsInSubcategory(
         categoryName,
         subcategoryName
       );

@@ -29,6 +29,8 @@ shared ({ caller = initializer }) actor class () {
         switch (Trie.get(conversations, key(friend), Text.equal)) {
             case null {
                 //caller and reciever haven't messaged each other before
+                await addUserToFriendList(caller, message.receiver);
+                await addUserToFriendList(message.receiver, caller);
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, List.nil())).0;
             };
             case (?list) {
@@ -36,8 +38,7 @@ shared ({ caller = initializer }) actor class () {
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, list)).0;
             };
         };
-        await addUserToFriendList(caller, message.receiver);
-        await addUserToFriendList(message.receiver, caller);
+
         #ok();
     };
 

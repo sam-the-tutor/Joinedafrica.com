@@ -60,7 +60,7 @@ export default function CreateProfile() {
 
     const authenticatedProfileUser = await getAuthenticatedProfileUser();
     let result = await authenticatedProfileUser.createUserProfile(createdProfile);
-
+      console.log(result);
     if (result?.err) {
       //handle the error
       alert(getErrorMessage(result.err));

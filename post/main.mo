@@ -1,17 +1,15 @@
 import Trie "mo:base/Trie";
 import Type "types";
-import Posts "Posts";
-import DatabaseStructure "DatabaseStructure";
+import Posts "posts";
+import DatabaseStructure "databasestructure";
 import List "mo:base/List";
 import Debug "mo:base/Debug";
-import UserProfiles "UserProfiles";
 import Result "mo:base/Result";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Error "mo:base/Error";
 import utils "utils";
-import ProfileCanister "../profile/main";
 
 shared ({ caller = initializer }) actor class () {
 
@@ -25,50 +23,11 @@ shared ({ caller = initializer }) actor class () {
   type Subcategory = Type.Subcategory;
   type Error = Type.Error;
 
-  /**
-    All data structures
-  */
-
-  //publishedPosts contains all published posts (visible to other users)
   var posts : Posts.Posts = Posts.Posts();
-
-  //users profile, includes create, deleting, searching, and editing profiles
-  var userProfiles : UserProfiles.UserProfiles = UserProfiles.UserProfiles();
-
   stable var stablePosts : [(UserId, Post)] = [];
-  stable var stableProfiles : [(UserId, Profile)] = [];
 
-  /**
-    The methods below are for user profiles
-  */
-
-  /**
-  New users have to create their profile to gain more access to the site.
-  */
-  // public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
-  //   userProfiles.createUserProfile(profile, caller);
-  // };
-
-  // public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
-  //   if (not (userProfiles.isUserAuthorized(caller))) {
-  //     return #err(#UnAuthorizedUser);
-  //   };
-  //   userProfiles.getUserProfile(caller);
-  // };
-
-  /**
-  This function is only called by the canister (joined africa) We use this function to display top10Posts, and so on
-*/
-  // public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error> {
-  //   userProfiles.getUserProfile(userId);
-  // };
-
-  /**
-  The methods below are for my Postings.
-*/
   public shared ({ caller }) func createPost(post : Post) : async Result<(), Error> {
-    let profile = await ProfileCanister.Profile();
-    if (not (await profile.isUserAuthorized(caller))) {
+    if (Principal.isAnonymous(caller)) {
       return #err(#UnAuthorizedUser);
     };
     posts.createPost(post, caller);
@@ -78,8 +37,7 @@ shared ({ caller = initializer }) actor class () {
   //this method should be defined using query but but it will give an error because we're importing the
   //profile canister
   public shared ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    let profile = await ProfileCanister.Profile();
-    if (not (await profile.isUserAuthorized(caller))) {
+    if (Principal.isAnonymous(caller)) {
       return #err(#UnAuthorizedUser);
     };
     #ok(posts.getAllMyPostings(caller));
@@ -91,8 +49,7 @@ shared ({ caller = initializer }) actor class () {
     posts.getPostById(id);
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
-    let profile = await ProfileCanister.Profile();
-    if (not (await profile.isUserAuthorized(caller))) {
+    if (Principal.isAnonymous(caller)) {
       return #err(#UnAuthorizedUser);
     };
     posts.markPostAsPublished(updatedPost, caller);
@@ -132,24 +89,15 @@ shared ({ caller = initializer }) actor class () {
   public shared query ({ caller }) func getAllPostIds() : async [PostId] {
     posts.getAllPostIds(caller);
   };
-  public shared query func getAllUsersId() : async [UserId] {
-    userProfiles.getAllUsers();
-  };
-  public func deleteUserProfile(user : UserId) : async () {
-    userProfiles.deleteUserProfile(user);
-  };
 
   //system method. Saving all the posts and user profiles in stable memory whenever we upgrade our canister.
   system func preupgrade() {
     stablePosts := posts.preupgrade();
-    stableProfiles := userProfiles.preupgrade();
   };
   //system method
   system func postupgrade() {
     posts.postupgrade(stablePosts);
-    userProfiles.postupgrade(stableProfiles);
     stablePosts := [];
-    stableProfiles := [];
   };
 
 };

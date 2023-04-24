@@ -3,7 +3,7 @@ import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import List "mo:base/List";
-import DatabaseStructure "DatabaseStructure";
+import DatabaseStructure "databasestructure";
 module {
     type UserId = Types.UserId;
     type Category = Types.Category;
