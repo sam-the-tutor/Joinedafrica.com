@@ -51,6 +51,7 @@ export async function removeFileFromPostAssetCanister(pathToFile) {
 }
 
 export async function getFileFromPostAssetCanister(pathToFile) {
+  pathToFile += pathToFile.charAt(pathToFile.length - 1) == "/" ? "" : "/";
   const file = await assetManager.get(pathToFile);
   return file;
 }

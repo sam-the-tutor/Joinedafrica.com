@@ -12,12 +12,10 @@
       },
       "profile" : {
         "main": "profile/main.mo",
-        "dependencies": ["post_assets"],
         "type": "motoko"
       },
         "post": {
           "main": "post/main.mo",
-          "dependencies": ["post_assets", "profile"],
           "type": "motoko"
         },
         "conversation": {
@@ -27,7 +25,6 @@
         "frontend": {
             "dependencies": [
                 "internet_identity",
-                "post_assets",
                 "profile",
                 "conversation",
                 "post"

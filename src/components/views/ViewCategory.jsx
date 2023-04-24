@@ -53,6 +53,7 @@ export default function ViewCategory() {
               const creatorOfPost = await profile.getUserProfilePicture(
                 createdPost.creatorOfPostId
               );
+              console.log(creatorOfPost);
               const iamgeFile = await getFileFromPostAssetCanister(
                 creatorOfPost.ok.profilePicture
               );

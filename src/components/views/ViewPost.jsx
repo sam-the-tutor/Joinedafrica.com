@@ -7,7 +7,7 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
-import { post } from "../../declarations/post";
+import { post as postCanister } from "../../declarations/post";
 import { conversation } from "../../declarations/conversation";
 import { useParams } from "react-router";
 import Header from "../appStructure/Header";
@@ -41,7 +41,7 @@ export default function ViewPost() {
     async function getPost() {
       setLoading(true);
       //getPost is accessible to very body, that's why we don't need to be authenticated to access it
-      let response = await post.getPost(postId);
+      let response = await postCanister.getPost(postId);
       if (response?.ok) {
         setPost(response.ok);
       } else {
@@ -85,6 +85,7 @@ export default function ViewPost() {
         receiver: post.creatorOfPostId,
         time: new Date().toLocaleString(),
       });
+      console.log(result);
       if (result?.err) {
         alert("error");
       } else {

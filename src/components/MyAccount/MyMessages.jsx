@@ -10,13 +10,17 @@ import {
   Typography,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Avatar,
   Fab,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import { profile } from "../../declarations/profile";
 import { getAuthenticatedConversationUser } from "../../util/auth";
+import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
+import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 // const useStyles = makeStyles({
 //   table: {
 //     minWidth: 650,
@@ -31,7 +35,7 @@ import { getAuthenticatedConversationUser } from "../../util/auth";
 // });
 
 export default function MyMessages() {
-  //   const classes = useStyles();
+  const [allMyFriends, setAllMyFriends] = useState([]);
   useEffect(() => {
     async function getAllMyFriends() {
       const authenticatedUser = await getAuthenticatedConversationUser();
@@ -40,7 +44,21 @@ export default function MyMessages() {
         alert("sdfas");
         return;
       }
-      console.log(myFriends);
+      const friendsList = [];
+      await Promise.all(
+        myFriends.ok.map(async (userId) => {
+          const friendProfile = await profile.getUserProfilePicture(userId);
+          const iamgeFile = await getFileFromPostAssetCanister(
+            friendProfile.ok.profilePicture
+          );
+          friendsList.push({
+            ...friendProfile.ok,
+            profilePicture: createObjectURLFromArrayOfBytes(iamgeFile._content),
+          });
+        })
+      );
+      console.log(friendsList);
+      setAllMyFriends(friendsList);
     }
     getAllMyFriends();
   }, []);
@@ -52,62 +70,33 @@ export default function MyMessages() {
         component={Paper}
         style={{ width: "100%", height: "80vh" }}
       >
+        {/* friendsList */}
         <Grid item xs={3} style={{ borderRight: "1px solid #e0e0e0" }}>
-          <List>
-            <ListItem key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
           <Grid item xs={12} style={{ padding: "10px" }}>
-            <TextField
-              id="outlined-basic-email"
-              label="Search"
-              variant="outlined"
-              fullWidth
-            />
+            <TextField label="Search" variant="outlined" />
           </Grid>
           <Divider />
           <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
+            {allMyFriends.map((profile, index) => (
+              <ListItemButton key={index}>
+                <ListItemIcon>
+                  <Avatar src={profile.profilePicture} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={profile.firstName + " " + profile.lastName}
                 />
-              </ListItemIcon>
-              <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-              <ListItemText secondary="online" align="right"></ListItemText>
-            </ListItem>
-            <ListItem button key="Alice">
-              <ListItemIcon>
-                <Avatar
-                  alt="Alice"
-                  src="https://material-ui.com/static/images/avatar/3.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Alice">Alice</ListItemText>
-            </ListItem>
-            <ListItem button key="CindyBaker">
-              <ListItemIcon>
-                <Avatar
-                  alt="Cindy Baker"
-                  src="https://material-ui.com/static/images/avatar/2.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-            </ListItem>
+                {/* <ListItemText secondary="online" align="right"></ListItemText> */}
+              </ListItemButton>
+            ))}
           </List>
         </Grid>
+        {/* conversation */}
         <Grid item xs={9}>
           <List style={{ height: "70vh", overflowY: "auto" }}>
-            <ListItem key="1">
+            <Typography style={{ textAlign: "center" }}>
+              Click on friend to view messages
+            </Typography>
+            {/* <ListItem key="1">
               <Grid container>
                 <Grid item xs={12}>
                   <ListItemText
@@ -145,7 +134,7 @@ export default function MyMessages() {
                   <ListItemText align="right" secondary="10:30"></ListItemText>
                 </Grid>
               </Grid>
-            </ListItem>
+            </ListItem> */}
           </List>
           <Divider />
           <Grid container style={{ padding: "20px" }}>
