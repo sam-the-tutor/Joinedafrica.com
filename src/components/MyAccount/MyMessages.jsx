@@ -18,9 +18,13 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { profile } from "../../declarations/profile";
+import { conversation } from "../../declarations/conversation";
 import { getAuthenticatedConversationUser } from "../../util/auth";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { createObjectURLFromArrayOfBytes } from "../../util/functions";
+import {
+  createObjectURLFromArrayOfBytes,
+  getFromSessionStorage,
+} from "../../util/functions";
 // const useStyles = makeStyles({
 //   table: {
 //     minWidth: 650,
@@ -36,6 +40,8 @@ import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 
 export default function MyMessages() {
   const [allMyFriends, setAllMyFriends] = useState([]);
+  const [myMessages, setMyMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getAllMyFriends() {
       const authenticatedUser = await getAuthenticatedConversationUser();
@@ -53,7 +59,9 @@ export default function MyMessages() {
           );
           friendsList.push({
             ...friendProfile.ok,
-            profilePicture: createObjectURLFromArrayOfBytes(iamgeFile._content),
+            profileImageFile: createObjectURLFromArrayOfBytes(
+              iamgeFile._content
+            ),
           });
         })
       );
@@ -62,6 +70,16 @@ export default function MyMessages() {
     }
     getAllMyFriends();
   }, []);
+
+  async function getMyMessages(friendProfilePicture) {
+    setLoading(true);
+    const friendsPrincipal = friendProfilePicture.substring(0, 63);
+    const authenticatedUser = await getAuthenticatedConversationUser();
+    const messages = await authenticatedUser.getMyMessages(friendsPrincipal);
+    console.log(messages);
+    setMyMessages(messages);
+    setLoading(false);
+  }
 
   return (
     <div>
@@ -78,9 +96,12 @@ export default function MyMessages() {
           <Divider />
           <List>
             {allMyFriends.map((profile, index) => (
-              <ListItemButton key={index}>
+              <ListItemButton
+                key={index}
+                onClick={() => getMyMessages(profile.profilePicture)}
+              >
                 <ListItemIcon>
-                  <Avatar src={profile.profilePicture} />
+                  <Avatar src={profile.profileImageFile} />
                 </ListItemIcon>
                 <ListItemText
                   primary={profile.firstName + " " + profile.lastName}
