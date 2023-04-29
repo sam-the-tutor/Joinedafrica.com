@@ -3,6 +3,5 @@ module {
     public type Notification = {
         sender : Principal;
         receiver : Principal;
-        content : Text;
     };
 };
