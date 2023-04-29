@@ -85,6 +85,7 @@ export default function CreatePost() {
     }
     setIsLoading(true);
     const userPrincipal = getFromSessionStorage("principalId", true);
+    console.log(userPrincipal);
     const post = {
       creationDateOfPost: new Date().toLocaleDateString(),
       category: selectedCategory,

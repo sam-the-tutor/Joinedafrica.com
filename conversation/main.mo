@@ -78,7 +78,17 @@ shared ({ caller = initializer }) actor class () {
         var sortedPrincipals = utils.sortPrincipals(caller, Principal.fromText(friend));
         let result = switch (Trie.get(conversations, key(sortedPrincipals), Text.equal)) {
             case null [];
-            case (?list) List.toArray(list);
+            case (?list) {
+                //mark the last conversation between the two friends as seen (true) so we know all the messages
+                //between the two friends are seen
+                // switch(List.last(list)){
+                //     case null return #err(#NoConversationFound);
+                //     case (?conversation){
+
+                //     }
+                // }
+                List.toArray(list);
+            };
         };
         #ok(result);
     };

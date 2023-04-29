@@ -13,9 +13,7 @@ import {
   IdentitySetup,
   ImageContainer,
 } from "../../styling/auth/CreateProfile";
-import {
-  uploadFileToPostAssetCanister,
-} from "../../util/postAssetCanisterFunctions";
+import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { getUniqueId, setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
 
@@ -54,13 +52,13 @@ export default function CreateProfile() {
       profileImagePath
     );
     createdProfile.profilePicture = key;
-
-    createdProfile.profilePicture = profileImagePath;
-    createdProfile.principalId = principal;
+    // createdProfile.principalId = principal;
 
     const authenticatedProfileUser = await getAuthenticatedProfileUser();
-    let result = await authenticatedProfileUser.createUserProfile(createdProfile);
-      console.log(result);
+    let result = await authenticatedProfileUser.createUserProfile(
+      createdProfile
+    );
+    console.log(result);
     if (result?.err) {
       //handle the error
       alert(getErrorMessage(result.err));

@@ -22,12 +22,18 @@
           "main": "conversation/main.mo",
           "type": "motoko"
         },
+        "message_notification":{
+          "main" :"backend/message_notification/main.mo",
+          "type" :"motoko"
+        },
         "frontend": {
             "dependencies": [
                 "internet_identity",
                 "profile",
                 "conversation",
-                "post"
+                "post",
+                "post_assets",
+                "message_notification"
               ],
             "type": "assets",
             "frontend": {

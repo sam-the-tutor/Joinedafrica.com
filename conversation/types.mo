@@ -10,9 +10,11 @@ module {
         messageContent : Text;
         sender : UserId;
         receiver : UserId;
+        isSeen : Bool;
     };
 
     public type Error = {
         #UnAuthorizedUser;
+        #NoConversationFound;
     };
 };

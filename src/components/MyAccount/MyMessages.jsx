@@ -76,8 +76,7 @@ export default function MyMessages() {
     const friendsPrincipal = friendProfilePicture.substring(0, 63);
     const authenticatedUser = await getAuthenticatedConversationUser();
     const messages = await authenticatedUser.getMyMessages(friendsPrincipal);
-    console.log(messages);
-    setMyMessages(messages);
+    setMyMessages(messages.ok);
     setLoading(false);
   }
 
@@ -117,6 +116,13 @@ export default function MyMessages() {
             <Typography style={{ textAlign: "center" }}>
               Click on friend to view messages
             </Typography>
+            {myMessages.map((message, index) => (
+              <ListItemText
+                key={index}
+                align="right"
+                primary={message.messageContent}
+              />
+            ))}
             {/* <ListItem key="1">
               <Grid container>
                 <Grid item xs={12}>

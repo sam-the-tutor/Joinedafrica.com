@@ -83,6 +83,7 @@ export default function ViewPost() {
         messageContent: userMessage,
         sender: Principal.fromText(loggedInUserPrincipalId),
         receiver: post.creatorOfPostId,
+        isSeen: false,
         time: new Date().toLocaleString(),
       });
       console.log(result);
