@@ -13,9 +13,18 @@ import {
   canisterId as postAssetCanisterId,
   createActor as postAssetCreateActor,
 } from "../declarations/post_assets";
+import {
+  canisterId as messageNotificationCanisterId,
+  createActor as messageNotificationCreateActor,
+} from "../declarations/message_notification";
 //Authenticate using internet identity and store the users principal
 export async function InternetIdentityAuthentication(setPrincipal) {
-  const authClient = await AuthClient.create();
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   if (await authClient.isAuthenticated()) {
     const identity = await authClient.getIdentity();
     setPrincipal(identity._principal.toText());
@@ -31,7 +40,12 @@ export async function InternetIdentityAuthentication(setPrincipal) {
 }
 
 export async function getAuthenticatedUser() {
-  const authClient = await AuthClient.create();
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   const identity = await authClient.getIdentity();
   return createActor(canisterId, {
     agentOptions: {
@@ -41,7 +55,12 @@ export async function getAuthenticatedUser() {
 }
 
 export async function getAuthenticatedProfileUser() {
-  const authClient = await AuthClient.create();
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   const identity = await authClient.getIdentity();
   return profileCreateActor(profileCanisterId, {
     agentOptions: {
@@ -51,7 +70,12 @@ export async function getAuthenticatedProfileUser() {
 }
 
 export async function getAuthenticatedConversationUser() {
-  const authClient = await AuthClient.create();
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   const identity = await authClient.getIdentity();
   return conversationCreateActor(conversationCanisterId, {
     agentOptions: {
@@ -61,9 +85,29 @@ export async function getAuthenticatedConversationUser() {
 }
 
 export async function getAuthenticatedPostAssetUser() {
-  const authClient = await AuthClient.create();
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   const identity = await authClient.getIdentity();
   return postAssetCreateActor(postAssetCanisterId, {
+    agentOptions: {
+      identity,
+    },
+  });
+}
+
+export async function getAuthenticatedMessageNotificationWorker() {
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
+  const identity = await authClient.getIdentity();
+  return messageNotificationCreateActor(messageNotificationCanisterId, {
     agentOptions: {
       identity,
     },

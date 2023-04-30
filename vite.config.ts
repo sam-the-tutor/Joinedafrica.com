@@ -8,7 +8,7 @@ const network = process.env['DFX_NETWORK'] || localNetwork;
 
 const internetIdentityUrl =
   network === "local"
-    ? `http://localhost:4943?canisterId=r7inp-6aaaa-aaaaa-aaabq-cai`
+    ? `http://localhost:4943?canisterId=rno2w-sqaaa-aaaaa-aaacq-cai`
     : "https://identity.ic0.app/#authorize";  
 
 let canisterIdPath: string;

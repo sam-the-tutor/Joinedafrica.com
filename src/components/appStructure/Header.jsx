@@ -23,6 +23,7 @@ import {
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
+import { startMessageWorker } from "../../util/webworkers/startMessageWorker";
 
 export default function Header() {
   //users principal
@@ -54,6 +55,8 @@ export default function Header() {
           setSessionStorage("profilePicture", profile.profilePicture, true);
           setSessionStorage("isLoggedIn", "true", false);
           setIsUserLoggedin(true);
+          //start pull message notification from the notification canister
+          startMessageWorker();
         }
         setIsLoading(false);
       }
