@@ -8,13 +8,13 @@ const network = process.env['DFX_NETWORK'] || localNetwork;
 
 const internetIdentityUrl =
   network === "local"
-    ? `http://localhost:4943?canisterId=rno2w-sqaaa-aaaaa-aaacq-cai`
+    ? `http://localhost:4943?canisterId=r7inp-6aaaa-aaaaa-aaabq-cai`
     : "https://identity.ic0.app/#authorize";  
 
 let canisterIdPath: string;
 if (network === localNetwork) {
   // Local replica canister IDs
-  canisterIdPath = join(__dirname, '.dfx/local/canister_ids.json');
+  canisterIdPath = join(__dirname, '.dfx/local/canister_ids.json');  
 } else {
   // Custom canister IDs
   canisterIdPath = join(__dirname, 'canister_ids.json');

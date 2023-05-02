@@ -1,43 +1,18 @@
-import { idlFactory } from "../../declarations/message_notification/index.js";
 import { getAuthenticatedMessageNotificationWorker } from "../auth.jsx";
-import worker_script from "./handleMessageWorker.jsx";
-import { Actor, HttpAgent } from "@dfinity/agent";
+// import worker_script from "./handleMessageWorker.jsx";
 
-getAuthenticatedMessageNotificationWorker;
 export async function startMessageWorker() {
-  const worker = new Worker(worker_script);
+  const worker = new Worker("src/util/webworkers/handleMessageWorker.jsx");
   worker.onmessage = ({ data }) => {
     const { msg, notifications } = data;
     if (msg === "messages_notifcations") {
       console.log(notifications);
     }
   };
-  console.log("here2");
+  const user = await getAuthenticatedMessageNotificationWorker();
+  const canisterId = process.env.MESSAGE_NOTIFICATION_CANISTER_ID;
   worker.postMessage({
     msg: "start",
-    canisterId: process.env.MESSAGE_NOTIFICATION_CANISTER_ID,
+    canisterId,
   });
 }
-
-const canisterId = process.env.MESSAGE_NOTIFICATION_CANISTER_ID;
-
-const createActor = (canisterId, options = {}) => {
-  const agent = new HttpAgent(options ? { ...options.agentOptions } : {});
-
-  // Fetch root key for certificate validation during development
-  if (process.env.NODE_ENV !== "production") {
-    agent.fetchRootKey().catch((err) => {
-      console.warn(
-        "Unable to fetch root key. Check to ensure that your local replica is running"
-      );
-      console.error(err);
-    });
-  }
-
-  // Creates an actor with using the candid interface and the HttpAgent
-  return Actor.createActor(idlFactory, {
-    agent,
-    canisterId,
-    ...(options ? options.actorOptions : {}),
-  });
-};

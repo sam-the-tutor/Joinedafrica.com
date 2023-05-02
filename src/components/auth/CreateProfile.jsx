@@ -72,7 +72,7 @@ export default function CreateProfile() {
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
       //start pull message notification from the notification canister
-      startMessageWorker();
+      // startMessageWorker();
       navigate("/home");
     }
     setIsLoading(false);

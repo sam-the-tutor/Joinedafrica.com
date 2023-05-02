@@ -83,17 +83,18 @@ export function RadioButtonCmp({ list, title, category, subcategory }) {
           <ListItemButton
             role={undefined}
             // id = '"filter_"+title' : condition
-            onClick={handleToggle(condition)}
+            // onClick={handleToggle(condition)}
             // onClick={() => naviage("view/sdaf/sfsd/search?"+[filtertitle=condition)}
             dense
           >
             <ListItemIcon>
-              <Checkbox
+              <input type="radio" name={title} value={condition} />
+              {/* <Checkbox
                 edge="start"
                 checked={checked.indexOf(condition) !== -1}
                 tabIndex={-1}
                 disableRipple
-              />
+              /> */}
             </ListItemIcon>
             <ListItemText id={index} primary={condition} />
           </ListItemButton>

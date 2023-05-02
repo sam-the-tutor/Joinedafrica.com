@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, List, Toolbar, Typography, Container, Grid } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
+import {
+  Box,
+  List,
+  Toolbar,
+  Typography,
+  Container,
+  Grid,
+  Button,
+} from "@mui/material";
 import Header from "../appStructure/Header";
 import {
   DrawerContainer,
@@ -18,6 +27,7 @@ export default function ViewSubcategory() {
   const [loading, setLoading] = useState(false);
   const { categoryName, subcategoryName } = useParams();
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     async function getAllPostingsInSubcategory() {
       setLoading(true);
@@ -30,7 +40,7 @@ export default function ViewSubcategory() {
       } else {
         //Looping through each subcategory and adding the profile picture of each posts createor in
         //the top10Subcategories list
-        const modifiedPosts = [];
+        var modifiedPosts = [];
         await Promise.all(
           result.ok.map(async (createdPost) => {
             const creatorOfPost = await profile.getUserProfilePicture(
@@ -47,12 +57,44 @@ export default function ViewSubcategory() {
             });
           })
         );
+        console.log(modifiedPosts);
+        modifiedPosts = filterSearch(modifiedPosts);
+        console.log(modifiedPosts);
         setPosts(modifiedPosts);
       }
       setLoading(false);
+      return modifiedPosts;
     }
     getAllPostingsInSubcategory();
   }, []);
+
+  function filterSearch(modifiedPosts) {
+    var search = window.location.search.substring(1);
+    if (search) {
+      let x = JSON.parse(
+        '{"' +
+          decodeURI(search)
+            .replace(/"/g, '\\"')
+            .replace(/&/g, '","')
+            .replace(/=/g, '":"') +
+          '"}'
+      );
+      const keys = Object.keys(x);
+      console.log(keys);
+      const filteredResult = modifiedPosts.filter((post) => {
+        var result = true;
+        keys.forEach((key) => {
+          if (keys.includes("Condition") && post.Condition != x.Condition) {
+            result = false;
+            return;
+          }
+        });
+        return result;
+      });
+      return filteredResult;
+    }
+    return modifiedPosts;
+  }
   return (
     <Box>
       <Header />
@@ -60,7 +102,12 @@ export default function ViewSubcategory() {
         <DrawerContainer variant="permanent" anchor="left">
           <Toolbar />
           <TypographyCmp variant="h6">Filter</TypographyCmp>
-          {getFilterForSubcategory(subcategoryName, categoryName)}
+          <form style={{ paddingBottom: "30px" }}>
+            {getFilterForSubcategory(subcategoryName, categoryName)}
+            <Button type="submit" variant="outlined" style={{ margin: "10px" }}>
+              Filter
+            </Button>
+          </form>
         </DrawerContainer>
         <Box style={{ padding: "24px", width: "100%" }}>
           <Toolbar />

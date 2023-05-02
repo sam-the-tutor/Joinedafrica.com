@@ -349,7 +349,7 @@ export const filtering = [
   },
   {
     Name: "Land and plots for sale",
-    Type: ["Commercial Land", "Farmland", "Residential Land", "Mised-Use Land"],
+    Type: ["Commercial Land", "Farmland", "Residential Land", "Mixed-Use Land"],
     Number_of_Plots: [
       "1",
       "2",

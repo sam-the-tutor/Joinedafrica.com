@@ -41,7 +41,7 @@ export default function App() {
             <Route exact path="search?" element={<ViewSubcategory />} />
             <Route
               exact
-              path="view/:categoryName/:subcategoryName/search?"
+              path="view/:categoryName/:subcategoryName"
               element={<ViewSubcategory />}
             />
 
