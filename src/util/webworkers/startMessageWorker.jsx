@@ -9,10 +9,7 @@ export async function startMessageWorker() {
       console.log(notifications);
     }
   };
-  const user = await getAuthenticatedMessageNotificationWorker();
-  const canisterId = process.env.MESSAGE_NOTIFICATION_CANISTER_ID;
   worker.postMessage({
     msg: "start",
-    canisterId,
   });
 }

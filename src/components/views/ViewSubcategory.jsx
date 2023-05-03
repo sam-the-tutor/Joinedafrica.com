@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import {
-  Box,
-  List,
-  Toolbar,
-  Typography,
-  Container,
-  Grid,
-  Button,
-} from "@mui/material";
+import { Box, Toolbar, Typography, Grid } from "@mui/material";
 import Header from "../appStructure/Header";
 import {
   DrawerContainer,
@@ -22,6 +13,12 @@ import { getErrorMessage } from "../../util/ErrorMessages";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { createObjectURLFromArrayOfBytes } from "../../util/functions";
+
+/**
+ * When the user clicks on a specific subcategory in the home page, this component is responsible for displaying all postings
+ * in that subcategory
+ * @returns returns all postings in a selected subcategory.
+ */
 
 export default function ViewSubcategory() {
   const [loading, setLoading] = useState(false);

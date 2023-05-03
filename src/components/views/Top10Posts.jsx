@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 
+/**
+ * This component is reponsible for displaying the top10 posts in the homepage and category page of a post
+ */
 export default function Top10Posts({ name, posts }) {
   return (
     <Box style={{ marginTop: "20px", marginBottom: "20px" }} key={posts}>

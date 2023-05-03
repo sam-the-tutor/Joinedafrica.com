@@ -1,31 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   FormGroup,
   FormControlLabel,
   Checkbox,
   List,
-  ListItem,
+  FormLabel,
+  RadioGroup,
   Radio,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  FormControl,
 } from "@mui/material/";
-import { useNavigate } from "react-router-dom";
-// import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-// import List from "@mui/material/List";
-// import ListItem from "@mui/material/ListItem";
-// import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import ListItemText from "@mui/material/ListItemText";
-// import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import CommentIcon from "@mui/icons-material/Comment";
 import filterSubcategory from "../posts/subCategoryFiltering";
 
 export function CheckboxCmp({ list }) {
@@ -37,7 +19,9 @@ export function CheckboxCmp({ list }) {
     </FormGroup>
   );
 }
-
+/**
+ *  ControlledRadioButtonsGroup filters the subcategory of postings based on the checkbox the user selects
+ */
 export function ControlledRadioButtonsGroup({
   list,
   title,

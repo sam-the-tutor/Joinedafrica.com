@@ -8,7 +8,6 @@ import Body from "./components/appStructure/Body";
 import WelcomePage from "./components/welcomeToJoinedAfrica/WelcomePage";
 import CreateProfile from "./components/auth/CreateProfile";
 import ViewPost from "./components/views/ViewPost";
-import ViewListOfPost from "./components/views/ViewListOfPost";
 import ViewCategory from "./components/views/ViewCategory";
 import ViewSubcategory from "./components/views/ViewSubcategory";
 

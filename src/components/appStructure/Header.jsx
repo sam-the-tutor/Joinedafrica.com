@@ -72,13 +72,13 @@ export default function Header() {
           <Typography variant="h6" component="div">
             Joined Africa
           </Typography>
-          {/* <InputContainer>
+          <InputContainer>
             <SearchIconCmp />
             <Input
               placeholder="search..."
               sx={{ width: "100%", color: "black" }}
             />
-          </InputContainer> */}
+          </InputContainer>
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
             {isUserLoggedIn ? (
               <>

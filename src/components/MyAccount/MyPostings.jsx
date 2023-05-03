@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid } from "@mui/material";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
+import { Box, Grid, Typography } from "@mui/material";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 import {
   createObjectURLFromArrayOfBytes,
@@ -40,7 +39,9 @@ export default function MyPostings() {
   }, []);
   return (
     <>
-      {!isLoading && (
+      {isLoading ? (
+        <Typography>Loading...</Typography>
+      ) : (
         <Box>
           <Grid
             container
@@ -59,8 +60,6 @@ export default function MyPostings() {
           </Grid>
         </Box>
       )}
-
-      {isLoading && LoadingCmp(isLoading)}
     </>
   );
 }
