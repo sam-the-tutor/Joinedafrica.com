@@ -57,9 +57,6 @@ export default function ViewSubcategory() {
             });
           })
         );
-        console.log(modifiedPosts);
-        modifiedPosts = filterSearch(modifiedPosts);
-        console.log(modifiedPosts);
         setPosts(modifiedPosts);
       }
       setLoading(false);
@@ -67,34 +64,6 @@ export default function ViewSubcategory() {
     }
     getAllPostingsInSubcategory();
   }, []);
-
-  function filterSearch(modifiedPosts) {
-    var search = window.location.search.substring(1);
-    if (search) {
-      let x = JSON.parse(
-        '{"' +
-          decodeURI(search)
-            .replace(/"/g, '\\"')
-            .replace(/&/g, '","')
-            .replace(/=/g, '":"') +
-          '"}'
-      );
-      const keys = Object.keys(x);
-      console.log(keys);
-      const filteredResult = modifiedPosts.filter((post) => {
-        var result = true;
-        keys.forEach((key) => {
-          if (keys.includes("Condition") && post.Condition != x.Condition) {
-            result = false;
-            return;
-          }
-        });
-        return result;
-      });
-      return filteredResult;
-    }
-    return modifiedPosts;
-  }
   return (
     <Box>
       <Header />
@@ -102,12 +71,15 @@ export default function ViewSubcategory() {
         <DrawerContainer variant="permanent" anchor="left">
           <Toolbar />
           <TypographyCmp variant="h6">Filter</TypographyCmp>
-          <form style={{ paddingBottom: "30px" }}>
-            {getFilterForSubcategory(subcategoryName, categoryName)}
-            <Button type="submit" variant="outlined" style={{ margin: "10px" }}>
-              Filter
-            </Button>
-          </form>
+          <div style={{ paddingBottom: "30px", paddingLeft: "15px" }}>
+            {getFilterForSubcategory(
+              subcategoryName,
+              categoryName,
+              posts,
+              setPosts,
+              setLoading
+            )}
+          </div>
         </DrawerContainer>
         <Box style={{ padding: "24px", width: "100%" }}>
           <Toolbar />

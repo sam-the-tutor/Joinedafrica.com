@@ -1,4 +1,7 @@
-import { CheckboxCmp, RadioButtonCmp } from "../reuseableComponents/SelectCmp";
+import {
+  CheckboxCmp,
+  ControlledRadioButtonsGroup,
+} from "../reuseableComponents/SelectCmp";
 
 export const filtering = [
   {
@@ -505,237 +508,312 @@ export function getFilteringInformation(subcategoryName) {
   return null;
 }
 
-export function getFilterForSubcategory(subcategoryName, categoryName) {
+export function getFilterForSubcategory(
+  subcategoryName,
+  categoryName,
+  posts,
+  setPosts,
+  setLoading
+) {
   const result = [];
   const postDetails = getFilteringInformation(subcategoryName);
   if (postDetails.Brand) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Brand}
         title="Brand"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Type) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Type}
         title="Type"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Condition) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Condition}
         title="Condition"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Is_Registered) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Is_Registered}
         title="Registered"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Has_Parking_Space) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Has_Parking_Space}
         title="Parking Space"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Style) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Style}
         title="Style"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Display) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Display}
         title="Display"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Is_Furnished) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Is_Furnished}
         title="Furnished"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Transmission) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Transmission}
         title="Transmission"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Processor) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Processor}
         title="Processor"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Display_Type) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Display_Type}
         title="Display Type"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Bedrooms) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Bedrooms}
         title="Bedrooms"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Number_of_Plots) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Number_of_Plots}
         title="Number of Plots"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Bathrooms) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Bathrooms}
         title="Bathrooms"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Gender) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Gender}
         title="Gender"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Formation) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Formation}
         title="Formation"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Formulation) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Formulation}
         title="Formulation"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Operating_System) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Operating_System}
         title="Operating System"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Storage_Type) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Storage_Type}
         title="Storage Type"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Storage_Capacity) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Storage_Capacity}
         title="Storage Capacity"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.RAM) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.RAM}
         title="RAM"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
   if (postDetails.Colour) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Colour}
         title="Colour"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
 
   if (postDetails.Year_of_manufacture) {
     result.push(
-      <RadioButtonCmp
+      <ControlledRadioButtonsGroup
         list={postDetails.Year_of_manufacture}
         title="Year of manufacture"
         category={categoryName}
         subcategory={subcategoryName}
+        posts={posts}
+        setPosts={setPosts}
+        setLoading={setLoading}
       />
     );
   }
