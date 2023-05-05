@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { defineConfig } from 'vite';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 
 const localNetwork = 'local';
 const network = process.env['DFX_NETWORK'] || localNetwork;
@@ -32,7 +33,8 @@ const canisterIds = JSON.parse(readFileSync(canisterIdPath, 'utf8'));
 export default defineConfig({
   plugins: [react()],
   define: {
-    global: 'window',
+    // global: 'globalThis',
+   
     'process.env.DFX_NETWORK': JSON.stringify(process.env.DFX_NETWORK),
     'process.env.INTERNET_IDENTITY_URL': JSON.stringify(internetIdentityUrl),
     // Expose canister IDs provided by `dfx deploy`
@@ -43,6 +45,26 @@ export default defineConfig({
       ]),
     ),
   },
+	optimizeDeps: {
+		esbuildOptions: {
+			// Node.js global to browser globalThis
+			define: {
+				global: 'globalThis',
+			},
+			// Enable esbuild polyfill plugins
+			plugins: [
+				// @ts-ignore
+				NodeModulesPolyfillPlugin(),
+				{
+					name: 'fix-node-globals-polyfill',
+					setup(build) {
+						build.onResolve({ filter: /_virtual-process-polyfill_\.js/ }, ({ path }) => ({ path }));
+					}
+				}
+			]
+		}
+	},
+
   server: {
     // Local IC replica proxy
     proxy: {
