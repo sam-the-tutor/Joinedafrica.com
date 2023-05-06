@@ -1,4 +1,12 @@
-export async function startMessageWorker() {
+import { useContext } from "react";
+import { AppContext } from "../../context";
+
+export async function startMessageWorker(
+  newMessageNotification,
+  setNewMessageNotification
+) {
+  // const {} = useContext(AppContext)
+  // console.log(newMessageNotification);
   const worker = new Worker("src/util/webworkers/handleMessageWorker.jsx", {
     type: "module",
   });
@@ -6,10 +14,9 @@ export async function startMessageWorker() {
   worker.onmessage = ({ data }) => {
     const { msg, notifications } = data;
     if (msg === "messages_notifcations") {
-      console.log(notifications);
+      setNewMessageNotification(notifications);
     }
   };
-  console.log(process.env.DFX_NETWORK);
   worker.postMessage({
     msg: "start",
     canisterId,

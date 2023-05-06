@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 // import { makeStyles } from "@mui/material/styles";
 
 import {
@@ -20,13 +20,17 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import { profile } from "../../declarations/profile";
 import { conversation } from "../../declarations/conversation";
-import { getAuthenticatedConversationUser } from "../../util/auth";
+import {
+  getAuthenticatedConversationUser,
+  getAuthenticatedMessageNotificationWorker,
+} from "../../util/auth";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../util/functions";
 import { Principal } from "@dfinity/principal";
+import { AppContext } from "../../context";
 // const useStyles = makeStyles({
 //   table: {
 //     minWidth: 650,
@@ -48,6 +52,18 @@ export default function MyMessages() {
   const [myFriendPrincipal, setMyFriendPrincipal] = useState("");
   //messages send to my friends principal
   const [conversation, setConveration] = useState("");
+  const { newMessageNotification } = useContext(AppContext);
+
+  useEffect(() => {
+    function loadNewMessages() {
+      if (myFriendPrincipal.length > 0) {
+        //if i am currently chatting with my friend, i want to to display all our messages
+        // newMessageNotification.filter(message => )
+      }
+      console.log(newMessageNotification);
+    }
+    loadNewMessages();
+  }, [newMessageNotification]);
 
   useEffect(() => {
     async function getAllMyFriends() {
@@ -93,13 +109,27 @@ export default function MyMessages() {
       alert("You have to click on a friend to send message to them");
       return;
     }
-    const authenticatedUser = await getAuthenticatedConversationUser();
-    await authenticatedUser.sendMessage({
+    //send the message to the other friends
+    const chatMessage = {
       messageContent: conversation,
       sender: Principal.fromText(myPrincipal),
-      receiver: Principal.fromText(myFriendPrincipal),
-      time: new Date().toLocaleString(),
-    });
+      mainReceiver: Principal.fromText(myFriendPrincipal),
+      time: new Date().toLocaleTimeString(),
+      date: new Date().toLocaleDateString(),
+      secondReceiver: null,
+    };
+    //send the message to my message notifications canister so it can be pulled
+    //using webworker and displayed in the chatbox
+    const myMessage = { ...chatMessage };
+    myMessage.receiver = Principal.fromText(myPrincipal);
+    myMessage.secondReceiver = myFriendPrincipal;
+    //send the message to the creators posts notification
+    const authenticatedWorker =
+      await getAuthenticatedMessageNotificationWorker();
+    await authenticatedWorker.sendNotification(myMessage);
+    await authenticatedWorker.sendNotification(chatMessage);
+    const authenticatedUser = await getAuthenticatedConversationUser();
+    await authenticatedUser.sendMessage(chatMessage);
   }
   return (
     <div>

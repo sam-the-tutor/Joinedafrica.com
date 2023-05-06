@@ -33,18 +33,34 @@ const canisterIds = JSON.parse(readFileSync(canisterIdPath, 'utf8'));
 export default defineConfig({
   plugins: [react()],
   define: {
-    // global: 'globalThis',
-   
-    'process.env.DFX_NETWORK': JSON.stringify(process.env.DFX_NETWORK),
-    'process.env.INTERNET_IDENTITY_URL': JSON.stringify(internetIdentityUrl),
-    // Expose canister IDs provided by `dfx deploy`
+    'process.env' : {
+      DFX_NETWORK: process.env['DFX_NETWORK'],
+      INTERNET_IDENTITY_URL: internetIdentityUrl,
+          // Expose canister IDs provided by `dfx deploy`
     ...Object.fromEntries(
       Object.entries(canisterIds).map(([name, ids]) => [
-        `process.env.${name.toUpperCase()}_CANISTER_ID`,
-        JSON.stringify(ids[network] || ids[localNetwork]),
+        `${name.toUpperCase()}_CANISTER_ID`,
+        ids[network] || ids[localNetwork],
       ]),
     ),
+    
+    },
   },
+
+  // define: {
+  //   // global: 'globalThis',
+   
+  //   'process.env.DFX_NETWORK': JSON.stringify(process.env.DFX_NETWORK),
+  //   'process.env.INTERNET_IDENTITY_URL': JSON.stringify(internetIdentityUrl),
+  //   // Expose canister IDs provided by `dfx deploy`
+  //   ...Object.fromEntries(
+  //     Object.entries(canisterIds).map(([name, ids]) => [
+  //       `process.env.${name.toUpperCase()}_CANISTER_ID`,
+  //       JSON.stringify(ids[network] || ids[localNetwork]),
+  //     ]),
+  //   ),
+  // },
+
 	optimizeDeps: {
 		esbuildOptions: {
 			// Node.js global to browser globalThis

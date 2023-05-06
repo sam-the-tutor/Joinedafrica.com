@@ -6,7 +6,6 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Debug "mo:base/Debug";
 import utils "utils";
-
 shared ({ caller = initializer }) actor class () {
 
     type Friend = types.Friend;
@@ -25,15 +24,15 @@ shared ({ caller = initializer }) actor class () {
     public shared ({ caller }) func sendMessage(message : Message) : async Result.Result<(), Error> {
         Debug.print("caller is ");
         Debug.print(debug_show (caller));
-        if (Principal.isAnonymous(caller) or Principal.equal(message.sender, message.receiver)) {
+        if (Principal.isAnonymous(caller) or Principal.equal(message.sender, message.mainReceiver)) {
             return #err(#UnAuthorizedUser);
         };
-        var friend = utils.sortPrincipals(caller, message.receiver);
+        var friend = utils.sortPrincipals(caller, message.mainReceiver);
         switch (Trie.get(conversations, key(friend), Text.equal)) {
             case null {
                 //caller and reciever haven't messaged each other before
-                await addUserToFriendList(caller, message.receiver);
-                await addUserToFriendList(message.receiver, caller);
+                await addUserToFriendList(caller, message.mainReceiver);
+                await addUserToFriendList(message.mainReceiver, caller);
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, List.nil())).0;
             };
             case (?list) {
@@ -41,7 +40,6 @@ shared ({ caller = initializer }) actor class () {
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, list)).0;
             };
         };
-
         #ok();
     };
 

@@ -10,17 +10,31 @@ import CreateProfile from "./components/auth/CreateProfile";
 import ViewPost from "./components/views/ViewPost";
 import ViewCategory from "./components/views/ViewCategory";
 import ViewSubcategory from "./components/views/ViewSubcategory";
+import { startMessageWorker } from "./util/webworkers/startMessageWorker";
+import { getFromSessionStorage } from "./util/functions";
 
 export default function App() {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  const [newMessageNotification, setNewMessageNotification] = useState([]);
 
+  //once the user logs in or creates an account, start pulling for message notifications
+  useEffect(() => {
+    if (getFromSessionStorage("isLoggedIn", false)) {
+      startMessageWorker(newMessageNotification, setNewMessageNotification);
+    }
+  }, []);
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
 
-  const stateValues = { authenticatedUser, setAuthenticatedUser };
+  const stateValues = {
+    authenticatedUser,
+    newMessageNotification,
+    setAuthenticatedUser,
+    setNewMessageNotification,
+  };
 
   return (
     <AppContext.Provider value={stateValues}>

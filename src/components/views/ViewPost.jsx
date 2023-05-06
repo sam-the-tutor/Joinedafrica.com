@@ -23,7 +23,10 @@ import { MessageCmp } from "../../styling/views/ViewPost";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import { Principal } from "@dfinity/principal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { getAuthenticatedConversationUser } from "../../util/auth";
+import {
+  getAuthenticatedConversationUser,
+  getAuthenticatedMessageNotificationWorker,
+} from "../../util/auth";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -67,8 +70,14 @@ export default function ViewPost() {
 
   // sending message to the creator of the post
   async function sendMessage() {
+    if (sessionStorage.getItem("principalId") == null) {
+      //user has to login or create a profile before they can message someoone
+      alert(
+        "You have to log in or create a profile to be able to send a message"
+      );
+      return;
+    }
     const loggedInUserPrincipalId = getFromSessionStorage("principalId", true);
-    console.log(loggedInUserPrincipalId);
     if (post.creatorOfPostId == loggedInUserPrincipalId) {
       alert("You can't message youself!");
     } else {
@@ -78,13 +87,22 @@ export default function ViewPost() {
           <Typography>Sending...</Typography>
         </Box>
       );
-      const authenticatedUser = await getAuthenticatedConversationUser();
-      const result = await authenticatedUser.sendMessage({
+      //send the message to the other friends
+      const chatMessage = {
         messageContent: userMessage,
         sender: Principal.fromText(loggedInUserPrincipalId),
-        receiver: post.creatorOfPostId,
-        time: new Date().toLocaleString(),
-      });
+        mainReceiver: post.creatorOfPostId,
+        time: new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString(),
+        secondReceiver: "",
+      };
+      //send notification message to the creators posts notification
+      const authenticatedWorker =
+        await getAuthenticatedMessageNotificationWorker();
+      await authenticatedWorker.sendNotification(chatMessage);
+      //create a conversation between me and the creator of post.. also send the message there too
+      const authenticatedUser = await getAuthenticatedConversationUser();
+      const result = await authenticatedUser.sendMessage(chatMessage);
       console.log(result);
       if (result?.err) {
         alert("error");

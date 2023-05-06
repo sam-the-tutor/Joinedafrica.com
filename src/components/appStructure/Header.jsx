@@ -24,7 +24,7 @@ import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import { startMessageWorker } from "../../util/webworkers/startMessageWorker";
-
+import { AppContext } from "../../context";
 export default function Header() {
   //users principal
   const [principal, setPrincipal] = useState("");
@@ -32,7 +32,8 @@ export default function Header() {
   const [isUserLoggedIn, setIsUserLoggedin] = useState(
     sessionStorage.getItem("isLoggedIn") == "true"
   );
-
+  const { newMessageNotification, setNewMessageNotification } =
+    useContext(AppContext);
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
    */
@@ -56,7 +57,7 @@ export default function Header() {
           setSessionStorage("isLoggedIn", "true", false);
           setIsUserLoggedin(true);
           //start pull message notification from the notification canister
-          startMessageWorker();
+          startMessageWorker(newMessageNotification, setNewMessageNotification);
         }
         setIsLoading(false);
       }
