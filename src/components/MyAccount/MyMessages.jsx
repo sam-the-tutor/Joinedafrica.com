@@ -46,7 +46,7 @@ import { AppContext } from "../../context";
 
 export default function MyMessages() {
   const [allMyFriends, setAllMyFriends] = useState([]);
-  const [myMessages, setMyMessages] = useState(null);
+  const [myMessages, setMyMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [myPrincipal, setMyPrincipal] = useState("");
   const [myFriendPrincipal, setMyFriendPrincipal] = useState("");
@@ -56,11 +56,25 @@ export default function MyMessages() {
 
   useEffect(() => {
     function loadNewMessages() {
+      //check if i'm currently chatting with a friend
       if (myFriendPrincipal.length > 0) {
+        // setMyMessages([...myMessages, [...newMessageNotification].reverse()]);
+        //checking if i sent my friend any message
+        const newMessages1 = newMessageNotification.filter(
+          (notification) =>
+            myPrincipal === notification.mainReceiver.toText() &&
+            myFriendPrincipal === notification.secondReceiver
+        );
+        //checking if my friend sent me any message
+        const newMessages2 = newMessageNotification.filter(
+          (notification) => myFriendPrincipal === notification.sender.toText()
+        );
+        //sort the messages by date and time
+        console.log([...newMessages1, ...newMessages2]);
         //if i am currently chatting with my friend, i want to to display all our messages
         // newMessageNotification.filter(message => )
+        // console.log(newMessageNotification);
       }
-      console.log(newMessageNotification);
     }
     loadNewMessages();
   }, [newMessageNotification]);
@@ -109,26 +123,28 @@ export default function MyMessages() {
       alert("You have to click on a friend to send message to them");
       return;
     }
-    //send the message to the other friends
     const chatMessage = {
       messageContent: conversation,
       sender: Principal.fromText(myPrincipal),
       mainReceiver: Principal.fromText(myFriendPrincipal),
       time: new Date().toLocaleTimeString(),
       date: new Date().toLocaleDateString(),
-      secondReceiver: null,
+      secondReceiver: "",
     };
-    //send the message to my message notifications canister so it can be pulled
-    //using webworker and displayed in the chatbox
+
     const myMessage = { ...chatMessage };
     myMessage.receiver = Principal.fromText(myPrincipal);
     myMessage.secondReceiver = myFriendPrincipal;
     //send the message to the creators posts notification
     const authenticatedWorker =
       await getAuthenticatedMessageNotificationWorker();
+    //send the message to my message notifications canister so it can be pulled
+    //using webworker and displayed in the chatbox
     await authenticatedWorker.sendNotification(myMessage);
+    //send the notification to my friend
     await authenticatedWorker.sendNotification(chatMessage);
     const authenticatedUser = await getAuthenticatedConversationUser();
+    //save message in conversations canister
     await authenticatedUser.sendMessage(chatMessage);
   }
   return (
@@ -164,13 +180,13 @@ export default function MyMessages() {
         {/* conversation */}
         <Grid item xs={9}>
           <List style={{ height: "70vh", overflowY: "auto" }}>
-            {myMessages == null && (
+            {myMessages.length == 0 && (
               <Typography style={{ textAlign: "center" }}>
                 Click on friend to view messages
               </Typography>
             )}
 
-            {myMessages &&
+            {myMessages.length > 0 &&
               myMessages.map((message, index) => (
                 <ListItem key={index}>
                   <Grid container>
@@ -191,7 +207,7 @@ export default function MyMessages() {
                             ? "right"
                             : "left"
                         }
-                        secondary={"at " + message.time}
+                        secondary={message.time}
                       ></ListItemText>
                     </Grid>
                   </Grid>

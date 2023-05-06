@@ -37,6 +37,7 @@ actor MessageNotification {
         for ((userId, mynotifications) in stableNotifications.vals()) {
             notifications := Trie.put(notifications, hashKey(userId), Principal.equal, List.fromArray(mynotifications)).0;
         };
+        stableNotifications :=[];
     };
     system func preupgrade() {
         stableNotifications := Trie.toArray<UserId, List.List<Notification>, (UserId, [Notification])>(notifications, func(userId, notifications) = (userId, List.toArray(notifications)));
