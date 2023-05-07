@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../../context";
 
-export async function startMessageWorker(
+export async function messageWorker(
   newMessageNotification,
   setNewMessageNotification,
   message
@@ -19,7 +19,6 @@ export async function startMessageWorker(
     }
   };
   worker.postMessage({
-    // msg: "start",
     message
     canisterId,
     host:

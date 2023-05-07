@@ -5,12 +5,15 @@ import { AuthClient } from "@dfinity/auth-client";
 let timer;
 
 self.onmessage = async ({ data }) => {
-  const { msg, canisterId, host } = data;
+  const { message, canisterId, host } = data;
 
   switch (msg) {
     case "start":
       start(canisterId, host);
       break;
+    case "clearAllNotifications":
+    clearAllNotifications(canisterId, host);
+    break;
     case stop:
       stop();
   }
@@ -68,12 +71,23 @@ export const createActor = (canisterId, options) => {
     ...(options ? options.actorOptions : {}),
   });
 };
-
+//clear all notifications between user and another friend. 
+//the user is already authenticated for them to see all their notifications
+//so we can just all the getIdentity method on the client
+async function clearAllNotifications(canisterId, host){
+  const identity = authClient.getIdentity();
+  const actor = createActor(canisterId, {
+    agentOptions: { identity, host },
+  });
+  await actor.clearAllNotifications();
+}
 const query = async (identity, canisterId, host) => {
   const actor = createActor(canisterId, {
     agentOptions: { identity, host },
   });
-  const myNotifications = await actor.getMyNotifications();
 
-  postMessage({ msg: "messages_notifcations", notifications: myNotifications });
+    const myNotifications = await actor.getMyNotifications();
+    postMessage({ msg: "messages_notifcations", notifications: myNotifications });
+  
+
 };

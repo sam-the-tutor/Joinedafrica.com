@@ -16,7 +16,7 @@ import {
 import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { getUniqueId, setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
-import { startMessageWorker } from "../../util/webworkers/startMessageWorker";
+import { messageWorker } from "../../util/webworkers/messageWorker";
 import {AppContext} from "../../context"
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -72,7 +72,7 @@ export default function CreateProfile() {
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
       //start pull message notification from the notification canister
-      startMessageWorker(newMessageNotification,setNewMessageNotification);
+      messageWorker(newMessageNotification,setNewMessageNotification, "getAllNotifications");
       navigate("/home");
     }
     setIsLoading(false);

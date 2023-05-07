@@ -30,8 +30,12 @@ actor MessageNotification {
     };
     //this is when the user has clicked on the friend to view the list of messages or when the user
     //starts typing a message in the message box. It means the sender has seen the message
-    public shared ({ caller }) func removeNotification() : async () {
-
+    public shared ({caller}) clearAllNotification() : async (){
+           notifications := Trie.remove(notifications, hashKey(caller), Principal.equal).0;
+    };
+    //test method
+    public shared ({ caller }) func removeNotification(user: UserId) : async () {
+       notifications := Trie.remove(notifications, hashKey(user), Principal.equal).0;
     };
     system func postupgrade() {
         for ((userId, mynotifications) in stableNotifications.vals()) {

@@ -10,7 +10,7 @@ import CreateProfile from "./components/auth/CreateProfile";
 import ViewPost from "./components/views/ViewPost";
 import ViewCategory from "./components/views/ViewCategory";
 import ViewSubcategory from "./components/views/ViewSubcategory";
-import { startMessageWorker } from "./util/webworkers/startMessageWorker";
+import { messageWorker } from "./util/webworkers/messageWorker";
 import { getFromSessionStorage } from "./util/functions";
 
 export default function App() {
@@ -20,7 +20,7 @@ export default function App() {
   //once the user logs in or creates an account, start pulling for message notifications
   useEffect(() => {
     if (getFromSessionStorage("isLoggedIn", false)) {
-      startMessageWorker(newMessageNotification, setNewMessageNotification);
+      messageWorker(newMessageNotification, setNewMessageNotification, "getAllNotifications");
     }
   }, []);
   const darkTheme = createTheme({

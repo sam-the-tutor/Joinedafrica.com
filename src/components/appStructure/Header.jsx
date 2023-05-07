@@ -23,7 +23,7 @@ import {
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
-import { startMessageWorker } from "../../util/webworkers/startMessageWorker";
+import { messageWorker } from "../../util/webworkers/messageWorker";
 import { AppContext } from "../../context";
 export default function Header() {
   //users principal
@@ -57,7 +57,7 @@ export default function Header() {
           setSessionStorage("isLoggedIn", "true", false);
           setIsUserLoggedin(true);
           //start pull message notification from the notification canister
-          startMessageWorker(newMessageNotification, setNewMessageNotification);
+          messageWorker(newMessageNotification, setNewMessageNotification, "getAllNotifications");
         }
         setIsLoading(false);
       }
