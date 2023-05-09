@@ -19,9 +19,16 @@ export default function App() {
 
   //once the user logs in or creates an account, start pulling for message notifications
   useEffect(() => {
-    if (getFromSessionStorage("isLoggedIn", false)) {
-      messageWorker(newMessageNotification, setNewMessageNotification, "getAllNotifications");
+    async function getAllNotifications() {
+      if (getFromSessionStorage("isLoggedIn", false)) {
+        messageWorker(
+          newMessageNotification,
+          setNewMessageNotification,
+          "getAllNotifications"
+        );
+      }
     }
+    getAllNotifications();
   }, []);
   const darkTheme = createTheme({
     palette: {

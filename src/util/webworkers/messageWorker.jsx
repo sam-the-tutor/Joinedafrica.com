@@ -15,11 +15,12 @@ export async function messageWorker(
   worker.onmessage = ({ data }) => {
     const { msg, notifications } = data;
     if (msg === "messages_notifcations" && notifications.length > 0) {
+      // console.log(notifications);
       setNewMessageNotification(notifications);
     }
   };
   worker.postMessage({
-    message
+    message,
     canisterId,
     host:
       process.env.DFX_NETWORK != "ic"

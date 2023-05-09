@@ -17,7 +17,7 @@ import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunct
 import { getUniqueId, setSessionStorage } from "../../util/functions";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import { messageWorker } from "../../util/webworkers/messageWorker";
-import {AppContext} from "../../context"
+import { AppContext } from "../../context";
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
   const [userProfile, setProfile] = useState({
@@ -27,7 +27,8 @@ export default function CreateProfile() {
     email: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const {newMessageNotification,setNewMessageNotification} = useContext(AppContext);
+  const { newMessageNotification, setNewMessageNotification } =
+    useContext(AppContext);
   // navigation so we can go back to the home page after saving the users profile
   const navigate = useNavigate();
 
@@ -72,7 +73,11 @@ export default function CreateProfile() {
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
       //start pull message notification from the notification canister
-      messageWorker(newMessageNotification,setNewMessageNotification, "getAllNotifications");
+      messageWorker(
+        newMessageNotification,
+        setNewMessageNotification,
+        "getAllNotifications"
+      );
       navigate("/home");
     }
     setIsLoading(false);

@@ -57,7 +57,11 @@ export default function Header() {
           setSessionStorage("isLoggedIn", "true", false);
           setIsUserLoggedin(true);
           //start pull message notification from the notification canister
-          messageWorker(newMessageNotification, setNewMessageNotification, "getAllNotifications");
+          await messageWorker(
+            newMessageNotification,
+            setNewMessageNotification,
+            "getAllNotifications"
+          );
         }
         setIsLoading(false);
       }

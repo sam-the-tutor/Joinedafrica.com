@@ -6,25 +6,10 @@ let timer;
 
 self.onmessage = async ({ data }) => {
   const { message, canisterId, host } = data;
-
-  switch (msg) {
-    case "start":
-      start(canisterId, host);
-      break;
-    case "clearAllNotifications":
-    clearAllNotifications(canisterId, host);
-    break;
-    case stop:
-      stop();
-  }
+  timer = setInterval(() => call(canisterId, host, message), 1000);
 };
 
-const stop = () => clearInterval(timer);
-
-const start = (canisterId, host) =>
-  (timer = setInterval(() => call(canisterId, host), 2000));
-
-const call = async (canisterId, host) => {
+const call = async (canisterId, host, message) => {
   // Disable idle manager because web worker cannot access the window object / the UI
   const authClient = await AuthClient.create({
     idleOptions: {
@@ -41,8 +26,11 @@ const call = async (canisterId, host) => {
   }
 
   const identity = authClient.getIdentity();
-
-  await query(identity, canisterId, host);
+  if (message === "getAllNotifications") {
+    await query(identity, canisterId, host);
+  } else if (message === "clearAllNotifications") {
+    await clearAllNotifications(canisterId, host);
+  }
 };
 
 // Copied from auto-generated ../../declarations/icwebworker_backend/icwebworker_backend.did.js
@@ -71,10 +59,16 @@ export const createActor = (canisterId, options) => {
     ...(options ? options.actorOptions : {}),
   });
 };
-//clear all notifications between user and another friend. 
+//clear all notifications between user and another friend.
 //the user is already authenticated for them to see all their notifications
 //so we can just all the getIdentity method on the client
-async function clearAllNotifications(canisterId, host){
+async function clearAllNotifications(canisterId, host) {
+  const authClient = await AuthClient.create({
+    idleOptions: {
+      disableIdle: true,
+      disableDefaultIdleCallback: true,
+    },
+  });
   const identity = authClient.getIdentity();
   const actor = createActor(canisterId, {
     agentOptions: { identity, host },
@@ -86,8 +80,6 @@ const query = async (identity, canisterId, host) => {
     agentOptions: { identity, host },
   });
 
-    const myNotifications = await actor.getMyNotifications();
-    postMessage({ msg: "messages_notifcations", notifications: myNotifications });
-  
-
+  const myNotifications = await actor.getMyNotifications();
+  postMessage({ msg: "messages_notifcations", notifications: myNotifications });
 };

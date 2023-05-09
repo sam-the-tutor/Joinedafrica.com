@@ -31,7 +31,7 @@ import {
 } from "../../util/functions";
 import { Principal } from "@dfinity/principal";
 import { AppContext } from "../../context";
-import {messageWorker} from "../../util/webworkers/messageWorker"
+import { messageWorker } from "../../util/webworkers/messageWorker";
 // const useStyles = makeStyles({
 //   table: {
 //     minWidth: 650,
@@ -53,35 +53,46 @@ export default function MyMessages() {
   const [myFriendPrincipal, setMyFriendPrincipal] = useState("");
   //messages send to my friends principal
   const [conversation, setConveration] = useState("");
-  const { newMessageNotification, setNewMessageNotification} = useContext(AppContext);
+  const { newMessageNotification, setNewMessageNotification } =
+    useContext(AppContext);
 
   const messageEndRef = useRef(null);
 
+  //contains checks if the search time is in the list of messages. We do this so we can know when there are new messages or not
+  //when there are new messages, the searchTime won't be fouund in the myMessages list
+
+  function contains(searchTime) {
+    for (var i = 0; i < myMessages.length; i++) {
+      const pastTime = myMessages[i].date + "" + myMessages[i].time;
+      if (pastTime === searchTime) return true;
+    }
+    return false;
+  }
+
+  //sorting the messages by date and time
+  function sort(newMessages) {
+    return newMessages.sort((child, parent) => {
+      if (child.date === parent.date) {
+        return parent.time < child.time;
+      } else {
+        //
+        return parent.date < child.date;
+      }
+    });
+  }
   useEffect(() => {
-    function loadNewMessages() {
+    async function loadNewMessages() {
       //check if i'm currently chatting with a friend
-      console.log(newMessageNotification);
       if (myFriendPrincipal.length > 0) {
-        
-        setMyMessages([...myMessages,...newMessageNotification.reverse()]);
-        messageEndRef.current.scrollIntoView({ behavior: "smooth" })
-        
-        messageWorker(newMessageNotification, setNewMessageNotification, "clearAllNotifications")
-        //checking if i sent my friend any message
-        // const newMessages1 = newMessageNotification.filter(
-        //   (notification) =>
-        //     myPrincipal === notification.mainReceiver.toText() &&
-        //     myFriendPrincipal === notification.secondReceiver
-        // );
-        //checking if my friend sent me any message
-        // const newMessages2 = newMessageNotification.filter(
-        //   (notification) => myFriendPrincipal === notification.sender.toText()
-        // );
-        //sort the messages by date and time
-        // console.log([...newMessages1, ...newMessages2]);
-        //if i am currently chatting with my friend, i want to to display all our messages
-        // newMessageNotification.filter(message => )
-        // console.log(newMessageNotification);
+        const result = newMessageNotification.filter(
+          (newMessage) => !contains(newMessage.date + "" + newMessage.time)
+        );
+        console.log(result);
+        if (result.length > 0) {
+          const newMessages = [...myMessages, ...result];
+          setMyMessages([...sort(newMessages)]);
+          messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
       }
     }
     loadNewMessages();
@@ -124,7 +135,7 @@ export default function MyMessages() {
     const authenticatedUser = await getAuthenticatedConversationUser();
     const messages = await authenticatedUser.getMyMessages(friendsPrincipal);
     // console.log(messages.ok.reverse());
-    setMyMessages(messages.ok.reverse());
+    setMyMessages([...sort(messages.ok)]);
     setLoading(false);
   }
   async function sendMessage() {
@@ -142,7 +153,7 @@ export default function MyMessages() {
     };
 
     const myMessage = { ...chatMessage };
-    myMessage.receiver = Principal.fromText(myPrincipal);
+    myMessage.mainReceiver = Principal.fromText(myPrincipal);
     myMessage.secondReceiver = myFriendPrincipal;
     //send the message to the creators posts notification
     const authenticatedWorker =
@@ -197,35 +208,32 @@ export default function MyMessages() {
 
             {myMessages.length > 0 &&
               myMessages.map((message, index) => (
-                <div key = {index} id = {index}>
-  <ListItem>
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <ListItemText
-                        // align={
-                        //   message.sender.toText() == myPrincipal
-                        //     ? "right"
-                        //     : "left"
-                        // }
-                        primary={message.messageContent}
-                     /> 
+                <div key={index} id={index}>
+                  <ListItem>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          //my messages i send will ALWAYS have secondReceiver's length > 0
+                          //because that is the other users principal
+                          align={
+                            message.secondReceiver.length > 0 ? "right" : "left"
+                          }
+                          primary={message.messageContent}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          align={
+                            message.secondReceiver.length > 0 ? "right" : "left"
+                          }
+                          secondary={message.time}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                      <ListItemText
-                        // align={
-                        //   message.sender.toText() == myPrincipal
-                        //     ? "right"
-                        //     : "left"
-                        // }
-                        secondary={message.time}
-                      />
-                    </Grid>
-                  </Grid>
-                </ListItem>
+                  </ListItem>
                 </div>
-              
               ))}
-                <div ref={messageEndRef} />
+            <div ref={messageEndRef} />
           </List>
           <Divider />
           <Grid container style={{ padding: "20px" }}>
@@ -237,13 +245,10 @@ export default function MyMessages() {
                 onChange={(event) => setConveration(event.target.value)}
               />
             </Grid>
-            <Grid xs={1} align="right">
+            <Grid item xs={1} align="right">
               <Button variant="outlined" onClick={sendMessage}>
                 SEND
               </Button>
-              {/* <Fab color="primary" aria-label="add">
-                <SendIcon />
-              </Fab> */}
             </Grid>
           </Grid>
         </Grid>
