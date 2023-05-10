@@ -31,19 +31,6 @@ import {
 } from "../../util/functions";
 import { Principal } from "@dfinity/principal";
 import { AppContext } from "../../context";
-import { messageWorker } from "../../util/webworkers/messageWorker";
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 650,
-//   },
-//   headBG: {
-//     backgroundColor: "#e0e0e0",
-//   },
-//   messageArea: {
-//     height: "70vh",
-//     overflowY: "auto",
-//   },
-// });
 
 export default function MyMessages() {
   const [allMyFriends, setAllMyFriends] = useState([]);
@@ -129,14 +116,11 @@ export default function MyMessages() {
   }, []);
 
   async function getMyMessages(friendProfilePicture) {
-    setLoading(true);
     const friendsPrincipal = friendProfilePicture.substring(0, 63);
     setMyFriendPrincipal(friendsPrincipal);
     const authenticatedUser = await getAuthenticatedConversationUser();
     const messages = await authenticatedUser.getMyMessages(friendsPrincipal);
-    // console.log(messages.ok.reverse());
-    setMyMessages([...sort(messages.ok)]);
-    setLoading(false);
+    setMyMessages([...sort(messages.ok).reverse()]);
   }
   async function sendMessage() {
     if (myFriendPrincipal.length == 0) {

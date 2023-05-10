@@ -21,6 +21,7 @@ export default function App() {
   useEffect(() => {
     async function getAllNotifications() {
       if (getFromSessionStorage("isLoggedIn", false)) {
+        console.log("her");
         messageWorker(
           newMessageNotification,
           setNewMessageNotification,

@@ -22,10 +22,14 @@ actor MessageNotification {
         };
     };
     //get myMyNotifications will be called from the webworker in the frontend.
-    public shared query ({ caller }) func getMyNotifications() : async [Notification] {
+    public shared ({ caller }) func getMyNotifications() : async [Notification] {
         return switch (Trie.get(notifications, hashKey(caller), Principal.equal)) {
             case null [];
-            case (?listOfNotifications) List.toArray(listOfNotifications);
+            case (?listOfNotifications) {
+                //remove all previous notifications for this caller
+                notifications := Trie.remove(notifications, hashKey(caller), Principal.equal).0;
+                List.toArray(listOfNotifications);
+            };
         };
     };
     //this is when the user has clicked on the friend to view the list of messages or when the user

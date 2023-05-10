@@ -6,7 +6,8 @@ let timer;
 
 self.onmessage = async ({ data }) => {
   const { message, canisterId, host } = data;
-  timer = setInterval(() => call(canisterId, host, message), 1000);
+  // timer = setInterval(() => call(canisterId, host, message), 1000);
+  call(canisterId, host, message);
 };
 
 const call = async (canisterId, host, message) => {
