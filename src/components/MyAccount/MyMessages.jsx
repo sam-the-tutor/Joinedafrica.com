@@ -164,6 +164,7 @@ export default function MyMessages() {
             <TextField label="Search" variant="outlined" />
           </Grid>
           <Divider />
+          {/* myfriends */}
           <List>
             {allMyFriends.map((profile, index) => (
               <ListItemButton

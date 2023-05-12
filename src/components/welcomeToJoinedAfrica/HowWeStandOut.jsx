@@ -5,15 +5,12 @@ import {
   HowWeStandOutContainer,
 } from "../../styling/WelcomeToJoinedAfrica";
 
-export default function HowWeStandOut({ title, content, imagePath }) {
+export default function HowWeStandOut({ content, imagePath }) {
   return (
     <HowWeStandOutContainer>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          {title}
-        </Typography>
-        <Typography sx={{ width: "500px" }}>{content}</Typography>
-      </Box>
+      <Typography sx={{ width: "500px" }} variant="h5">
+        {content}
+      </Typography>
       <ImageCmp component="img" src={imagePath} />
     </HowWeStandOutContainer>
   );

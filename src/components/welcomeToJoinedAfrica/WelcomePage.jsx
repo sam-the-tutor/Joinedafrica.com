@@ -32,7 +32,7 @@ export default function WelcomePage() {
             </Typography>
             <Typography>
               Is a marketplace where Africans can buy and sell to each other
-              under a single currency
+              using one currency
             </Typography>
           </Box>
         </Box>
@@ -50,24 +50,20 @@ export default function WelcomePage() {
         >
           How we stand out
         </Typography>
-        <Stack spacing={5}>
+        <Box>
           <HowWeStandOut
-            title="Bitcoin is our form of payment"
-            content="Bitcoin is a digital currency that allows people to make payments directly to each other through an online system."
-            imagePath="./bitcoin.png"
+            content="You can now market your product(s) to global and local customers using one currency - USDT (Tether)"
+            imagePath="./Tether_USDT.png"
           />
-          <HowWeStandOut
-            title="Secure transactions"
-            content="We use blockchain technology that follows the principles of cryptography and decentralization 
-          and consensus with ensures trusts in transactions"
-            imagePath="./secure_transactions.png"
-          />
-          <HowWeStandOut
-            title="Authenticate using Internet identity"
-            content="Internet identity allows you to log in securely and annoymously using fingerprint sensor on a laptop, the face ID system on a phone, or a portable HSM. You don't need a username and password to Log in! "
-            imagePath="./Internet_identity.png"
-          />
-        </Stack>
+        </Box>
+        <OurVision></OurVision>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ textDecoration: "underline", textAlign: "center" }}
+        >
+          How to get started!
+        </Typography>
         <OurVision>
           <Typography
             variant="h4"
