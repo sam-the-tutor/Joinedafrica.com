@@ -11,15 +11,15 @@
         "source": []
       },
       "profile" : {
-        "main": "profile/main.mo",
+        "main": "backend/profile/main.mo",
         "type": "motoko"
       },
         "post": {
-          "main": "post/main.mo",
+          "main": "backend/post/main.mo",
           "type": "motoko"
         },
         "conversation": {
-          "main": "conversation/main.mo",
+          "main": "backend/conversation/main.mo",
           "type": "motoko"
         },
         "message_notification":{
