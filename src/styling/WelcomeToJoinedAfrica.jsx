@@ -12,13 +12,12 @@ export const Greeting = styled(Box)({
 
 export const Introduction = styled(Box)({
   display: "flex",
-  justifyContent: "space-around",
-  height: "700px",
-  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "50px",
 });
 export const HowWeStandOutContainer = styled(Box)({
   display: "flex",
-  justifyContent: "space-around",
+  justifyContent: "space-between",
   alignItems: "center",
 });
 export const ImageCmp = styled(Box)({
@@ -33,11 +32,9 @@ export const MainContent = styled(Box)({
   paddingBottom: "50px",
 });
 export const OurVision = styled(Box)({
-  backgroundColor: "black",
-  color: "white",
-  paddingTop: "50px",
-  paddingBottom: "50px",
-  height: "600px",
+  backgroundColor: "white",
+  color: "black",
+  padding: "50px",
 });
 export const MessageFromFounder = styled(Box)({
   display: "flex",

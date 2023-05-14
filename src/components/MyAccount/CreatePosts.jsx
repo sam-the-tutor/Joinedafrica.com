@@ -224,7 +224,7 @@ export default function CreatePost() {
             type="number"
             inputProps={{ min: "0", step: "any" }}
             onChange={(e) => setAmount(e.target.value)}
-            label="Price (ckBTC)"
+            label="Price (USDT)"
           />
           {CreatePostSpecificationForm(
             selectedSubcategory,

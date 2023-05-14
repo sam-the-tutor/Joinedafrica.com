@@ -1,5 +1,12 @@
 import React from "react";
-import { Container, Box, Typography, Button, Stack } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  Stack,
+  Paper,
+} from "@mui/material";
 import HowWeStandOut from "./HowWeStandOut";
 import { Link } from "react-router-dom";
 import {
@@ -9,7 +16,12 @@ import {
   Greeting,
   Introduction,
 } from "../../styling/WelcomeToJoinedAfrica";
-
+import HowToGetStarted from "./HowToGetStarted";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
 export default function WelcomePage() {
   return (
     <Box>
@@ -30,7 +42,7 @@ export default function WelcomePage() {
             <Typography variant="h1" sx={{ fontWeight: "bold" }}>
               Joined Africa
             </Typography>
-            <Typography>
+            <Typography style={{ color: "#d8d8df" }}>
               Is a marketplace where Africans can buy and sell to each other
               using one currency
             </Typography>
@@ -42,28 +54,45 @@ export default function WelcomePage() {
           alt="Connected Africa"
         />
       </Introduction>
-      <MainContent>
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ textDecoration: "underline", textAlign: "center" }}
+      <Box>
+        <Box
+          style={{ backgroundColor: "white", color: "black", padding: "50px" }}
         >
-          How we stand out
-        </Typography>
-        <Box>
-          <HowWeStandOut
-            content="You can now market your product(s) to global and local customers using one currency - USDT (Tether)"
-            imagePath="./Tether_USDT.png"
-          />
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{ textDecoration: "underline", textAlign: "center" }}
+          >
+            How we stand out
+          </Typography>
+          <Box>
+            <HowWeStandOut
+              content="You can now market your product(s) to global and local customers using one currency - USDT (Tether)"
+              imagePath="./Tether_USDT.png"
+            />
+          </Box>
         </Box>
-        <OurVision></OurVision>
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ textDecoration: "underline", textAlign: "center" }}
+
+        <Box
+          style={{
+            backgroundColor: "black",
+            padding: "50px",
+          }}
         >
-          How to get started!
-        </Typography>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              textDecoration: "underline",
+              textAlign: "center",
+              color: "white",
+            }}
+          >
+            How to get started!
+          </Typography>
+          <HowToGetStarted />
+        </Box>
+        {/* we'll add customer feedback out or platform here when we have one */}
         <OurVision>
           <Typography
             variant="h4"
@@ -90,10 +119,43 @@ export default function WelcomePage() {
             <Box component="img" src="./bitcoin_payment_transaction.png" />
           </MessageFromFounder>
         </OurVision>
-        <Container>
+
+        {/* <Container>
           <Button sx={{ color: "black" }}>About us</Button>
-        </Container>
-      </MainContent>
+        </Container> */}
+      </Box>
+      <Box
+        style={{
+          backgroundColor: "black",
+          height: "200px",
+          padding: "50px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box>
+          <Button sx={{ color: "white" }}>About us</Button>
+          <Button sx={{ color: "white" }}>Contact us</Button>
+          <Button sx={{ color: "white" }}>Privacy policy</Button>
+        </Box>
+        <Box>
+          <Button sx={{ color: "white" }}>
+            <FacebookIcon />
+          </Button>
+          <Button sx={{ color: "white" }}>
+            <YouTubeIcon />
+          </Button>
+          <Button sx={{ color: "white" }}>
+            <LinkedInIcon />
+          </Button>
+          <Button sx={{ color: "white" }}>
+            <TwitterIcon />
+          </Button>
+          <Button sx={{ color: "white" }}>
+            <InstagramIcon />
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 }
