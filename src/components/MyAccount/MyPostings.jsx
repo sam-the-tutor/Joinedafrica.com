@@ -8,6 +8,7 @@ import {
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { getAuthenticatedUser } from "../../util/auth";
 import { getErrorMessage } from "../../util/ErrorMessages";
+import DeletePostPopup from "../../util/reuseableComponents/DeletePostPopup";
 
 //display all my postings
 export default function MyPostings() {
@@ -16,6 +17,9 @@ export default function MyPostings() {
   const [myPostings, setMyPostings] = useState([]);
   //logged in users profile
   const [userProfile, setUserProfile] = useState();
+  const [showDeletePostPopup, setShowDeletePostPopup] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState("");
+
   useEffect(() => {
     async function getAllMyPostings() {
       setIsLoading(true);
@@ -37,6 +41,12 @@ export default function MyPostings() {
     }
     getAllMyPostings();
   }, []);
+  function filterMyPostings() {
+    const myNewPostings = myPostings.filter(
+      (posting) => posting.postId != selectedPostId
+    );
+    setMyPostings(myNewPostings);
+  }
   return (
     <>
       {isLoading ? (
@@ -54,10 +64,21 @@ export default function MyPostings() {
                   post={posting[0]}
                   userProfile={userProfile}
                   canOnlyMeSeeThisPost={true}
+                  setShowDeletePostPopup={(value) =>
+                    setShowDeletePostPopup(value)
+                  }
+                  setSelectedPostId={(postId) => setSelectedPostId(postId)}
                 />
               </Grid>
             ))}
           </Grid>
+          <DeletePostPopup
+            showDeletePostPopup={showDeletePostPopup}
+            setShowDeletePostPopup={(value) => setShowDeletePostPopup(value)}
+            selectedPostId={selectedPostId}
+            filterMyPostings={() => filterMyPostings()}
+            setIsLoading={setIsLoading}
+          />
         </Box>
       )}
     </>

@@ -89,15 +89,19 @@ shared ({ caller = initializer }) actor class () {
   public shared query ({ caller }) func getAllPostIds() : async [PostId] {
     posts.getAllPostIds(caller);
   };
-
+  //only posts that are not published to the marketplace can be deleted. A post that is published to the marketplace
+  //has to first be removed from the marketplace before they can be deleted.
+  public shared ({ caller }) func deletePost(postId : PostId) : async Result<(), Error> {
+    posts.deletePost(caller, postId);
+  };
   //system method. Saving all the posts and user profiles in stable memory whenever we upgrade our canister.
-  system func preupgrade() {
-    stablePosts := posts.preupgrade();
-  };
-  //system method
-  system func postupgrade() {
-    posts.postupgrade(stablePosts);
-    stablePosts := [];
-  };
+  // system func preupgrade() {
+  //   stablePosts := posts.preupgrade();
+  // };
+  // //system method
+  // system func postupgrade() {
+  //   posts.postupgrade(stablePosts);
+  //   stablePosts := [];
+  // };
 
 };

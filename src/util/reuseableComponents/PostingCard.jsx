@@ -26,6 +26,8 @@ export default function PostingCard({
   post,
   userProfile,
   canOnlyMeSeeThisPost,
+  setShowDeletePostPopup,
+  setSelectedPostId,
 }) {
   //maximum length of characters for description and title
   const MAX_LENGTH_OF_DESCRIPTION = 150;
@@ -138,6 +140,8 @@ export default function PostingCard({
             postId={updatedPost.postId}
             markPostAsPublished={markPostAsPublished}
             canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
+            setShowDeletePostPopup={setShowDeletePostPopup}
+            setSelectedPostId={setSelectedPostId}
           />
           {/* show the snackbar when the user has marked the post as published */}
           {showSnackbarCmp && (

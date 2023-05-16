@@ -13,8 +13,8 @@ actor class Profile() {
     type Result<T, E> = Result.Result<T, E>;
     type Error = Type.Error;
 
-    var userProfiles : Trie.Trie<UserId, Profile> = Trie.empty();
-    stable var stableProfiles : [(UserId, Profile)] = [];
+    stable var userProfiles : Trie.Trie<UserId, Profile> = Trie.empty();
+    // stable var stableProfiles : [(UserId, Profile)] = [];
 
     public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
         //users that already have a profile shouldn't be able to create another profile with thesame identity
@@ -68,16 +68,16 @@ actor class Profile() {
     //     userProfiles := Trie.remove(userProfiles, key(user), Principal.equal).0;
     // };
     //system method for saving user id and thier profile in stable memory before upgrading the canister
-    system func preupgrade() {
-        stableProfiles := Trie.toArray<UserId, Profile, (UserId, Profile)>(userProfiles, func(k, v) = (k, v));
-    };
-    //system method for recovering profiles after canister is upgraded
-    system func postupgrade() {
-        for ((userId, profile) in stableProfiles.vals()) {
-            userProfiles := Trie.put<UserId, Profile>(userProfiles, key(userId), Principal.equal, profile).0;
-        };
-        stableProfiles := [];
-    };
+    // system func preupgrade() {
+    //     stableProfiles := Trie.toArray<UserId, Profile, (UserId, Profile)>(userProfiles, func(k, v) = (k, v));
+    // };
+    // //system method for recovering profiles after canister is upgraded
+    // system func postupgrade() {
+    //     for ((userId, profile) in stableProfiles.vals()) {
+    //         userProfiles := Trie.put<UserId, Profile>(userProfiles, key(userId), Principal.equal, profile).0;
+    //     };
+    //     stableProfiles := [];
+    // };
     func key(t : UserId) : Trie.Key<UserId> {
         { hash = Principal.hash(t); key = t };
     };

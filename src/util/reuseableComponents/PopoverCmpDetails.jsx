@@ -16,8 +16,14 @@ export default function PopoverCmpDetails({
   postId,
   markPostAsPublished,
   canOnlyMeSeeThisPost,
+  setShowDeletePostPopup,
+  setSelectedPostId,
 }) {
   const navigate = useNavigate();
+  function deletePost() {
+    setShowDeletePostPopup(true);
+    setSelectedPostId(postId);
+  }
   return (
     <List>
       <ListItem disablePadding>
@@ -50,7 +56,7 @@ export default function PopoverCmpDetails({
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => deletePost()}>
               <ListItemText primary="Delete post" />
             </ListItemButton>
           </ListItem>

@@ -28,8 +28,8 @@ module {
     public class Posts() {
         //stores all the published posts
         var publishedPosts = Util.createDatabase(DatabaseStructure.Database);
-
-        var singlePosts : Trie.Trie<PostId, Post> = Trie.empty();
+        //Every post and can be identified by its id
+        var postsLedger : Trie.Trie<PostId, Post> = Trie.empty();
 
         //stores all personal postings created by the users that deployed this canister.
         var myPostings : Trie.Trie<UserId, List.List<PostId>> = Trie.empty();
@@ -40,7 +40,7 @@ module {
                 case (?postids) postids;
             };
             myPostings := Trie.put(myPostings, hashKey(userId), Principal.equal, List.push(newPost.postId, userPostings)).0;
-            singlePosts := Trie.put(singlePosts, textHash(newPost.postId), Text.equal, newPost).0;
+            postsLedger := Trie.put(postsLedger, textHash(newPost.postId), Text.equal, newPost).0;
         };
         public func getAllMyPostings(userId : UserId) : [?Post] {
             switch (Trie.get(myPostings, hashKey(userId), Principal.equal)) {
@@ -50,7 +50,7 @@ module {
                         List.toArray(myPosts),
                         func(postid, index) {
                             Debug.print(postid);
-                            Trie.get(singlePosts, textHash(postid), Text.equal);
+                            Trie.get(postsLedger, textHash(postid), Text.equal);
                         },
                     );
                 };
@@ -140,27 +140,48 @@ module {
         };
         public func markPostAsPublished(post : Post, userId : UserId) : Result.Result<(), Error> {
             //replace the previous post
-            singlePosts := Trie.replace<PostId, Post>(singlePosts, textHash(post.postId), Text.equal, Option.make(post)).0;
+            postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(post.postId), Text.equal, Option.make(post)).0;
             return switch (publishPost(post)) {
                 case (#err(error)) #err(error);
                 case (#ok()) #ok();
             };
 
         };
+        func deleteFromPostsLedger(postId : PostId) {
+            postsLedger := Trie.remove(postsLedger, textHash(postId), Text.equal).0;
+        };
+        //only posts that are not published to the marketplace can be deleted. A post that is published to the marketplace
+        //has to first be removed from the marketplace before they can be deleted.
+        public func deletePost(userId : UserId, postId : Text) : Result.Result<(), Error> {
+            switch (Trie.get(myPostings, hashKey(userId), Principal.equal)) {
+                case null return #err(#UserNotFound);
+                case (?postings) {
+                    let myNewPostIds = List.filter(
+                        postings,
+                        func(id : PostId) : Bool {
+                            return id != postId;
+                        },
+                    );
+                    myPostings := Trie.put(myPostings, hashKey(userId), Principal.equal, myNewPostIds).0;
+                    deleteFromPostsLedger(postId);
+                };
+            };
+            #ok();
+        };
         public func getPostById(id : PostId) : Result.Result<Post, Error> {
-            switch (Trie.get(singlePosts, textHash(id), Text.equal)) {
+            switch (Trie.get(postsLedger, textHash(id), Text.equal)) {
                 case null #err(#PostNotFound);
                 case (?post) #ok(post);
             };
         };
         //this method is a testing method, and will be removed
         public func getAllPostIds(caller : UserId) : [PostId] {
-            Trie.toArray<PostId, Post, PostId>(singlePosts, func(k, v) = k);
+            Trie.toArray<PostId, Post, PostId>(postsLedger, func(k, v) = k);
         };
 
         //system method. Saving the usersId and post in stable memory.
         public func preupgrade() : [(UserId, Post)] {
-            Trie.toArray<PostId, Post, (UserId, Post)>(singlePosts, func(k, v) = (v.creatorOfPostId, v));
+            Trie.toArray<PostId, Post, (UserId, Post)>(postsLedger, func(k, v) = (v.creatorOfPostId, v));
         };
         //system method. After upgrading the canister, we initialise our data structures back with the posts
         public func postupgrade(stablePosts : [(UserId, Post)]) {

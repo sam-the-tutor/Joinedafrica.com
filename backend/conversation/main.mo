@@ -14,11 +14,11 @@ shared ({ caller = initializer }) actor class () {
     type UserId = types.UserId;
 
     //conversations between two people
-    var conversations : Trie.Trie<Friend, List.List<Message>> = Trie.empty();
+    stable var conversations : Trie.Trie<Friend, List.List<Message>> = Trie.empty();
     stable var stableConversations : [(Friend, [Message])] = [];
     //a user has list of friends
-    var friendList : Trie.Trie<UserId, List.List<UserId>> = Trie.empty();
-    stable var stableFriendList : [(UserId, [UserId])] = [];
+    stable var friendList : Trie.Trie<UserId, List.List<UserId>> = Trie.empty();
+    // stable var stableFriendList : [(UserId, [UserId])] = [];
 
     //user has to be authorized to make this function
     public shared ({ caller }) func sendMessage(message : Message) : async Result.Result<(), Error> {
@@ -96,19 +96,19 @@ shared ({ caller = initializer }) actor class () {
         Trie.toArray<Friend, List.List<Message>, Friend>(conversations, func(friend, message) = friend);
     };
 
-    system func preupgrade() {
-        stableConversations := Trie.toArray<Friend, List.List<Message>, (Friend, [Message])>(conversations, func(friend, messages) = (friend, List.toArray(messages)));
-        stableFriendList := Trie.toArray<UserId, List.List<UserId>, (UserId, [UserId])>(friendList, func(userId, listOfUserIdFriends) = (userId, List.toArray(listOfUserIdFriends)));
-    };
+    // system func preupgrade() {
+    //     stableConversations := Trie.toArray<Friend, List.List<Message>, (Friend, [Message])>(conversations, func(friend, messages) = (friend, List.toArray(messages)));
+    //     stableFriendList := Trie.toArray<UserId, List.List<UserId>, (UserId, [UserId])>(friendList, func(userId, listOfUserIdFriends) = (userId, List.toArray(listOfUserIdFriends)));
+    // };
 
-    system func postupgrade() {
-        for ((friend, messages) in stableConversations.vals()) {
-            conversations := Trie.put(conversations, key(friend), Text.equal, List.fromArray(messages)).0;
-        };
-        for ((userId, listOfUserIdFriends) in stableFriendList.vals()) {
-            friendList := Trie.put(friendList, hashKey(userId), Principal.equal, List.fromArray(listOfUserIdFriends)).0;
-        };
-    };
+    // system func postupgrade() {
+    //     for ((friend, messages) in stableConversations.vals()) {
+    //         conversations := Trie.put(conversations, key(friend), Text.equal, List.fromArray(messages)).0;
+    //     };
+    //     for ((userId, listOfUserIdFriends) in stableFriendList.vals()) {
+    //         friendList := Trie.put(friendList, hashKey(userId), Principal.equal, List.fromArray(listOfUserIdFriends)).0;
+    //     };
+    // };
 
     func key(t : Friend) : Trie.Key<Friend> {
         { hash = Text.hash(t); key = t };

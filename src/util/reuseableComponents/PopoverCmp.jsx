@@ -12,6 +12,8 @@ export default function PopoverCmp({
   postId,
   markPostAsPublished,
   canOnlyMeSeeThisPost,
+  setShowDeletePostPopup,
+  setSelectedPostId
 }) {
   return (
     <Popover
@@ -28,6 +30,8 @@ export default function PopoverCmp({
         postId={postId}
         markPostAsPublished={markPostAsPublished}
         canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
+        setShowDeletePostPopup={setShowDeletePostPopup}
+        setSelectedPostId={setSelectedPostId}
       />
     </Popover>
   );
