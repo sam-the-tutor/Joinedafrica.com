@@ -5,8 +5,11 @@ import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../util/functions";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { getAuthenticatedUser } from "../../util/auth";
+import {
+  getFileFromPostAssetCanister,
+  removeFileFromPostAssetCanister,
+} from "../../util/postAssetCanisterFunctions";
+import { getAuthenticatedPostUser } from "../../util/auth";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import DeletePostPopup from "../../util/reuseableComponents/DeletePostPopup";
 
@@ -19,11 +22,12 @@ export default function MyPostings() {
   const [userProfile, setUserProfile] = useState();
   const [showDeletePostPopup, setShowDeletePostPopup] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState("");
+  const [refreshComponent, setRefreshComponent] = useState(false);
 
   useEffect(() => {
     async function getAllMyPostings() {
       setIsLoading(true);
-      const authenticatedUser = await getAuthenticatedUser();
+      const authenticatedUser = await getAuthenticatedPostUser();
       const post = await authenticatedUser.getAllMyPostings();
       console.log(post);
       if (post?.err) {
@@ -32,19 +36,30 @@ export default function MyPostings() {
         return;
       }
       setMyPostings(post.ok);
+
       const file = await getFileFromPostAssetCanister(
         getFromSessionStorage("profilePicture", true)
       );
       setUserProfile(createObjectURLFromArrayOfBytes(file._content));
-
+      console.log(myPostings);
       setIsLoading(false);
     }
     getAllMyPostings();
   }, []);
+  function deletePostImagesFromPostAssetCanister(images) {
+    images.forEach(async (image) => {
+      await removeFileFromPostAssetCanister(image);
+    });
+  }
   function filterMyPostings() {
-    const myNewPostings = myPostings.filter(
-      (posting) => posting.postId != selectedPostId
-    );
+    const myNewPostings = myPostings.filter((posting) => {
+      const condition = posting[0].postId != selectedPostId;
+      if (!condition) {
+        deletePostImagesFromPostAssetCanister(posting[0].images);
+      }
+      return condition;
+    });
+
     setMyPostings(myNewPostings);
   }
   return (
@@ -58,26 +73,27 @@ export default function MyPostings() {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
-            {myPostings.map((posting, index) => (
-              <Grid item xs={2} sm={4} md={4} key={index}>
-                <PostingCard
-                  post={posting[0]}
-                  userProfile={userProfile}
-                  canOnlyMeSeeThisPost={true}
-                  setShowDeletePostPopup={(value) =>
-                    setShowDeletePostPopup(value)
-                  }
-                  setSelectedPostId={(postId) => setSelectedPostId(postId)}
-                />
-              </Grid>
-            ))}
+            {myPostings.length == 0
+              ? "You have no postings"
+              : myPostings.map((posting, index) => (
+                  <Grid item xs={2} sm={4} md={4} key={index}>
+                    <PostingCard
+                      post={posting[0]}
+                      userProfile={userProfile}
+                      canOnlyMeSeeThisPost={true}
+                      setShowDeletePostPopup={(value) =>
+                        setShowDeletePostPopup(value)
+                      }
+                      setSelectedPostId={(postId) => setSelectedPostId(postId)}
+                    />
+                  </Grid>
+                ))}
           </Grid>
           <DeletePostPopup
             showDeletePostPopup={showDeletePostPopup}
             setShowDeletePostPopup={(value) => setShowDeletePostPopup(value)}
             selectedPostId={selectedPostId}
             filterMyPostings={() => filterMyPostings()}
-            setIsLoading={setIsLoading}
           />
         </Box>
       )}

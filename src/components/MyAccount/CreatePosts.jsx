@@ -18,7 +18,7 @@ import { PostImage } from "../../styling/MyAccount/CreatePosts";
 import { CreatePostSpecificationForm } from "../../util/posts/CreatePostSpecificationForm";
 import getPostSpecificationFromForm from "../../util/posts/GetPostSpecificationFromForm";
 import { Principal } from "@dfinity/principal";
-import { getAuthenticatedUser } from "../../util/auth";
+import { getAuthenticatedPostUser } from "../../util/auth";
 import { getErrorMessage } from "../../util/ErrorMessages";
 
 export default function CreatePost() {
@@ -141,7 +141,7 @@ export default function CreatePost() {
     );
 
     post.images = pathsToImages;
-    const authenticatedUser = await getAuthenticatedUser();
+    const authenticatedUser = await getAuthenticatedPostUser();
     const result = await authenticatedUser.createPost(post);
     if (result?.err) {
       alert(getErrorMessage(result.err));

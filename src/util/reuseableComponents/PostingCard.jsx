@@ -16,7 +16,7 @@ import {
 import SnackbarCmp from "./SnackbarCmp";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import { getFileFromPostAssetCanister } from "../postAssetCanisterFunctions";
-import { getAuthenticatedUser } from "../auth";
+import { getAuthenticatedPostUser } from "../auth";
 import { getErrorMessage } from "../ErrorMessages";
 
 /**
@@ -46,7 +46,7 @@ export default function PostingCard({
   async function markPostAsPublished() {
     setLoading(true);
     updatedPost.isPublished = true;
-    const authenticatedUser = await getAuthenticatedUser();
+    const authenticatedUser = await getAuthenticatedPostUser();
     const post = await authenticatedUser.markPostAsPublished(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));

@@ -39,7 +39,7 @@ export async function InternetIdentityAuthentication(setPrincipal) {
   }
 }
 
-export async function getAuthenticatedUser() {
+export async function getAuthenticatedPostUser() {
   const authClient = await AuthClient.create({
     idleOptions: {
       disableIdle: true,
