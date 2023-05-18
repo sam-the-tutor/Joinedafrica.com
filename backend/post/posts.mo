@@ -104,7 +104,34 @@ module {
             };
             #ok();
         };
+        public func removePostFromMarketplace(category : Category, subcategory : Subcategory, postId : PostId) : Result.Result<(), Error> {
 
+            switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
+                case null {
+                    return #err(#CategoryNotFound);
+                };
+                case (?subcategoryList) {
+                    switch (Trie.get(subcategoryList, categoryKey(subcategory), Text.equal)) {
+                        case null {
+                            return #err(#SubcategoryNotFound);
+                        };
+                        case (?listOfPostIds) {
+
+                            let newList = List.filter(
+                                listOfPostIds,
+                                func(publishedPostIds : PostId) : Bool {
+                                    return publishedPostIds != postId;
+                                },
+                            );
+                            let updatedSubcategory = Trie.put(subcategoryList, categoryKey(subcategory), Text.equal, newList).0;
+                            publishedPosts := Trie.put(publishedPosts, categoryKey(category), Text.equal, updatedSubcategory).0;
+                            #ok();
+                        };
+                    };
+
+                };
+            };
+        };
         /**
             Get the top 10 postings in a subcategory.
         */
@@ -146,6 +173,11 @@ module {
                 case (#ok()) #ok();
             };
 
+        };
+
+        public func updatePostDetails(post : Post, userId : UserId) {
+            //replace the previous post
+            postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(post.postId), Text.equal, Option.make(post)).0;
         };
         func deleteFromPostsLedger(postId : PostId) {
             postsLedger := Trie.remove(postsLedger, textHash(postId), Text.equal).0;

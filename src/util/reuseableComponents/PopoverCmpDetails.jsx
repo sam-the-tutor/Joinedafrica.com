@@ -18,12 +18,14 @@ export default function PopoverCmpDetails({
   canOnlyMeSeeThisPost,
   setShowDeletePostPopup,
   setSelectedPostId,
+  removePostFromMarketplace,
 }) {
   const navigate = useNavigate();
   function deletePost() {
     setShowDeletePostPopup(true);
     setSelectedPostId(postId);
   }
+
   return (
     <List>
       <ListItem disablePadding>
@@ -36,7 +38,7 @@ export default function PopoverCmpDetails({
           {isPublished ? (
             <>
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={() => removePostFromMarketplace()}>
                   <ListItemText primary="Remove from market place" />
                 </ListItemButton>
               </ListItem>
@@ -51,20 +53,24 @@ export default function PopoverCmpDetails({
             </>
           )}
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton>
               <ListItemText primary="Edit post" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => deletePost()}>
-              <ListItemText primary="Delete post" />
-            </ListItemButton>
-          </ListItem>
+          {/* only posts that are not published can be deleted. Posts that are published have to first be removed from the 
+          marketplace before it can be deleted */}
+          {!isPublished && (
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => deletePost()}>
+                <ListItemText primary="Delete post" />
+              </ListItemButton>
+            </ListItem>
+          )}
         </>
       ) : (
         <>
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton>
               <ListItemText primary="Message creator of post" />
             </ListItemButton>
           </ListItem>

@@ -48,13 +48,22 @@ shared ({ caller = initializer }) actor class () {
   public shared query func getPost(id : PostId) : async Result<Post, Error> {
     posts.getPostById(id);
   };
+  public shared ({ caller }) func updatePostDetails(updatedPost : Post) : async Result<(), Error> {
+    if (Principal.isAnonymous(caller)) {
+      return #err(#UnAuthorizedUser);
+    };
+    posts.updatePostDetails(updatedPost, caller);
+    #ok();
+  };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
     if (Principal.isAnonymous(caller)) {
       return #err(#UnAuthorizedUser);
     };
     posts.markPostAsPublished(updatedPost, caller);
   };
-
+  public func removePostFromMarketplace(category : Category, subcategory : Subcategory, postId : PostId) : async Result<(), Error> {
+    posts.removePostFromMarketplace(category, subcategory, postId);
+  };
   public shared query func getAllPostingsInSubcategory(category : Category, subcategory : Subcategory) : async Result<[Post], Error> {
     posts.getAllPostingsInSubcategory(category, subcategory);
   };

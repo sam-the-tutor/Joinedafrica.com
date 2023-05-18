@@ -37,7 +37,7 @@ export default function PostingCard({
   //post can be updated by pushlishing the post and any other edit that can be made on a post
   const [updatedPost, setUpdatedPost] = useState(post);
   //after marking the post as published, we want to show a success message.
-  const [showSnackbarCmp, setShowSnackbarCmp] = useState(false);
+  const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
 
   const [loading, setLoading] = useState(false);
   //front page image of a posting card
@@ -46,6 +46,22 @@ export default function PostingCard({
   async function markPostAsPublished() {
     setLoading(true);
     updatedPost.isPublished = true;
+    await markPostAsPublishedInPostCanister(updatedPost);
+    setShowSnackbarCmp(
+      <SnackbarCmp
+        open={true}
+        message="Post is published to marketplace!"
+        handleClose={(event, reason) => {
+          //the user has to click on the alert to close it.
+          if (reason != "clickaway") {
+            setShowSnackbarCmp(null);
+          }
+        }}
+        severity="success"
+      />
+    );
+  }
+  async function markPostAsPublishedInPostCanister(updatedPost) {
     const authenticatedUser = await getAuthenticatedPostUser();
     const post = await authenticatedUser.markPostAsPublished(updatedPost);
     if (post?.err) {
@@ -55,7 +71,40 @@ export default function PostingCard({
     }
     setUpdatedPost(updatedPost);
     setLoading(false);
-    setShowSnackbarCmp(true);
+  }
+  async function updatePostDetailsInPostCanister(updatedPost) {
+    const authenticatedUser = await getAuthenticatedPostUser();
+    const post = await authenticatedUser.updatePostDetails(updatedPost);
+    await authenticatedUser.removePostFromMarketplace(
+      updatedPost.category,
+      updatedPost.subcategory,
+      updatedPost.postId
+    );
+    if (post?.err) {
+      alert(getErrorMessage(post.err));
+      setLoading(false);
+      return;
+    }
+    setUpdatedPost(updatedPost);
+    setLoading(false);
+  }
+  async function removePostFromMarketplace() {
+    setLoading(true);
+    updatedPost.isPublished = false;
+    await updatePostDetailsInPostCanister(updatedPost);
+    setShowSnackbarCmp(
+      <SnackbarCmp
+        open={true}
+        message="Post is removed from marketplace!"
+        handleClose={(event, reason) => {
+          //the user has to click on the alert to close it.
+          if (reason != "clickaway") {
+            setShowSnackbarCmp(null);
+          }
+        }}
+        severity="success"
+      />
+    );
   }
 
   //update the post if/when the user interacts with the post like publishing to market place or removing from the market place
@@ -142,21 +191,11 @@ export default function PostingCard({
             canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
             setShowDeletePostPopup={setShowDeletePostPopup}
             setSelectedPostId={setSelectedPostId}
+            removePostFromMarketplace={removePostFromMarketplace}
           />
           {/* show the snackbar when the user has marked the post as published */}
-          {showSnackbarCmp && (
-            <SnackbarCmp
-              message="Post is published to marketplace!"
-              open={showSnackbarCmp}
-              handleClose={(event, reason) => {
-                //the user has to click on the alert to close it.
-                if (reason != "clickaway") {
-                  setShowSnackbarCmp(false);
-                }
-              }}
-              severity="success"
-            />
-          )}
+
+          {showSnackbarCmp}
         </>
       )}
     </Box>
