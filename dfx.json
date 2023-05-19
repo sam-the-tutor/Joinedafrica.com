@@ -16,7 +16,8 @@
       },
         "post": {
           "main": "backend/post/main.mo",
-          "type": "motoko"
+          "type": "motoko",
+          "dependencies": ["profile"]
         },
         "conversation": {
           "main": "backend/conversation/main.mo",

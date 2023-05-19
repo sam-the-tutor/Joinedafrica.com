@@ -74,12 +74,7 @@ export default function PostingCard({
   }
   async function updatePostDetailsInPostCanister(updatedPost) {
     const authenticatedUser = await getAuthenticatedPostUser();
-    const post = await authenticatedUser.updatePostDetails(updatedPost);
-    await authenticatedUser.removePostFromMarketplace(
-      updatedPost.category,
-      updatedPost.subcategory,
-      updatedPost.postId
-    );
+    await authenticatedUser.removePostFromMarketplace(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));
       setLoading(false);

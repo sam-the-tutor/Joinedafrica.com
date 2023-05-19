@@ -77,14 +77,6 @@ shared ({ caller = initializer }) actor class () {
         let result = switch (Trie.get(conversations, key(sortedPrincipals), Text.equal)) {
             case null [];
             case (?list) {
-                //mark the last conversation between the two friends as seen (true) so we know all the messages
-                //between the two friends are seen
-                // switch(List.last(list)){
-                //     case null return #err(#NoConversationFound);
-                //     case (?conversation){
-
-                //     }
-                // }
                 List.toArray(list);
             };
         };
@@ -95,21 +87,6 @@ shared ({ caller = initializer }) actor class () {
     public query func getAllFriends() : async [Friend] {
         Trie.toArray<Friend, List.List<Message>, Friend>(conversations, func(friend, message) = friend);
     };
-
-    // system func preupgrade() {
-    //     stableConversations := Trie.toArray<Friend, List.List<Message>, (Friend, [Message])>(conversations, func(friend, messages) = (friend, List.toArray(messages)));
-    //     stableFriendList := Trie.toArray<UserId, List.List<UserId>, (UserId, [UserId])>(friendList, func(userId, listOfUserIdFriends) = (userId, List.toArray(listOfUserIdFriends)));
-    // };
-
-    // system func postupgrade() {
-    //     for ((friend, messages) in stableConversations.vals()) {
-    //         conversations := Trie.put(conversations, key(friend), Text.equal, List.fromArray(messages)).0;
-    //     };
-    //     for ((userId, listOfUserIdFriends) in stableFriendList.vals()) {
-    //         friendList := Trie.put(friendList, hashKey(userId), Principal.equal, List.fromArray(listOfUserIdFriends)).0;
-    //     };
-    // };
-
     func key(t : Friend) : Trie.Key<Friend> {
         { hash = Text.hash(t); key = t };
     };
