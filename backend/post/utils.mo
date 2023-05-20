@@ -1,9 +1,11 @@
-import Types "types";
-import Trie "mo:base/Trie";
+import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
-import List "mo:base/List";
+import Trie "mo:base/Trie";
+
 import DatabaseStructure "databasestructure";
+import Types "types";
+
 module {
     type UserId = Types.UserId;
     type Category = Types.Category;
@@ -13,7 +15,7 @@ module {
     type PostId = Types.PostId;
 
     /**
-        createDatabase initialises the category with another Trie and subcategory with list of post ids
+        cfeateDatabase initialises the database with the category and subcategory
     */
     public func createDatabase(allCategories : [Database]) : Trie.Trie<Category, Trie.Trie<Subcategory, List.List<PostId>>> {
         var database : Trie.Trie<Category, Trie.Trie<Subcategory, List.List<PostId>>> = Trie.empty();

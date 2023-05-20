@@ -3,11 +3,17 @@ import Types "types";
 import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
+
+//user caller of this must be registered in the profile otherwise, an error message is sent
 actor MessageNotification {
     type Notification = Types.Notification;
     type UserId = Types.UserId;
     stable var notifications : Trie.Trie<UserId, List.List<Notification>> = Trie.empty();
-    // stable var stableNotifications : [(UserId, [Notification])] = [];
+
+    //----------------------------------------------------------------------------------------
+    // update calls
+    //---------------------------------------------------------------------------------------
+
     //send message notifications to the receiver
     public shared ({ caller }) func sendNotification(message : Notification) : async () {
         Debug.print("readchded re");
@@ -32,8 +38,10 @@ actor MessageNotification {
             };
         };
     };
+
     //this is when the user has clicked on the friend to view the list of messages or when the user
     //starts typing a message in the message box. It means the sender has seen the message
+
     public shared ({ caller }) func clearAllNotifications() : async () {
         notifications := Trie.remove(notifications, hashKey(caller), Principal.equal).0;
     };
@@ -41,15 +49,7 @@ actor MessageNotification {
     public shared ({ caller }) func removeNotification(user : UserId) : async () {
         notifications := Trie.remove(notifications, hashKey(user), Principal.equal).0;
     };
-    // system func postupgrade() {
-    //     for ((userId, mynotifications) in stableNotifications.vals()) {
-    //         notifications := Trie.put(notifications, hashKey(userId), Principal.equal, List.fromArray(mynotifications)).0;
-    //     };
-    //     stableNotifications := [];
-    // };
-    // system func preupgrade() {
-    //     stableNotifications := Trie.toArray<UserId, List.List<Notification>, (UserId, [Notification])>(notifications, func(userId, notifications) = (userId, List.toArray(notifications)));
-    // };
+
     func hashKey(t : UserId) : Trie.Key<UserId> {
         { hash = Principal.hash(t); key = t };
     };

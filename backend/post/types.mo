@@ -201,15 +201,6 @@ module {
         post : [Post];
     };
 
-    public type Profile = {
-        firstName : Text;
-        lastName : Text;
-        //path to the image in post asset canister.
-        //Profile picture path starts like this "<user-principal-id>/profile/<file name>"
-        profilePicture : Text;
-        email : Text;
-    };
-
     //the strucutre of how the posts are organised in the database
     public type Database = {
         name : Category;

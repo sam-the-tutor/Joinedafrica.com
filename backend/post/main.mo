@@ -1,4 +1,5 @@
-import Profile "canister:profile";
+//this line gies an error. You have to deploy the canisters to remove the error
+import ProfileCanister "canister:profile";
 
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
@@ -21,7 +22,6 @@ shared ({ caller = initializer }) actor class () {
   type Category = Text;
   type Post = Type.Post;
   type UserId = Type.UserId;
-  type Profile = Type.Profile;
   type Result<T, E> = Result.Result<T, E>;
   type PostId = Type.PostId;
   type Top10Posts = Type.Top10Posts;
@@ -35,7 +35,7 @@ shared ({ caller = initializer }) actor class () {
   //Every post and can be identified by its id
   stable var postsLedger : Trie.Trie<PostId, Post> = Trie.empty();
 
-  //stores all personal postings created by the users that deployed this canister.
+  //stores all personal postings created by the unique principal
   stable var myPostings : Trie.Trie<UserId, List.List<PostId>> = Trie.empty();
 
   //----------------------------------------------------------------------------------------
@@ -43,9 +43,9 @@ shared ({ caller = initializer }) actor class () {
   //---------------------------------------------------------------------------------------
 
   public shared ({ caller }) func createPost(post : Post) : async Result<(), Error> {
-        let authorized = await Profle.isUserAuthorized(caller);
-    if(!authorized) return #err(#UnAuthorizedUser);
-let userPostings : List.List<PostId> = switch (Trie.get(myPostings, hashKey(caller), Principal.equal)) {
+    let authorized = await ProfileCanister.isUserAuthorized(caller);
+    if (not authorized) return #err(#UnAuthorizedUser);
+    let userPostings : List.List<PostId> = switch (Trie.get(myPostings, hashKey(caller), Principal.equal)) {
       case null List.nil();
       case (?postids) postids;
     };
@@ -60,8 +60,8 @@ let userPostings : List.List<PostId> = switch (Trie.get(myPostings, hashKey(call
     has to first be removed from the marketplace before they can be deleted.
   */
   public shared ({ caller }) func deletePost(postId : PostId) : async Result<(), Error> {
-    let authorized = await Profle.isUserAuthorized(caller);
-    if(!authorized) return #err(#UnAuthorizedUser);
+    let authorized = await ProfileCanister.isUserAuthorized(caller);
+    if (not authorized) return #err(#UnAuthorizedUser);
     switch (Trie.get(myPostings, hashKey(caller), Principal.equal)) {
       case null return #err(#UserNotFound);
       case (?postings) {
@@ -78,8 +78,8 @@ let userPostings : List.List<PostId> = switch (Trie.get(myPostings, hashKey(call
     #ok();
   };
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
-    let authorized = await Profle.isUserAuthorized(caller);
-    if(!authorized) return #err(#UnAuthorizedUser);
+    let authorized = await ProfileCanister.isUserAuthorized(caller);
+    if (not authorized) return #err(#UnAuthorizedUser);
     postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(updatedPost.postId), Text.equal, Option.make(updatedPost)).0;
     return switch (_publishPost(updatedPost)) {
       case (#err(error)) #err(error);
@@ -107,9 +107,9 @@ let userPostings : List.List<PostId> = switch (Trie.get(myPostings, hashKey(call
     };
     #ok();
   };
-  public shared ({caller}) func removePostFromMarketplace(post : Post) : async Result<(), Error> {
-       let authorized = await Profle.isUserAuthorized(caller);
-    if(!authorized) return #err(#UnAuthorizedUser);
+  public shared ({ caller }) func removePostFromMarketplace(post : Post) : async Result<(), Error> {
+    let authorized = await ProfileCanister.isUserAuthorized(caller);
+    if (not authorized) return #err(#UnAuthorizedUser);
     /*
       Updating the post in the ledger. The post passed as an argument will not be published. This was done from
       the front end. We updated the post in the ledger as not published.

@@ -1,5 +1,7 @@
-import types "types";
 import Principal "mo:base/Principal";
+
+import types "types";
+
 module {
     type UserId = types.UserId;
 

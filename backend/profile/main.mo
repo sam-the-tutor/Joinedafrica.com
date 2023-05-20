@@ -15,6 +15,10 @@ actor Profile {
 
     stable var userProfiles : Trie.Trie<UserId, Profile> = Trie.empty();
 
+    //----------------------------------------------------------------------------------------
+    // update calls
+    //---------------------------------------------------------------------------------------
+
     public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
         //users that already have a profile shouldn't be able to create another profile with thesame identity
         if (not (userHasCreatedProfile(caller))) {
@@ -26,6 +30,9 @@ actor Profile {
 
     };
 
+    //----------------------------------------------------------------------------------------
+    // query calls
+    //---------------------------------------------------------------------------------------
     public shared query ({ caller }) func getUserProfile() : async Result<Profile, Error> {
         // calling isUserAuthorized method in this method creates an error because of the async
         if (not (userHasCreatedProfile(caller) and not Principal.isAnonymous(caller))) {
@@ -36,10 +43,9 @@ actor Profile {
             case (?profile) #ok(profile);
         };
     };
-
     /**
-  This function is only called by the profile canister We use this function to display top10Posts, and so on
-*/
+    This function is only called by the profile canister We use this function to display top10Posts, and so on
+    */
     public shared query func getUserProfilePicture(userId : UserId) : async Result<Profile, Error> {
         switch (Trie.get(userProfiles, key(userId), Principal.equal)) {
             case null #err(#UserNotFound);
