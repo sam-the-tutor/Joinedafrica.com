@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { Principal } from "@dfinity/principal";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
-  Container,
-  Button,
   Box,
-  Typography,
-  TextField,
+  Button,
   CircularProgress,
+  Container,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { post as postCanister } from "../../declarations/post";
-import { conversation } from "../../declarations/conversation";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import Header from "../appStructure/Header";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import CarouselCmp from "../../util/reuseableComponents/CarouselCmp";
+
+import { post as postCanister } from "../../declarations/post";
+import { MessageCmp } from "../../styling/views/ViewPost";
+import { getErrorMessage } from "../../util/ErrorMessages";
+import {
+  getAuthenticatedConversationUser,
+  getAuthenticatedMessageNotificationWorker,
+} from "../../util/auth";
 import {
   createObjectURLFromArrayOfBytes,
   extractProductSpecification,
   getFromSessionStorage,
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { MessageCmp } from "../../styling/views/ViewPost";
-import { getErrorMessage } from "../../util/ErrorMessages";
-import { Principal } from "@dfinity/principal";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import {
-  getAuthenticatedConversationUser,
-  getAuthenticatedMessageNotificationWorker,
-} from "../../util/auth";
+import CarouselCmp from "../../util/reuseableComponents/CarouselCmp";
+import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
+import Header from "../appStructure/Header";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post

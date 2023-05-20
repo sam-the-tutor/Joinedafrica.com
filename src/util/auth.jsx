@@ -1,22 +1,22 @@
-import React from "react";
 import { AuthClient } from "@dfinity/auth-client";
-import { canisterId, createActor } from "../declarations/post";
+
 import {
   canisterId as conversationCanisterId,
   createActor as conversationCreateActor,
 } from "../declarations/conversation";
 import {
-  canisterId as profileCanisterId,
-  createActor as profileCreateActor,
-} from "../declarations/profile";
+  canisterId as messageNotificationCanisterId,
+  createActor as messageNotificationCreateActor,
+} from "../declarations/message_notification";
+import { canisterId, createActor } from "../declarations/post";
 import {
   canisterId as postAssetCanisterId,
   createActor as postAssetCreateActor,
 } from "../declarations/post_assets";
 import {
-  canisterId as messageNotificationCanisterId,
-  createActor as messageNotificationCreateActor,
-} from "../declarations/message_notification";
+  canisterId as profileCanisterId,
+  createActor as profileCreateActor,
+} from "../declarations/profile";
 //Authenticate using internet identity and store the users principal
 export async function InternetIdentityAuthentication(setPrincipal) {
   const authClient = await AuthClient.create({

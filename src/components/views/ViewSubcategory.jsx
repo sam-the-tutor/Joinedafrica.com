@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Box, Toolbar, Typography, Grid } from "@mui/material";
-import Header from "../appStructure/Header";
+import { Box, Grid, Toolbar, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { post } from "../../declarations/post";
+import { profile } from "../../declarations/profile";
 import {
   DrawerContainer,
   TypographyCmp,
 } from "../../styling/appStructure/LeftBar";
-import { useParams } from "react-router-dom";
-import { getFilterForSubcategory } from "../../util/posts/PostFiltering";
-import { profile } from "../../declarations/profile";
-import { post } from "../../declarations/post";
 import { getErrorMessage } from "../../util/ErrorMessages";
-import PostingCard from "../../util/reuseableComponents/PostingCard";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { createObjectURLFromArrayOfBytes } from "../../util/functions";
+import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
+import { getFilterForSubcategory } from "../../util/posts/PostFiltering";
+import PostingCard from "../../util/reuseableComponents/PostingCard";
+import Header from "../appStructure/Header";
 
 /**
  * When the user clicks on a specific subcategory in the home page, this component is responsible for displaying all postings

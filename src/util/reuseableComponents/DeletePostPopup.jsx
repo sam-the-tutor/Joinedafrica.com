@@ -1,13 +1,14 @@
-import React, { useState } from "react";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  CircularProgress,
   Slide,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import { getAuthenticatedPostUser } from "../auth";
 
 const Transition = React.forwardRef(function Transition(props, ref) {

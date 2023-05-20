@@ -1,23 +1,25 @@
-import React, { useState, useContext } from "react";
-import { Container, TextField, Box, Typography, Button } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import SendIcon from "@mui/icons-material/Send";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { AppContext } from "../../context";
+import {
+  IdentitySetup,
+  Image,
+  ImageContainer,
+} from "../../styling/auth/CreateProfile";
+import { getErrorMessage } from "../../util/ErrorMessages";
 import {
   InternetIdentityAuthentication,
   getAuthenticatedProfileUser,
 } from "../../util/auth";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import { useNavigate } from "react-router-dom";
-import {
-  Image,
-  IdentitySetup,
-  ImageContainer,
-} from "../../styling/auth/CreateProfile";
-import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { getUniqueId, setSessionStorage } from "../../util/functions";
-import { getErrorMessage } from "../../util/ErrorMessages";
+import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
+import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { messageWorker } from "../../util/webworkers/messageWorker";
-import { AppContext } from "../../context";
+
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
   const [userProfile, setProfile] = useState({

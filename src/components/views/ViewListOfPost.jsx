@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
 import { Container } from "@mui/material";
-import PostFilter from "./PostFilter";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import PostFilter from "./PostFilter";
 import ViewCategory from "./ViewCategory";
 
 /**

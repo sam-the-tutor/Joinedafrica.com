@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import MyAccount from "./components/MyAccount/MyAccount";
-import { AppContext } from "./context";
 import Body from "./components/appStructure/Body";
-import WelcomePage from "./components/welcomeToJoinedAfrica/WelcomePage";
 import CreateProfile from "./components/auth/CreateProfile";
-import ViewPost from "./components/views/ViewPost";
 import ViewCategory from "./components/views/ViewCategory";
+import ViewPost from "./components/views/ViewPost";
 import ViewSubcategory from "./components/views/ViewSubcategory";
-import { messageWorker } from "./util/webworkers/messageWorker";
+import WelcomePage from "./components/welcomeToJoinedAfrica/WelcomePage";
+import { AppContext } from "./context";
 import { getFromSessionStorage } from "./util/functions";
+import { messageWorker } from "./util/webworkers/messageWorker";
 
 export default function App() {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);

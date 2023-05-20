@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import PostingCard from "../../util/reuseableComponents/PostingCard";
+import React, { useEffect, useState } from "react";
+
+import { getErrorMessage } from "../../util/ErrorMessages";
+import { getAuthenticatedPostUser } from "../../util/auth";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
@@ -9,9 +11,8 @@ import {
   getFileFromPostAssetCanister,
   removeFileFromPostAssetCanister,
 } from "../../util/postAssetCanisterFunctions";
-import { getAuthenticatedPostUser } from "../../util/auth";
-import { getErrorMessage } from "../../util/ErrorMessages";
 import DeletePostPopup from "../../util/reuseableComponents/DeletePostPopup";
+import PostingCard from "../../util/reuseableComponents/PostingCard";
 
 //display all my postings
 export default function MyPostings() {

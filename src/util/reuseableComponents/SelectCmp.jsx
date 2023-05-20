@@ -1,13 +1,14 @@
-import React from "react";
 import {
-  FormGroup,
-  FormControlLabel,
   Checkbox,
-  List,
+  FormControlLabel,
+  FormGroup,
   FormLabel,
-  RadioGroup,
+  List,
   Radio,
+  RadioGroup,
 } from "@mui/material/";
+import React from "react";
+
 import filterSubcategory from "../posts/subCategoryFiltering";
 
 export function CheckboxCmp({ list }) {

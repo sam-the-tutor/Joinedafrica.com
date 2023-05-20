@@ -1,27 +1,25 @@
-import React from "react";
-import {
-  Container,
-  Box,
-  Typography,
-  Button,
-  Stack,
-  Paper,
-} from "@mui/material";
-import HowWeStandOut from "./HowWeStandOut";
-import { Link } from "react-router-dom";
-import {
-  MainContent,
-  OurVision,
-  MessageFromFounder,
-  Greeting,
-  Introduction,
-} from "../../styling/WelcomeToJoinedAfrica";
-import HowToGetStarted from "./HowToGetStarted";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import YouTubeIcon from "@mui/icons-material/YouTube";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import {
+  Box,
+  Button,
+  Typography
+} from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+
+import {
+  Greeting,
+  Introduction,
+  MessageFromFounder,
+  OurVision
+} from "../../styling/WelcomeToJoinedAfrica";
+import HowToGetStarted from "./HowToGetStarted";
+import HowWeStandOut from "./HowWeStandOut";
+
 export default function WelcomePage() {
   return (
     <Box>

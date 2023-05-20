@@ -1,5 +1,6 @@
+import { Alert, Snackbar } from "@mui/material";
+
 import React from "react";
-import { Snackbar, Alert } from "@mui/material";
 
 /**
  * SnackbarCmp is used to display success or error messages.

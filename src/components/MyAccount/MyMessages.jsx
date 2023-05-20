@@ -1,36 +1,33 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 // import { makeStyles } from "@mui/material/styles";
 
+import { Principal } from "@dfinity/principal";
 import {
-  Grid,
-  Paper,
-  Box,
+  Avatar,
+  Button,
   Divider,
-  TextField,
-  Typography,
+  Grid,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Avatar,
-  Fab,
-  Button,
+  Paper,
+  TextField,
+  Typography
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+
+import { AppContext } from "../../context";
 import { profile } from "../../declarations/profile";
-import { conversation } from "../../declarations/conversation";
 import {
   getAuthenticatedConversationUser,
   getAuthenticatedMessageNotificationWorker,
 } from "../../util/auth";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../util/functions";
-import { Principal } from "@dfinity/principal";
-import { AppContext } from "../../context";
+import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 
 export default function MyMessages() {
   const [allMyFriends, setAllMyFriends] = useState([]);

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
+import React from "react";
+
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 
 /**

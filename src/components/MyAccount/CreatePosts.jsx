@@ -1,25 +1,26 @@
-import React, { useState } from "react";
+import { Principal } from "@dfinity/principal";
+import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
-  Typography,
+  Button,
   Divider,
   Stack,
   TextField,
-  Button,
+  Typography,
 } from "@mui/material";
-import { getCategoryNames, getSubcategory } from "../../util/ListOfCategories";
-import SendIcon from "@mui/icons-material/Send";
-import { MultiSelect } from "../../util/reuseableComponents/MultiSelect";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import SnackbarCmp from "../../util/reuseableComponents/SnackbarCmp";
-import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { getFromSessionStorage, getUniqueId } from "../../util/functions";
+import React, { useState } from "react";
+
 import { PostImage } from "../../styling/MyAccount/CreatePosts";
+import { getErrorMessage } from "../../util/ErrorMessages";
+import { getCategoryNames, getSubcategory } from "../../util/ListOfCategories";
+import { getAuthenticatedPostUser } from "../../util/auth";
+import { getFromSessionStorage, getUniqueId } from "../../util/functions";
+import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { CreatePostSpecificationForm } from "../../util/posts/CreatePostSpecificationForm";
 import getPostSpecificationFromForm from "../../util/posts/GetPostSpecificationFromForm";
-import { Principal } from "@dfinity/principal";
-import { getAuthenticatedPostUser } from "../../util/auth";
-import { getErrorMessage } from "../../util/ErrorMessages";
+import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
+import { MultiSelect } from "../../util/reuseableComponents/MultiSelect";
+import SnackbarCmp from "../../util/reuseableComponents/SnackbarCmp";
 
 export default function CreatePost() {
   const categories = getCategoryNames();

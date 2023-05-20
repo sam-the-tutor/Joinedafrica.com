@@ -1,21 +1,22 @@
-import React from "react";
-import Feed from "./Feed";
-import Header from "./Header";
 import {
+  Box,
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
-  Toolbar,
   ListItemIcon,
-  Box
+  ListItemText,
+  Toolbar
 } from "@mui/material";
-import { categories } from "../../util/ListOfCategories";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   DrawerContainer,
   TypographyCmp,
 } from "../../styling/appStructure/LeftBar";
-import { useNavigate } from "react-router-dom";
+import { categories } from "../../util/ListOfCategories";
+import Feed from "./Feed";
+import Header from "./Header";
 
 export default function Body() {
   const navigate = useNavigate();

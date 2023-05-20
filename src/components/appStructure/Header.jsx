@@ -1,30 +1,32 @@
-import React, { useContext, useState, useEffect } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Input,
-  Stack,
-  Badge,
-  Button,
-} from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import MyProfileMenu from "../MyAccount/MyprofileMenu";
+import {
+  AppBar,
+  Badge,
+  Button,
+  Input,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import { AppContext } from "../../context";
 import {
   InputContainer,
   SearchIconCmp,
 } from "../../styling/appStructure/Header";
-import { Link } from "react-router-dom";
+import { getErrorMessage } from "../../util/ErrorMessages";
 import {
   InternetIdentityAuthentication,
   getAuthenticatedProfileUser,
 } from "../../util/auth";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { setSessionStorage } from "../../util/functions";
-import { getErrorMessage } from "../../util/ErrorMessages";
+import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { messageWorker } from "../../util/webworkers/messageWorker";
-import { AppContext } from "../../context";
+import MyProfileMenu from "../MyAccount/MyprofileMenu";
+
 export default function Header() {
   //users principal
   const [principal, setPrincipal] = useState("");
@@ -34,6 +36,7 @@ export default function Header() {
   );
   const { newMessageNotification, setNewMessageNotification } =
     useContext(AppContext);
+    
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
    */

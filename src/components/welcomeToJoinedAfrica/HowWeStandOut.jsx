@@ -1,8 +1,9 @@
+import { Typography } from "@mui/material";
 import React from "react";
-import { Box, Typography } from "@mui/material";
+
 import {
-  ImageCmp,
   HowWeStandOutContainer,
+  ImageCmp,
 } from "../../styling/WelcomeToJoinedAfrica";
 
 export default function HowWeStandOut({ content, imagePath }) {

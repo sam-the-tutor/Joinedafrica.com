@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import PopoverCmp from "./PopoverCmp";
 import {
-  Divider,
+  Avatar,
+  Box,
   Card,
+  CardContent,
   CardHeader,
   CardMedia,
-  CardContent,
-  Avatar,
+  CircularProgress,
+  Divider,
   IconButton,
   Typography,
-  Box,
-  CircularProgress,
 } from "@mui/material";
-import SnackbarCmp from "./SnackbarCmp";
+import React, { useEffect, useState } from "react";
+
+import { getErrorMessage } from "../ErrorMessages";
+import { getAuthenticatedPostUser } from "../auth";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import { getFileFromPostAssetCanister } from "../postAssetCanisterFunctions";
-import { getAuthenticatedPostUser } from "../auth";
-import { getErrorMessage } from "../ErrorMessages";
+import PopoverCmp from "./PopoverCmp";
+import SnackbarCmp from "./SnackbarCmp";
 
 /**
  * Postingcard is a container that shows the relevant details about a post

@@ -1,5 +1,6 @@
-import React from "react";
 import { Grid } from "@mui/material";
+import React from "react";
+
 export default function GridCmp(posts) {
   <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
     {posts.map((posting, index) => (

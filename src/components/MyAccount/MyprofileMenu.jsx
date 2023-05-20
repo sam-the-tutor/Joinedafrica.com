@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Button, Box, Menu, MenuItem, Avatar } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useNavigate } from "react-router-dom";
+import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import { enc } from "crypto-js";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../util/functions";
+import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 
 export default function MyProfileMenu() {
   const navigate = useNavigate();

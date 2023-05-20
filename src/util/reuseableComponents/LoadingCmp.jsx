@@ -1,5 +1,5 @@
-import React from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
+import React from "react";
 
 /**
  * LoadingCmp is used to signify a loading process

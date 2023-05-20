@@ -1,5 +1,5 @@
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
-import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 
 /**
  * MultiSelect is used to select from a list of elements

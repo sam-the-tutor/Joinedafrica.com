@@ -1,7 +1,8 @@
+import { TextField } from "@mui/material";
 import React from "react";
+
 import { MultiSelect } from "../reuseableComponents/MultiSelect";
 import { getFilteringInformation } from "./PostFiltering";
-import { TextField } from "@mui/material";
 
 /**
  * Create product specification based on what category and subcategory the users chooses.

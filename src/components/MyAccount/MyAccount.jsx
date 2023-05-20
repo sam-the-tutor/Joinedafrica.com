@@ -1,11 +1,12 @@
-import React from "react";
-import { Box, Container, Toolbar } from "@mui/material";
-import Tabs from "@mui/material/Tabs";
+import { Box, Container } from "@mui/material";
 import Tab from "@mui/material/Tab";
-import CreatePost from "./CreatePosts";
-import MyPostings from "./MyPostings";
+import Tabs from "@mui/material/Tabs";
+import React from "react";
+
 import Header from "../appStructure/Header";
+import CreatePost from "./CreatePosts";
 import MyMessages from "./MyMessages";
+import MyPostings from "./MyPostings";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

@@ -1,11 +1,10 @@
-import React from "react";
 import {
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
-  Divider,
+  ListItemText
 } from "@mui/material";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 /**
