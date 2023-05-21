@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import React from "react";
 
 import Header from "../appStructure/Header";
+import Settings from "../auth/Settings";
 import CreatePost from "./CreatePosts";
 import MyMessages from "./MyMessages";
 import MyPostings from "./MyPostings";
@@ -87,7 +88,7 @@ export default function MyAccount() {
           <MyPostings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
-          Item Three
+          <Settings />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
           <CreatePost />
