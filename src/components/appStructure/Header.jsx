@@ -20,7 +20,7 @@ import {
 import { getErrorMessage } from "../../util/ErrorMessages";
 import {
   InternetIdentityAuthentication,
-  getAuthenticatedProfileUser
+  getAuthenticatedProfileUser,
 } from "../../util/auth";
 import { setSessionStorage } from "../../util/functions";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
@@ -36,7 +36,7 @@ export default function Header() {
   );
   const { newMessageNotification, setNewMessageNotification } =
     useContext(AppContext);
-    
+
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
    */
@@ -72,6 +72,7 @@ export default function Header() {
     getUserProfile();
     //set the users principal as a dependency incase the user already has an account and clicks on login
     //not create account
+    //In the settings page, if the user selects a new image, we update the profile menu image
   }, [principal]);
   return (
     <>

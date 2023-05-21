@@ -50,7 +50,7 @@ export default function CreateProfile() {
     setIsLoading(true);
     const createdProfile = { ...userProfile };
     const profileImagePath = principal + "/profile/" + getUniqueId();
-
+    console.log(userProfile.profilePicture);
     const key = await uploadFileToPostAssetCanister(
       userProfile.profilePicture,
       profileImagePath

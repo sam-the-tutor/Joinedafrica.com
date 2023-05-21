@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Header from "../appStructure/Header";
 import Settings from "../auth/Settings";
@@ -35,15 +35,20 @@ export default function MyAccount() {
       "aria-controls": `vertical-tabpanel-${index}`,
     };
   }
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [refreshComponent, setRefreshComponent] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  // useEffect(() => {
+
+  // }, [])
+
   return (
     <>
-      <Header />
+      <Header refreshComponent={refreshComponent} />
       <Container
         sx={{
           flexGrow: 1,
@@ -88,7 +93,9 @@ export default function MyAccount() {
           <MyPostings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
-          <Settings />
+          <Settings
+            setRefreshComponent={() => setRefreshComponent(!refreshComponent)}
+          />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
           <CreatePost />

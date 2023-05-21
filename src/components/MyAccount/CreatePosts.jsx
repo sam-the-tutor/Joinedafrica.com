@@ -132,6 +132,7 @@ export default function CreatePost() {
     const pathsToImages = [];
     await Promise.all(
       selectedImages.map(async (image) => {
+        console.log(image);
         //generating unique id each time for each image
         const key = await uploadFileToPostAssetCanister(
           image,

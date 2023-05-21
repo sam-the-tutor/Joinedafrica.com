@@ -29,7 +29,7 @@ export default function MyProfileMenu() {
     }
     LoadProfile();
   }, []);
-  function logUserOut(){
+  function logUserOut() {
     logout();
     navigate("/home");
   }
