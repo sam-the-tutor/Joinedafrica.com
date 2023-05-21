@@ -20,7 +20,7 @@ import {
 import { getErrorMessage } from "../../util/ErrorMessages";
 import {
   InternetIdentityAuthentication,
-  getAuthenticatedProfileUser,
+  getAuthenticatedProfileUser
 } from "../../util/auth";
 import { setSessionStorage } from "../../util/functions";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";

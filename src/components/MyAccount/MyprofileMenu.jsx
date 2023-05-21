@@ -4,6 +4,7 @@ import { enc } from "crypto-js";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { logout } from "../../util/auth";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
@@ -28,7 +29,10 @@ export default function MyProfileMenu() {
     }
     LoadProfile();
   }, []);
-
+  function logUserOut(){
+    logout();
+    navigate("/home");
+  }
   return (
     <Box>
       <Button
@@ -51,7 +55,7 @@ export default function MyProfileMenu() {
         }}
       >
         <MenuItem onClick={() => navigate("/my-account")}>My Account</MenuItem>
-        <MenuItem onClick={() => setAnchorEl(null)}>Log Out</MenuItem>
+        <MenuItem onClick={() => logUserOut()}>Log Out</MenuItem>
       </Menu>
     </Box>
   );

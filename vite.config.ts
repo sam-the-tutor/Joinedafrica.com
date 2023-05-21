@@ -9,13 +9,13 @@ const network = process.env['DFX_NETWORK'] || localNetwork;
 
 const internetIdentityUrl =
   network === "local"
-    ? `http://localhost:4943?canisterId=r7inp-6aaaa-aaaaa-aaabq-cai`
-    : "https://identity.ic0.app/#authorize";  
+    ? `http://localhost:4943?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai`
+    : "https://identity.ic0.app/#authorize";
 
 let canisterIdPath: string;
 if (network === localNetwork) {
   // Local replica canister IDs
-  canisterIdPath = join(__dirname, '.dfx/local/canister_ids.json');  
+  canisterIdPath = join(__dirname, '.dfx/local/canister_ids.json');
 } else {
   // Custom canister IDs
   canisterIdPath = join(__dirname, 'canister_ids.json');
@@ -33,23 +33,23 @@ const canisterIds = JSON.parse(readFileSync(canisterIdPath, 'utf8'));
 export default defineConfig({
   plugins: [react()],
   define: {
-    'process.env' : {
+    'process.env': {
       DFX_NETWORK: process.env['DFX_NETWORK'],
       INTERNET_IDENTITY_URL: internetIdentityUrl,
-          // Expose canister IDs provided by `dfx deploy`
-    ...Object.fromEntries(
-      Object.entries(canisterIds).map(([name, ids]) => [
-        `${name.toUpperCase()}_CANISTER_ID`,
-        ids[network] || ids[localNetwork],
-      ]),
-    ),
-    
+      // Expose canister IDs provided by `dfx deploy`
+      ...Object.fromEntries(
+        Object.entries(canisterIds).map(([name, ids]) => [
+          `${name.toUpperCase()}_CANISTER_ID`,
+          ids[network] || ids[localNetwork],
+        ]),
+      ),
+
     },
   },
 
   // define: {
   //   // global: 'globalThis',
-   
+
   //   'process.env.DFX_NETWORK': JSON.stringify(process.env.DFX_NETWORK),
   //   'process.env.INTERNET_IDENTITY_URL': JSON.stringify(internetIdentityUrl),
   //   // Expose canister IDs provided by `dfx deploy`
@@ -61,25 +61,25 @@ export default defineConfig({
   //   ),
   // },
 
-	optimizeDeps: {
-		esbuildOptions: {
-			// Node.js global to browser globalThis
-			define: {
-				global: 'globalThis',
-			},
-			// Enable esbuild polyfill plugins
-			plugins: [
-				// @ts-ignore
-				NodeModulesPolyfillPlugin(),
-				{
-					name: 'fix-node-globals-polyfill',
-					setup(build) {
-						build.onResolve({ filter: /_virtual-process-polyfill_\.js/ }, ({ path }) => ({ path }));
-					}
-				}
-			]
-		}
-	},
+  optimizeDeps: {
+    esbuildOptions: {
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+      // Enable esbuild polyfill plugins
+      plugins: [
+        // @ts-ignore
+        NodeModulesPolyfillPlugin(),
+        {
+          name: 'fix-node-globals-polyfill',
+          setup(build) {
+            build.onResolve({ filter: /_virtual-process-polyfill_\.js/ }, ({ path }) => ({ path }));
+          }
+        }
+      ]
+    }
+  },
 
   server: {
     // Local IC replica proxy
