@@ -44,23 +44,26 @@ export default function PostingCard({
   //front page image of a posting card
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
 
-  async function markPostAsPublished() {
-    setLoading(true);
-    updatedPost.isPublished = true;
-    await markPostAsPublishedInPostCanister(updatedPost);
+  function updateSnackBarCmp(message) {
     setShowSnackbarCmp(
       <SnackbarCmp
-        open={true}
-        message="Post is published to marketplace!"
+        message={message}
         handleClose={(event, reason) => {
           //the user has to click on the alert to close it.
           if (reason != "clickaway") {
             setShowSnackbarCmp(null);
           }
         }}
-        severity="success"
       />
     );
+  }
+  async function markPostAsPublished() {
+    setLoading(true);
+    updatedPost.isPublished = true;
+    await markPostAsPublishedInPostCanister(updatedPost);
+    setLoading(false);
+    const message = "Your post has been to the marketplace";
+    updateSnackBarCmp(message);
   }
   async function markPostAsPublishedInPostCanister(updatedPost) {
     const authenticatedUser = await getAuthenticatedPostUser();
@@ -71,7 +74,6 @@ export default function PostingCard({
       return;
     }
     setUpdatedPost(updatedPost);
-    setLoading(false);
   }
   async function updatePostDetailsInPostCanister(updatedPost) {
     const authenticatedUser = await getAuthenticatedPostUser();
@@ -82,25 +84,14 @@ export default function PostingCard({
       return;
     }
     setUpdatedPost(updatedPost);
-    setLoading(false);
   }
   async function removePostFromMarketplace() {
     setLoading(true);
     updatedPost.isPublished = false;
     await updatePostDetailsInPostCanister(updatedPost);
-    setShowSnackbarCmp(
-      <SnackbarCmp
-        open={true}
-        message="Post is removed from marketplace!"
-        handleClose={(event, reason) => {
-          //the user has to click on the alert to close it.
-          if (reason != "clickaway") {
-            setShowSnackbarCmp(null);
-          }
-        }}
-        severity="success"
-      />
-    );
+    setLoading(false);
+    const message = "Your post has been removed from the marketplace";
+    updateSnackBarCmp(message);
   }
 
   //update the post if/when the user interacts with the post like publishing to market place or removing from the market place

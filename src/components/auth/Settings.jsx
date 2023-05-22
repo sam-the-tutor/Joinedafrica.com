@@ -17,6 +17,7 @@ import {
   uploadFileToPostAssetCanister,
 } from "../../util/postAssetCanisterFunctions";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
+import SnackbarCmp from "../../util/reuseableComponents/SnackbarCmp";
 
 export default function Settings({ setRefreshComponent }) {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -27,7 +28,21 @@ export default function Settings({ setRefreshComponent }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [saveProfile, setSaveProfile] = useState(false);
-
+  const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
+  
+  function updateSnackBarCmp() {
+    setShowSnackbarCmp(
+      <SnackbarCmp
+        message="Your profile has been updated!"
+        handleClose={(event, reason) => {
+          //the user has to click on the alert to close it.
+          if (reason != "clickaway") {
+            setShowSnackbarCmp(null);
+          }
+        }}
+      />
+    );
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     if (firstName.length == 0 || lastName.length == 0 || email.length == 0) {
@@ -58,15 +73,18 @@ export default function Settings({ setRefreshComponent }) {
     if (result?.err) {
       //handle the error
       alert(getErrorMessage(result.err));
+      setSaveProfile(false);
     } else {
       //encrypt the users email and principalId and profilePicture only as they are confidential.
-      // setSessionStorage("firstName", firstName, false);
-      // setSessionStorage("lastName", lastName, false);
-      // setSessionStorage("email", email, true);
-      // setSessionStorage("profilePicture", key, true);
-      // setRefreshComponent();
+      setSessionStorage("firstName", firstName, false);
+      setSessionStorage("lastName", lastName, false);
+      setSessionStorage("email", email, true);
+      setSessionStorage("profilePicture", key, true);
+      setRefreshComponent();
+      setSaveProfile(false);
+      updateSnackBarCmp();
     }
-    setSaveProfile(false);
+   
   }
 
   useEffect(() => {
@@ -145,6 +163,7 @@ export default function Settings({ setRefreshComponent }) {
           </Box>
         )}
         {LoadingCmp(saveProfile)}
+        {showSnackbarCmp}
       </Box>
     </>
   );

@@ -27,13 +27,37 @@ import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { messageWorker } from "../../util/webworkers/messageWorker";
 import MyProfileMenu from "../MyAccount/MyprofileMenu";
 
-export default function Header() {
+export default function Header({ refreshComponent }) {
   //users principal
   const [principal, setPrincipal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedin] = useState(
     sessionStorage.getItem("isLoggedIn") == "true"
   );
+
+  async function getUserProfileDetails() {
+    const authenticatedProfileUser = await getAuthenticatedProfileUser();
+    let result = await authenticatedProfileUser.getUserProfile();
+    if (result?.err) {
+      alert(getErrorMessage(result.err));
+    } else {
+      const profile = { ...result.ok };
+      //encrypt the users email, principalId and profilePicture only as they are confidential.
+      setSessionStorage("firstName", profile.firstName, false);
+      setSessionStorage("lastName", profile.lastName, false);
+      setSessionStorage("email", profile.email, true);
+      setSessionStorage("principalId", principal, true);
+      setSessionStorage("profilePicture", profile.profilePicture, true);
+      setSessionStorage("isLoggedIn", "true", false);
+      setIsUserLoggedin(true);
+      //start pull message notification from the notification canister
+      await messageWorker(
+        newMessageNotification,
+        setNewMessageNotification,
+        "getAllNotifications"
+      );
+    }
+  }
   const { newMessageNotification, setNewMessageNotification } =
     useContext(AppContext);
 
@@ -45,34 +69,13 @@ export default function Header() {
       //making sure the actor isn't null.
       if (principal.length > 0) {
         setIsLoading(true);
-        const authenticatedProfileUser = await getAuthenticatedProfileUser();
-        let result = await authenticatedProfileUser.getUserProfile();
-        if (result?.err) {
-          alert(getErrorMessage(result.err));
-        } else {
-          const profile = { ...result.ok };
-          //encrypt the users email, principalId and profilePicture only as they are confidential.
-          setSessionStorage("firstName", profile.firstName, false);
-          setSessionStorage("lastName", profile.lastName, false);
-          setSessionStorage("email", profile.email, true);
-          setSessionStorage("principalId", principal, true);
-          setSessionStorage("profilePicture", profile.profilePicture, true);
-          setSessionStorage("isLoggedIn", "true", false);
-          setIsUserLoggedin(true);
-          //start pull message notification from the notification canister
-          await messageWorker(
-            newMessageNotification,
-            setNewMessageNotification,
-            "getAllNotifications"
-          );
-        }
+        await getUserProfileDetails();
         setIsLoading(false);
       }
     }
     getUserProfile();
     //set the users principal as a dependency incase the user already has an account and clicks on login
     //not create account
-    //In the settings page, if the user selects a new image, we update the profile menu image
   }, [principal]);
   return (
     <>
@@ -97,7 +100,7 @@ export default function Header() {
                 <Badge>
                   <NotificationsNoneIcon color="action" />
                 </Badge>
-                <MyProfileMenu />
+                <MyProfileMenu refreshComponent={refreshComponent} />
               </>
             ) : (
               <>

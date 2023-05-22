@@ -11,7 +11,7 @@ import {
 } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 
-export default function MyProfileMenu() {
+export default function MyProfileMenu({ refreshComponent }) {
   const navigate = useNavigate();
 
   const [profile, setUserProfile] = useState(null);
@@ -28,7 +28,7 @@ export default function MyProfileMenu() {
       setUserProfile(createObjectURLFromArrayOfBytes(file._content));
     }
     LoadProfile();
-  }, []);
+  }, [refreshComponent]);
   function logUserOut() {
     logout();
     navigate("/home");

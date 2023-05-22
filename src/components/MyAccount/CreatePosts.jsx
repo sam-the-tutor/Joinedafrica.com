@@ -41,7 +41,7 @@ export default function CreatePost() {
   const [isFurnished, setIsFurnished] = useState("");
   const [hasParkingSpace, setHasParkingSpace] = useState("");
   const [numberOfPlots, setNumberOfPlots] = useState("0");
-  const [showSnackbarCmp, setShowSnackbarCmp] = useState(false);
+  const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
 
   const [colour, setColour] = useState("");
   const [isRegistered, setIsRegistered] = useState("");
@@ -64,6 +64,21 @@ export default function CreatePost() {
   //maximum length of characters and number of images
   const MAXIMUM_NUMBER_OF_IMAGES = 3;
   const MAX_LENGTH_OF_DESCRIPTION = 150;
+
+
+  function updateSnackBarCmp() {
+    setShowSnackbarCmp(
+      <SnackbarCmp
+        message="Your post has been created!"
+        handleClose={(event, reason) => {
+          //the user has to click on the alert to close it.
+          if (reason != "clickaway") {
+            setShowSnackbarCmp(null);
+          }
+        }}
+      />
+    );
+  }
 
   function addImages(event) {
     if (selectedImages.length == MAXIMUM_NUMBER_OF_IMAGES) {
@@ -151,7 +166,7 @@ export default function CreatePost() {
       return;
     }
     setIsLoading(false);
-    setShowSnackbarCmp(true);
+    updateSnackBarCmp();
   }
 
   return (
@@ -276,19 +291,7 @@ export default function CreatePost() {
         </Button>
       </Box>
       {isLoading && LoadingCmp(isLoading)}
-      {showSnackbarCmp && (
-        <SnackbarCmp
-          message="Your post has been created! Go to my postings to view your post."
-          open={showSnackbarCmp}
-          handleClose={(event, reason) => {
-            //the user has to click on the alert to close it.
-            if (reason != "clickaway") {
-              setShowSnackbarCmp(false);
-            }
-          }}
-          severity="success"
-        />
-      )}
+      {showSnackbarCmp}
     </Box>
   );
 }

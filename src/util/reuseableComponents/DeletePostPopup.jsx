@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   Slide,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 
@@ -47,7 +48,7 @@ export default function DeletePostPopup({
 
       <DialogActions>
         {isLoading ? (
-          <CircularProgress />
+          <Typography>Deleting...</Typography>
         ) : (
           <>
             <Button onClick={() => deletePost()}>Yes</Button>
