@@ -33,7 +33,8 @@ export function CreatePostSpecificationForm(
   setBrand,
   setBathrooms,
   setFormation,
-  setDisplayType
+  setDisplayType,
+  setFormulation
 ) {
   const filteringInformation = getFilteringInformation(subcategoryName);
 
@@ -45,7 +46,7 @@ export function CreatePostSpecificationForm(
           required
           label="Model"
           variant="outlined"
-          onChange={(e) => setModel(e.target.value)}
+          onChange={(model) => setModel(model)}
         />
         <MultiSelect
           name="Condition"
@@ -155,7 +156,7 @@ export function CreatePostSpecificationForm(
           required
           label="Model"
           variant="outlined"
-          onChange={(e) => setModel(e.target.value)}
+          onChange={(model) => setModel(model)}
         />
         <MultiSelect
           name="Condition"
@@ -197,7 +198,7 @@ export function CreatePostSpecificationForm(
           required
           label="Model"
           variant="outlined"
-          onChange={(e) => setModel(e.target.value)}
+          onChange={(model) => setModel(model)}
         />
         <MultiSelect
           name="Condition"
@@ -369,9 +370,9 @@ export function CreatePostSpecificationForm(
           clickedValue={(type) => setType(type)}
         />
         <MultiSelect
-          name="Formation"
-          listOfElements={filteringInformation.Formation}
-          clickedValue={(formation) => setFormation(formation)}
+          name="Formulation"
+          listOfElements={filteringInformation.Formulation}
+          clickedValue={(Formulation) => setFormulation(Formulation)}
         />
         <MultiSelect
           name="Condition"

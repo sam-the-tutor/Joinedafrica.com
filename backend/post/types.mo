@@ -107,7 +107,7 @@ module {
                 };
                 #Vitamins_and_supplements : {
                     Type : Text;
-                    Formation : Text;
+                    Formulation : Text;
                     Condition : Text;
                 };
 

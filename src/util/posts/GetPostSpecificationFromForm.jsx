@@ -27,7 +27,8 @@ export default function getPostSpecificationFromForm(
   style,
   display,
   isRegistered,
-  isFurnished
+  isFurnished,
+  formulation
 ) {
   if (subcategoryName === "Cars") {
     return {
@@ -186,7 +187,7 @@ export default function getPostSpecificationFromForm(
     return {
       Health_and_beauty: {
         Vitamins_and_supplements: {
-          Formation: formation,
+          Formulation: formulation,
           Condition: condition,
           Type: type,
         },
