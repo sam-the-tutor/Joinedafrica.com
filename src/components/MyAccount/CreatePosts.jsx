@@ -1,5 +1,6 @@
 import { Principal } from "@dfinity/principal";
 import SendIcon from "@mui/icons-material/Send";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   Box,
   Button,
@@ -60,11 +61,11 @@ export default function CreatePost() {
   const [brand, setBrand] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [formation, setFormation] = useState("");
+  const [formulation, setFormulation] = useState("");
   const [displayType, setDisplayType] = useState("");
   //maximum length of characters and number of images
   const MAXIMUM_NUMBER_OF_IMAGES = 3;
   const MAX_LENGTH_OF_DESCRIPTION = 150;
-
 
   function updateSnackBarCmp() {
     setShowSnackbarCmp(
@@ -78,6 +79,13 @@ export default function CreatePost() {
         }}
       />
     );
+  }
+
+  function removeImage(imagePosition) {
+    const result = selectedImages.filter(
+      (image, index) => imagePosition != index
+    );
+    setSelectedImages(result);
   }
 
   function addImages(event) {
@@ -138,7 +146,8 @@ export default function CreatePost() {
           style,
           display,
           isRegistered,
-          isFurnished
+          isFurnished,
+          formulation
         ),
       },
     };
@@ -212,14 +221,33 @@ export default function CreatePost() {
         <Divider />
         <Stack direction="row" spacing={2} style={{ marginTop: "20px" }}>
           {selectedImages.map((file, index) => (
-            <Box key={index} style={{ width: "200px", height: "200px" }}>
+            <Box
+              key={index}
+              style={{
+                width: "200px",
+                height: "200px",
+                backgroundColor: "black",
+                position: "relative",
+              }}
+            >
               <img
                 src={URL.createObjectURL(file)}
                 alt="Posting preview"
                 style={{
                   width: "100%",
                   height: "100%",
+                  opacity: "0.7",
                 }}
+              />
+              <ClearIcon
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "10px",
+                  cursor: "pointer",
+                }}
+                fontSize="large"
+                onClick={() => removeImage(index)}
               />
             </Box>
           ))}
@@ -267,7 +295,8 @@ export default function CreatePost() {
             setBrand,
             setBathrooms,
             setFormation,
-            setDisplayType
+            setDisplayType,
+            setFormulation
           )}
           <TextField
             required
