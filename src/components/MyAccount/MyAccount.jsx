@@ -1,7 +1,8 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, useMediaQuery, Toolbar } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import React, { useState, useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import Header from "../appStructure/Header";
 import Settings from "../auth/Settings";
@@ -29,6 +30,8 @@ function TabPanel(props) {
  * This component is reponsible for displaying all operations a logged in user can do
  */
 export default function MyAccount() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   function a11yProps(index) {
     return {
       id: `vertical-tab-${index}`,
@@ -49,21 +52,22 @@ export default function MyAccount() {
   return (
     <>
       <Header refreshComponent={refreshComponent} />
+      <Toolbar style={{ marginTop: "20px" }} />
       <Container
-        sx={{
-          flexGrow: 1,
-          marginBottom: "100px",
-          display: "flex",
-          marginTop: "100px",
-        }}
+        style={
+          {
+            // sx: "marginTop:400px",
+            // lg: "flexGrow: 1, marginBottom: 100px, display: flex, marginTop: 100px",
+          }
+        }
       >
         <Tabs
-          orientation="vertical"
-          variant="fullWidth"
+          orientation={isSmallScreen ? "horizontal" : "vertical"}
+          variant={isSmallScreen ? "scrollable" : "fullWidth"}
           value={value}
           onChange={handleChange}
-          aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: "divider" }}
+          // scrollButtons
+          allowScrollButtonsMobile
         >
           <Tab
             sx={{ alignItems: "start", textAlign: "left" }}
@@ -87,10 +91,10 @@ export default function MyAccount() {
           />
         </Tabs>
         <TabPanel value={value} index={0} style={{ width: "100%" }}>
-          <MyMessages />
+          {/* <MyMessages /> */}1
         </TabPanel>
         <TabPanel value={value} index={1} style={{ width: "100%" }}>
-          <MyPostings />
+          {/* <MyPostings /> */}2
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
           <Settings
@@ -98,7 +102,7 @@ export default function MyAccount() {
           />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
-          <CreatePost />
+          {/* <CreatePost /> */}3
         </TabPanel>
       </Container>
     </>

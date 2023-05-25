@@ -1,9 +1,4 @@
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText
-} from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -51,11 +46,6 @@ export default function PopoverCmpDetails({
               </ListItem>
             </>
           )}
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Edit post" />
-            </ListItemButton>
-          </ListItem>
           {/* only posts that are not published can be deleted. Posts that are published have to first be removed from the 
           marketplace before it can be deleted */}
           {!isPublished && (
