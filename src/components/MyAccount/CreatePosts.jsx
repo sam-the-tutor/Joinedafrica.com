@@ -8,8 +8,10 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import { PostImage } from "../../styling/MyAccount/CreatePosts";
 import { getErrorMessage } from "../../util/ErrorMessages";
@@ -24,6 +26,11 @@ import { MultiSelect } from "../../util/reuseableComponents/MultiSelect";
 import SnackbarCmp from "../../util/reuseableComponents/SnackbarCmp";
 
 export default function CreatePost() {
+  const theme = useTheme();
+  const ismediumScreenSizeAndBelow = useMediaQuery(
+    theme.breakpoints.down("md")
+  );
+
   const categories = getCategoryNames();
   const [isLoading, setIsLoading] = useState(false);
   const [subcategories, setSubcategories] = useState([]);
@@ -70,7 +77,7 @@ export default function CreatePost() {
   function updateSnackBarCmp() {
     setShowSnackbarCmp(
       <SnackbarCmp
-        message="Your post has been created!"
+        message="Your post has been created! Go to My postings to see your post"
         handleClose={(event, reason) => {
           //the user has to click on the alert to close it.
           if (reason != "clickaway") {
@@ -219,7 +226,11 @@ export default function CreatePost() {
           </Box>
         </PostImage>
         <Divider />
-        <Stack direction="row" spacing={2} style={{ marginTop: "20px" }}>
+        <Stack
+          direction={ismediumScreenSizeAndBelow ? "column" : "row"}
+          spacing={2}
+          style={{ marginTop: "20px" }}
+        >
           {selectedImages.map((file, index) => (
             <Box
               key={index}

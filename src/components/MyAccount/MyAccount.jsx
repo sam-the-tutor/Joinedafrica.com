@@ -31,7 +31,9 @@ function TabPanel(props) {
  */
 export default function MyAccount() {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const ismediumScreenSizeAndBelow = useMediaQuery(
+    theme.breakpoints.down("md")
+  );
   function a11yProps(index) {
     return {
       id: `vertical-tab-${index}`,
@@ -57,13 +59,19 @@ export default function MyAccount() {
         style={
           {
             // sx: "marginTop:400px",
-            // lg: "flexGrow: 1, marginBottom: 100px, display: flex, marginTop: 100px",
           }
+        }
+        sx={
+          ismediumScreenSizeAndBelow
+            ? {}
+            : {
+                display: "flex",
+              }
         }
       >
         <Tabs
-          orientation={isSmallScreen ? "horizontal" : "vertical"}
-          variant={isSmallScreen ? "scrollable" : "fullWidth"}
+          orientation={ismediumScreenSizeAndBelow ? "horizontal" : "vertical"}
+          variant={ismediumScreenSizeAndBelow ? "scrollable" : "fullWidth"}
           value={value}
           onChange={handleChange}
           // scrollButtons
@@ -91,10 +99,10 @@ export default function MyAccount() {
           />
         </Tabs>
         <TabPanel value={value} index={0} style={{ width: "100%" }}>
-          {/* <MyMessages /> */}1
+          <MyMessages />
         </TabPanel>
         <TabPanel value={value} index={1} style={{ width: "100%" }}>
-          {/* <MyPostings /> */}2
+          <MyPostings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
           <Settings
@@ -102,7 +110,7 @@ export default function MyAccount() {
           />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
-          {/* <CreatePost /> */}3
+          <CreatePost />
         </TabPanel>
       </Container>
     </>

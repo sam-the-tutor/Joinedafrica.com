@@ -23,7 +23,6 @@ export default function MyPostings() {
   const [userProfile, setUserProfile] = useState();
   const [showDeletePostPopup, setShowDeletePostPopup] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState("");
-  const [refreshComponent, setRefreshComponent] = useState(false);
 
   useEffect(() => {
     async function getAllMyPostings() {
@@ -69,15 +68,11 @@ export default function MyPostings() {
         <Typography>Loading...</Typography>
       ) : (
         <Box>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-          >
+          <Grid container spacing={{ xs: 2, md: 3 }}>
             {myPostings.length == 0
               ? "You have no postings"
               : myPostings.map((posting, index) => (
-                  <Grid item xs={2} sm={4} md={4} key={index}>
+                  <Grid item xs={12} sm={6} md={4} key={index}>
                     <PostingCard
                       post={posting[0]}
                       userProfile={userProfile}
