@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 
 import { getAuthenticatedPostUser } from "../auth";
+import { deletePost } from "../../components/MyAccount/postings/util";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -19,17 +20,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function DeletePostPopup({
   showDeletePostPopup,
   setShowDeletePostPopup,
-  filterMyPostings,
   selectedPostId,
+  filterFromFrontend,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   //only posts that are not published to the marketplace can be deleted. A post that is published to the marketplace
   //has to first be removed from the marketplace before they can be deleted.
-  async function deletePost() {
+  async function deletePostFromBackAndFrontend() {
     setIsLoading(true);
-    const authenticatedPostUser = await getAuthenticatedPostUser();
-    await authenticatedPostUser.deletePost(selectedPostId);
-    filterMyPostings();
+    await deletePost(selectedPostId);
+    filterFromFrontend(selectedPostId);
     setIsLoading(false);
     setShowDeletePostPopup(false);
   }
@@ -51,7 +51,7 @@ export default function DeletePostPopup({
           <Typography>Deleting...</Typography>
         ) : (
           <>
-            <Button onClick={() => deletePost()}>Yes</Button>
+            <Button onClick={() => deletePostFromBackAndFrontend()}>Yes</Button>
             <Button onClick={() => setShowDeletePostPopup(false)}>No</Button>
           </>
         )}

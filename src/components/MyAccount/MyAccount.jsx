@@ -7,9 +7,8 @@ import { useTheme } from "@mui/material/styles";
 import Header from "../appStructure/Header";
 import Settings from "../auth/Settings";
 import CreatePost from "./CreatePosts";
-import MyMessages from "./MyMessages";
-import MyPostings from "./MyPostings";
 import Messages from "./messages";
+import Postings from "./postings";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -103,11 +102,11 @@ export default function MyAccount() {
           />
         </Tabs>
         <TabPanel value={value} index={0} style={{ width: "100%" }}>
-          {/* <MyMessages /> */}
           <Messages />
         </TabPanel>
         <TabPanel value={value} index={1} style={{ width: "100%" }}>
-          <MyPostings />
+          {/* <MyPostings /> */}
+          <Postings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
           <Settings

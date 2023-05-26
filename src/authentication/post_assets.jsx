@@ -56,3 +56,9 @@ export async function getFileFromPostAssetCanister(pathToFile) {
   const file = await assetManager.get(pathToFile);
   return file;
 }
+
+export function deletePostImagesFromPostAssetCanister(images) {
+  images.forEach(async (image) => {
+    await removeFileFromPostAssetCanister(image);
+  });
+}
