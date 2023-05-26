@@ -79,7 +79,10 @@ export default function MyAccount() {
           allowScrollButtonsMobile
         >
           <Tab
-            sx={{ alignItems: "start", textAlign: "left" }}
+            sx={{
+              alignItems: "start",
+              textAlign: "left",
+            }}
             label="My messages"
             {...a11yProps(0)}
           />
