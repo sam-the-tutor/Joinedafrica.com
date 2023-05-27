@@ -55,6 +55,16 @@ export default function CreatePost() {
     dispatch({ type: "setSelectedSubcategory", value });
   }
 
+  function addImages(event) {
+    if (state.selectedImages.length == MAXIMUM_NUMBER_OF_IMAGES) {
+      alert(
+        "The maximum number of images to add is " + MAXIMUM_NUMBER_OF_IMAGES
+      );
+      return;
+    }
+    dispath({ type: "selectedImages", value: event.target.files[0] });
+  }
+
   return (
     <Box
       component="form"

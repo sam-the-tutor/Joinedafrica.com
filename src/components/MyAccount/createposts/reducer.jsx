@@ -1,6 +1,6 @@
 export default function reducer(state, action) {
-    console.log(state);
-    console.log(action);
+  console.log(state);
+  console.log(action);
   switch (action.type) {
     case "setCategoryName": {
       return {
@@ -18,6 +18,12 @@ export default function reducer(state, action) {
       return {
         ...state,
         selectedSubcategory: action.value,
+      };
+    }
+    case "selectedImages": {
+      return {
+        ...state,
+        selectedImages: [...state.selectedImages, value],
       };
     }
   }
