@@ -26,7 +26,7 @@ import {
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import CarouselCmp from "../../util/reuseableComponents/CarouselCmp";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import Header from "../appStructure/Header";
+import Header from "../navigation/header";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post

@@ -19,8 +19,8 @@ import {
 import { getSubcategory } from "../../util/ListOfCategories";
 import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import Header from "../appStructure/Header";
 import Top10Posts from "./Top10Posts";
+import Header from "../navigation/header";
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
  * in that category

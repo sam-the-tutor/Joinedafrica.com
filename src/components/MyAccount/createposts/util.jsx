@@ -1,6 +1,6 @@
 import { Principal } from "@dfinity/principal";
-import { post } from "../../../authentication/post";
-import { uploadMultipleFiles } from "../../../authentication/post_assets";
+import { post } from "../../../canisters/post";
+import { uploadMultipleFiles } from "../../../canisters/post_assets";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 import getPostSpecificationFromForm from "./util/getPostSpecificationFromForm";

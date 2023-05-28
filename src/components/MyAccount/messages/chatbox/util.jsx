@@ -1,4 +1,4 @@
-import { conversation } from "../../../../authentication/conversation";
+import { conversation } from "../../../../canisters/conversation";
 
 export async function loadNewMessages(userProfile) {
   return getMyMessages(userProfile);

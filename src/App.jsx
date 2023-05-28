@@ -1,7 +1,7 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import MyAccount from "./components/MyAccount/MyAccount";
 import Body from "./components/appStructure/Body";
@@ -13,25 +13,14 @@ import WelcomePage from "./components/welcomeToJoinedAfrica/WelcomePage";
 import { AppContext } from "./context";
 import { getFromSessionStorage } from "./util/functions";
 import { messageWorker } from "./util/webworkers/messageWorker";
+import Header from "./components/appStructure/Header";
 
 export default function App() {
   const [authenticatedUser, setAuthenticatedUser] = useState(null);
   const [newMessageNotification, setNewMessageNotification] = useState([]);
+  const [currentPage, setCurrentPage] = useState("");
 
   //once the user logs in or creates an account, start pulling for message notifications
-  useEffect(() => {
-    async function getAllNotifications() {
-      if (getFromSessionStorage("isLoggedIn", false)) {
-        console.log("her");
-        messageWorker(
-          newMessageNotification,
-          setNewMessageNotification,
-          "getAllNotifications"
-        );
-      }
-    }
-    getAllNotifications();
-  }, []);
   const darkTheme = createTheme({
     palette: {
       mode: "dark",

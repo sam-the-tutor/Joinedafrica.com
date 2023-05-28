@@ -13,7 +13,7 @@ import {
 import React, { useState, useReducer } from "react";
 import { useTheme } from "@mui/material/styles";
 import { PostImage } from "./style";
-import { post } from "../../../authentication/post";
+import { post } from "../../../canisters/post";
 import { getCategoryNames, getSubcategory } from "./listOfCategories";
 
 import { state as initialState } from "./state";

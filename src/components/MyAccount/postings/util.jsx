@@ -1,8 +1,8 @@
-import { post } from "../../../authentication/post";
+import { post } from "../../../canisters/post";
 import {
   deletePostImagesFromPostAssetCanister,
   getFileFromPostAssetCanister,
-} from "../../../authentication/post_assets";
+} from "../../../canisters/post_assets";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,

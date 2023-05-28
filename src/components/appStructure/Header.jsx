@@ -27,8 +27,9 @@ import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { messageWorker } from "../../util/webworkers/messageWorker";
 import MyProfileMenu from "../MyAccount/MyprofileMenu";
 
-export default function Header({ refreshComponent }) {
+export default function Header({ refreshComponent, currentPage }) {
   //users principal
+  console.log(currentPage);
   const [principal, setPrincipal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedin] = useState(
@@ -77,6 +78,8 @@ export default function Header({ refreshComponent }) {
     //set the users principal as a dependency incase the user already has an account and clicks on login
     //not create account
   }, [principal]);
+  console.log(location.pathname);
+  const currentPageLocation = location.pathname;
   return (
     <>
       <AppBar position="fixed" sx={{ zIndex: "1201" }}>
@@ -84,13 +87,17 @@ export default function Header({ refreshComponent }) {
           <Typography variant="h6" component="div">
             Joined Africa
           </Typography>
-          <InputContainer>
-            <SearchIconCmp />
-            <Input
-              placeholder="search..."
-              sx={{ width: "100%", color: "black" }}
-            />
-          </InputContainer>
+          {currentPageLocation != "/my-account" &&
+            currentPageLocation != "/create-profile" && (
+              <InputContainer>
+                <SearchIconCmp />
+                <Input
+                  placeholder="search..."
+                  sx={{ width: "100%", color: "black" }}
+                />
+              </InputContainer>
+            )}
+
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
             {isUserLoggedIn ? (
               <>

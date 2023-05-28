@@ -19,6 +19,7 @@ import { getUniqueId, setSessionStorage } from "../../util/functions";
 import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
 import { messageWorker } from "../../util/webworkers/messageWorker";
+import Header from "../navigation/header";
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -87,9 +88,10 @@ export default function CreateProfile() {
 
   return (
     <>
+      <Header />
       <Container
         component="form"
-        style={{ marginTop: "50px" }}
+        style={{ marginTop: "100px" }}
         onSubmit={handleSubmit}
       >
         <Typography variant="h5" gutterBottom style={{ textAlign: "center" }}>

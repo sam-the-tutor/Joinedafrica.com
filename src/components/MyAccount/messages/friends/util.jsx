@@ -1,6 +1,6 @@
-import { conversation } from "../../../../authentication/conversation";
+import { conversation } from "../../../../canisters/conversation";
 import { profile } from "../../../../declarations/profile";
-import { getFileFromPostAssetCanister } from "../../../../authentication/post_assets";
+import { getFileFromPostAssetCanister } from "../../../../canisters/post_assets";
 import { createObjectURLFromArrayOfBytes } from "../../../../util/functions";
 
 export async function getAllMyFriends() {
