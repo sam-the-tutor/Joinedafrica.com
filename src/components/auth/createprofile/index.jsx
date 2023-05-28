@@ -1,25 +1,17 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AppContext } from "../../context";
-import {
-  IdentitySetup,
-  Image,
-  ImageContainer,
-} from "../../styling/auth/CreateProfile";
-import { getErrorMessage } from "../../util/ErrorMessages";
-import {
-  InternetIdentityAuthentication,
-  getAuthenticatedProfileUser,
-} from "../../util/auth";
-import { getUniqueId, setSessionStorage } from "../../util/functions";
-import { uploadFileToPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import { messageWorker } from "../../util/webworkers/messageWorker";
-import Header from "../navigation/header";
+import { uploadFileToPostAssetCanister } from "../../../canisters/post_assets";
+import { profile } from "../../../canisters/profile";
+import { getErrorMessage } from "../../../util/ErrorMessages";
+import { getUniqueId, setSessionStorage } from "../../../util/functions";
+import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import Header from "../../navigation/header";
+import { internet_identity } from "../Login";
+import { IdentitySetup, Image, ImageContainer } from "./style";
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -30,8 +22,6 @@ export default function CreateProfile() {
     email: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { newMessageNotification, setNewMessageNotification } =
-    useContext(AppContext);
   // navigation so we can go back to the home page after saving the users profile
   const navigate = useNavigate();
 
@@ -59,7 +49,7 @@ export default function CreateProfile() {
     createdProfile.profilePicture = key;
     // createdProfile.principalId = principal;
 
-    const authenticatedProfileUser = await getAuthenticatedProfileUser();
+    const authenticatedProfileUser = await profile();
     let result = await authenticatedProfileUser.createUserProfile(
       createdProfile
     );
@@ -75,12 +65,6 @@ export default function CreateProfile() {
       setSessionStorage("principalId", principal, true);
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
-      //start pull message notification from the notification canister
-      messageWorker(
-        newMessageNotification,
-        setNewMessageNotification,
-        "getAllNotifications"
-      );
       navigate("/home");
     }
     setIsLoading(false);
@@ -150,7 +134,7 @@ export default function CreateProfile() {
           }
         />
         <IdentitySetup
-          onClick={() => InternetIdentityAuthentication(setPrincipal)}
+          onClick={async () => setPrincipal(await internet_identity())}
         >
           <Typography style={{ marginRight: "5px" }}>
             Set up your identity

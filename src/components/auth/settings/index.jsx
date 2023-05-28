@@ -1,23 +1,22 @@
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { enc } from "crypto-js";
 import React, { useEffect, useState } from "react";
 
-import { Image, ImageContainer } from "../../styling/auth/CreateProfile";
-import { getAuthenticatedProfileUser } from "../../util/auth";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
   getUniqueId,
   setSessionStorage,
-} from "../../util/functions";
+} from "../../../util/functions";
+import { Image, ImageContainer } from "./style";
+
 import {
   getFileFromPostAssetCanister,
-  removeFileFromPostAssetCanister,
   uploadFileToPostAssetCanister,
-} from "../../util/postAssetCanisterFunctions";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import SnackbarCmp from "../../util/reuseableComponents/SnackbarCmp";
+} from "../../../canisters/post_assets";
+import { profile } from "../../../canisters/profile";
+import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 
 export default function Settings({ setRefreshComponent }) {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -29,7 +28,7 @@ export default function Settings({ setRefreshComponent }) {
   const [isLoading, setIsLoading] = useState(false);
   const [saveProfile, setSaveProfile] = useState(false);
   const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
-  
+
   function updateSnackBarCmp() {
     setShowSnackbarCmp(
       <SnackbarCmp
@@ -66,7 +65,7 @@ export default function Settings({ setRefreshComponent }) {
       lastName,
       email,
     };
-    const authenticatedProfileUser = await getAuthenticatedProfileUser();
+    const authenticatedProfileUser = await profile();
     let result = await authenticatedProfileUser.updateUserProfile(
       updatedProfile
     );
@@ -84,7 +83,6 @@ export default function Settings({ setRefreshComponent }) {
       setSaveProfile(false);
       updateSnackBarCmp();
     }
-   
   }
 
   useEffect(() => {

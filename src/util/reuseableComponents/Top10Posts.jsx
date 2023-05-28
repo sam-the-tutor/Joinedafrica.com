@@ -1,7 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
-
-import PostingCard from "../../util/reuseableComponents/PostingCard";
+import PostingCard from "./PostingCard";
 
 /**
  * This component is reponsible for displaying the top10 posts in the homepage and category page of a post

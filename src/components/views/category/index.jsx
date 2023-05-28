@@ -9,18 +9,14 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { post } from "../../declarations/post";
-import { profile } from "../../declarations/profile";
-import {
-  DrawerContainer,
-  TypographyCmp,
-} from "../../styling/appStructure/LeftBar";
-import { getSubcategory } from "../../util/ListOfCategories";
-import { createObjectURLFromArrayOfBytes } from "../../util/functions";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import Top10Posts from "./Top10Posts";
-import Header from "../navigation/header";
+import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
+import Header from "../../navigation/header";
+import { post } from "../../../declarations/post";
+import { profile } from "../../../declarations/profile";
+import { TypographyCmp, DrawerContainer } from "./style";
+import { getSubcategory } from "../../myAccount/createposts/listOfCategories";
+import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import Top10Posts from "../../../util/reuseableComponents/Top10Posts";
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
  * in that category

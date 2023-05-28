@@ -10,23 +10,19 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
-import { post as postCanister } from "../../declarations/post";
-import { MessageCmp } from "../../styling/views/ViewPost";
-import { getErrorMessage } from "../../util/ErrorMessages";
-import {
-  getAuthenticatedConversationUser,
-  getAuthenticatedMessageNotificationWorker,
-} from "../../util/auth";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import {
   createObjectURLFromArrayOfBytes,
-  extractProductSpecification,
   getFromSessionStorage,
-} from "../../util/functions";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import CarouselCmp from "../../util/reuseableComponents/CarouselCmp";
-import { LoadingCmp } from "../../util/reuseableComponents/LoadingCmp";
-import Header from "../navigation/header";
+} from "../../../util/functions";
+import CarouselCmp from "../../../util/reuseableComponents/CarouselCmp";
+import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import Header from "../../navigation/header";
+import { post as postCanister } from "../../../declarations/post";
+import { conversation } from "../../../canisters/conversation";
+import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import { MessageCmp } from "./style";
+import { extractProductSpecification } from "./util";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -97,11 +93,11 @@ export default function ViewPost() {
         secondReceiver: "",
       };
       //send notification message to the creators posts notification
-      const authenticatedWorker =
-        await getAuthenticatedMessageNotificationWorker();
-      await authenticatedWorker.sendNotification(chatMessage);
+      //   const authenticatedWorker =
+      //     await getAuthenticatedMessageNotificationWorker();
+      //   await authenticatedWorker.sendNotification(chatMessage);
       //create a conversation between me and the creator of post.. also send the message there too
-      const authenticatedUser = await getAuthenticatedConversationUser();
+      const authenticatedUser = await conversation();
       const result = await authenticatedUser.sendMessage(chatMessage);
       console.log(result);
       if (result?.err) {

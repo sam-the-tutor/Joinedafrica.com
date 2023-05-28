@@ -1,13 +1,14 @@
-import { Box, Container, useMediaQuery, Toolbar } from "@mui/material";
+import { Box, Container, Toolbar, useMediaQuery } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import Header from "../appStructure/Header";
-import Settings from "../auth/Settings";
+import React, { useState } from "react";
+
+import Settings from "../auth/settings";
+import Header from "../navigation/header";
+import CreatePost from "./createposts";
 import Messages from "./messages";
 import Postings from "./postings";
-import CreatePost from "./createposts";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,10 +46,6 @@ export default function MyAccount() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  // useEffect(() => {
-
-  // }, [])
 
   return (
     <>
@@ -113,7 +110,6 @@ export default function MyAccount() {
           />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
-          {/* <CreatePost /> */}
           <CreatePost />
         </TabPanel>
       </Container>

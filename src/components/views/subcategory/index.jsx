@@ -2,18 +2,15 @@ import { Box, Grid, Toolbar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { post } from "../../declarations/post";
-import { profile } from "../../declarations/profile";
-import {
-  DrawerContainer,
-  TypographyCmp,
-} from "../../styling/appStructure/LeftBar";
-import { getErrorMessage } from "../../util/ErrorMessages";
-import { createObjectURLFromArrayOfBytes } from "../../util/functions";
-import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import PostingCard from "../../util/reuseableComponents/PostingCard";
-import { getFilterForSubcategory } from "../MyAccount/createposts/util/postFiltering";
-import Header from "../navigation/header";
+import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import { post } from "../../../declarations/post";
+import { profile } from "../../../declarations/profile";
+import { getErrorMessage } from "../../../util/ErrorMessages";
+import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
+import PostingCard from "../../../util/reuseableComponents/PostingCard";
+import { getFilterForSubcategory } from "../../myAccount/createposts/util/postFiltering";
+import Header from "../../navigation/header";
+import { DrawerContainer, TypographyCmp } from "./style";
 
 /**
  * When the user clicks on a specific subcategory in the home page, this component is responsible for displaying all postings
