@@ -1,44 +1,21 @@
 import { TextField } from "@mui/material";
-import React from "react";
-
-import { MultiSelect } from "../reuseableComponents/MultiSelect";
-import { getFilteringInformation } from "./PostFiltering";
+import { MultiSelect } from "../../../../util/reuseableComponents/MultiSelect";
+import { getFilteringInformation } from "./postFiltering";
 
 /**
  * Create product specification based on what category and subcategory the users chooses.
  * @returns the specification of a given category and subcategory the user chooses.
  */
 
-export function CreatePostSpecificationForm(
-  subcategoryName,
-  setYearOfManufacture,
-  setModel,
-  setGender,
-  setIsFurnished,
-  setHasParkingSpace,
-  setNumberOfPlots,
-  setColour,
-  setCondition,
-  setIsRegistered,
-  setTransmission,
-  setType,
-  setOperatingSystem,
-  setProcessor,
-  setDisplay,
-  setStyle,
-  setBedrooms,
-  setStorageCapacity,
-  setStorageType,
-  setRAM,
-  setBrand,
-  setBathrooms,
-  setFormation,
-  setDisplayType,
-  setFormulation
-) {
-  const filteringInformation = getFilteringInformation(subcategoryName);
+export function CreatePostSpecificationForm(state, setState) {
+  const filteringInformation = getFilteringInformation(
+    state.selectedSubcategory
+  );
 
-  if (subcategoryName == "Cars" || subcategoryName == "Buses") {
+  if (
+    state.selectedSubcategory == "Cars" ||
+    state.selectedSubcategory == "Buses"
+  ) {
     return (
       <>
         {/* Hyundai accord. Hyundai being the brand and accord being the model */}
@@ -46,549 +23,579 @@ export function CreatePostSpecificationForm(
           required
           label="Model"
           variant="outlined"
-          onChange={(model) => setModel(model)}
+          onChange={(e) => setState("setModel", { model: e.target.value })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", brand)}
         />
         <MultiSelect
           name="Year of manufacture"
           listOfElements={filteringInformation.Year_of_manufacture}
-          clickedValue={(year) => setYearOfManufacture(year)}
+          clickedValue={(year) =>
+            setState("setYearOfManufacture", { yearOfManufacture: year })
+          }
         />
         <MultiSelect
           name="Transmission"
           listOfElements={filteringInformation.Transmission}
-          clickedValue={(transmission) => setTransmission(transmission)}
+          clickedValue={(transmission) =>
+            setState("setTransmission", { transmission })
+          }
         />
         <MultiSelect
           name="Is Registered?"
           listOfElements={filteringInformation.Is_Registered}
-          clickedValue={(is_registered) => setIsRegistered(is_registered)}
+          clickedValue={(isRegistered) =>
+            setState("setIsRegistered", { isRegistered })
+          }
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
       </>
     );
   }
-  if (subcategoryName == "Trucks and trailers") {
+  if (state.selectedSubcategory == "Trucks and trailers") {
     return (
       <>
         <TextField
           required
           label="Model"
           variant="outlined"
-          onChange={(e) => setModel(e.target.value)}
+          onChange={(e) => setState("setModel", { model: e.target.value })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Year of manufacture"
           listOfElements={filteringInformation.Year_of_manufacture}
-          clickedValue={(year) => setYearOfManufacture(year)}
+          clickedValue={(year) =>
+            setState("setYearOfManufacture", { yearOfManufacture: year })
+          }
         />
         <MultiSelect
           name="Transmission"
           listOfElements={filteringInformation.Transmission}
-          clickedValue={(transmission) => setTransmission(transmission)}
+          clickedValue={(transmission) =>
+            setState("setTransmission", { transmission })
+          }
         />
         <MultiSelect
           name="Is Registered?"
           listOfElements={filteringInformation.Is_Registered}
-          clickedValue={(is_registered) => setIsRegistered(is_registered)}
+          clickedValue={(isRegistered) =>
+            setState("setIsRegistered", { isRegistered })
+          }
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
       </>
     );
   }
-  if (subcategoryName == "Vehicle parts and assessories") {
+  if (state.selectedSubcategory == "Vehicle parts and assessories") {
     return (
       <>
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
       </>
     );
   }
-  if (subcategoryName == "Motocycles and bicycles") {
+  if (state.selectedSubcategory == "Motocycles and bicycles") {
     return (
       <>
         <TextField
           required
           label="Model"
           variant="outlined"
-          onChange={(model) => setModel(model)}
+          onChange={(e) => setState("setModel", { model: e.target.value })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Year of manufacture"
           listOfElements={filteringInformation.Year_of_manufacture}
-          clickedValue={(year) => setYearOfManufacture(year)}
+          clickedValue={(year) =>
+            setState("setYearOfManufacture", { yearOfManufacture: year })
+          }
         />
         <MultiSelect
           name="Transmission"
           listOfElements={filteringInformation.Transmission}
-          clickedValue={(transmission) => setTransmission(transmission)}
+          clickedValue={(transmission) =>
+            setState("setTransmission", { transmission })
+          }
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
       </>
     );
   }
-  if (subcategoryName == "Computers and laptops") {
+  if (state.selectedSubcategory == "Computers and laptops") {
     return (
       <>
         <TextField
           required
           label="Model"
           variant="outlined"
-          onChange={(model) => setModel(model)}
+          onChange={(e) => setState("setModel", { model: e.target.value })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Opearting System"
           listOfElements={filteringInformation.Operating_System}
           clickedValue={(operatingSystem) =>
-            setOperatingSystem(operatingSystem)
+            setState("setOperatingSystem", { operatingSystem })
           }
         />
         <MultiSelect
           name="Processor"
           listOfElements={filteringInformation.Processor}
-          clickedValue={(processor) => setProcessor(processor)}
+          clickedValue={(processor) => setState("setProcessor", { processor })}
         />
         <MultiSelect
           name="Storage_Capacity"
           listOfElements={filteringInformation.Storage_Capacity}
           clickedValue={(storageCapacity) =>
-            setStorageCapacity(storageCapacity)
+            setState("setStorageCapacity", { storageCapacity })
           }
         />
         <MultiSelect
           name="Storage_Type"
           listOfElements={filteringInformation.Storage_Type}
-          clickedValue={(storageType) => setStorageType(storageType)}
+          clickedValue={(storageType) =>
+            setState("setStorageType", { storageType })
+          }
         />
         <MultiSelect
           name="RAM"
           listOfElements={filteringInformation.RAM}
-          clickedValue={(ram) => setRAM(ram)}
+          clickedValue={(ram) => setState("setRAM", { ram })}
         />
       </>
     );
   }
   if (
-    subcategoryName == "Audio and music equipments" ||
-    subcategoryName == "Computer accessories"
+    state.selectedSubcategory == "Audio and music equipments" ||
+    state.selectedSubcategory == "Computer accessories"
   ) {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
       </>
     );
   }
-  if (subcategoryName == "Tv and dvd equipment") {
+  if (state.selectedSubcategory == "Tv and dvd equipment") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
       </>
     );
   }
-  if (subcategoryName == "Electronic supplies") {
+  if (state.selectedSubcategory == "Electronic supplies") {
     return (
       <>
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
       </>
     );
   }
-  if (subcategoryName == "Skincare") {
-    return (
-      <>
-        <MultiSelect
-          name="Type"
-          listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
-        />
-        <MultiSelect
-          name="Condition"
-          listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
-        />
-        <MultiSelect
-          name="Gender"
-          listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
-        />
-      </>
-    );
-  }
-  if (subcategoryName == "Hair products") {
+  if (state.selectedSubcategory == "Skincare") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Gender"
           listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
+          clickedValue={(gender) => setState("setGender", { gender })}
         />
       </>
     );
   }
-  if (subcategoryName == "Fragrances") {
+  if (state.selectedSubcategory == "Hair products") {
+    return (
+      <>
+        <MultiSelect
+          name="Type"
+          listOfElements={filteringInformation.Type}
+          clickedValue={(type) => setState("setType", { type })}
+        />
+        <MultiSelect
+          name="Condition"
+          listOfElements={filteringInformation.Condition}
+          clickedValue={(condition) => setState("setCondition", { condition })}
+        />
+        <MultiSelect
+          name="Gender"
+          listOfElements={filteringInformation.Gender}
+          clickedValue={(gender) => setState("setGender", { gender })}
+        />
+      </>
+    );
+  }
+  if (state.selectedSubcategory == "Fragrances") {
     return (
       <>
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Formation"
           listOfElements={filteringInformation.Formation}
-          clickedValue={(formation) => setFormation(formation)}
+          clickedValue={(formation) => setState("setFormation", { formation })}
         />
         <MultiSelect
           name="Gender"
           listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
+          clickedValue={(gender) => setState("setGender", { gender })}
         />
       </>
     );
   }
-  if (subcategoryName == "Vitamins and supplements") {
+  if (state.selectedSubcategory == "Vitamins and supplements") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Formulation"
           listOfElements={filteringInformation.Formulation}
-          clickedValue={(Formulation) => setFormulation(Formulation)}
+          clickedValue={(Formulation) =>
+            setState("setFormulation", { Formulation })
+          }
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
       </>
     );
   }
-  if (subcategoryName == "Phones and tablets") {
+  if (state.selectedSubcategory == "Phones and tablets") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Storage Capacity"
           listOfElements={filteringInformation.Storage_Capacity}
           clickedValue={(storageCapacity) =>
-            setStorageCapacity(storageCapacity)
+            setState("setStorageCapacity", { storageCapacity })
           }
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
         <MultiSelect
           name="Display Type"
           listOfElements={filteringInformation.Display_Type}
-          clickedValue={(displayType) => setDisplayType(displayType)}
+          clickedValue={(displayType) =>
+            setState("setDisplayType", { displayType })
+          }
         />
         <MultiSelect
           name="RAM"
           listOfElements={filteringInformation.RAM}
-          clickedValue={(ram) => setRAM(ram)}
+          clickedValue={(ram) => setState("setRAM", { ram })}
         />
 
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
-        />
-      </>
-    );
-  }
-  if (subcategoryName == "Accessories for mobile phones and tablets") {
-    return (
-      <>
-        <MultiSelect
-          name="Type"
-          listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
-        />
-        <MultiSelect
-          name="Condition"
-          listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
       </>
     );
   }
   if (
-    subcategoryName == "Houses and apartments for rent" ||
-    subcategoryName == "Houses and apartments for sale"
+    state.selectedSubcategory == "Accessories for mobile phones and tablets"
   ) {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
+        />
+      </>
+    );
+  }
+  if (
+    state.selectedSubcategory == "Houses and apartments for rent" ||
+    state.selectedSubcategory == "Houses and apartments for sale"
+  ) {
+    return (
+      <>
+        <MultiSelect
+          name="Type"
+          listOfElements={filteringInformation.Type}
+          clickedValue={(type) => setState("setType", { type })}
+        />
+        <MultiSelect
+          name="Condition"
+          listOfElements={filteringInformation.Condition}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Has parking space"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(parkingSpace) => setHasParkingSpace(parkingSpace)}
+          clickedValue={(hasParkingSpace) =>
+            setState("setHasParkingSpace", { hasParkingSpace })
+          }
         />
         <MultiSelect
           name="Bathrooms"
           listOfElements={filteringInformation.Bathrooms}
-          clickedValue={(bathrooms) => setBathrooms(bathrooms)}
+          clickedValue={(bathrooms) => setState("setBathrooms", { bathrooms })}
         />
         <MultiSelect
           name="Badrooms"
           listOfElements={filteringInformation.Bedrooms}
-          clickedValue={(bedrooms) => setBedrooms(bedrooms)}
+          clickedValue={(bedrooms) => setState("setBedrooms", { bedrooms })}
         />
         <MultiSelect
           name="Is Furnished"
           listOfElements={filteringInformation.Is_Furnished}
-          clickedValue={(is_furnished) => setIsFurnished(is_furnished)}
+          clickedValue={(isFurnished) =>
+            setState("setIsFurnished", { isFurnished })
+          }
         />
       </>
     );
   }
-  if (subcategoryName == "Land and plots for sale") {
+  if (state.selectedSubcategory == "Land and plots for sale") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Number of plots"
           listOfElements={filteringInformation.Number_of_Plots}
-          clickedValue={(plots) => setNumberOfPlots(plots)}
+          clickedValue={(plots) =>
+            setState("setNumberOfPlots", { numberOfPlots: plots })
+          }
         />
       </>
     );
   }
   if (
-    subcategoryName == "Bags" ||
-    subcategoryName == "Clothing and clothing accessories"
+    state.selectedSubcategory == "Bags" ||
+    state.selectedSubcategory == "Clothing and clothing accessories"
   ) {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Gender"
           listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
+          clickedValue={(gender) => setState("setGender", { gender })}
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
       </>
     );
   }
-  if (subcategoryName == "Watches") {
+  if (state.selectedSubcategory == "Watches") {
     return (
       <>
         <MultiSelect
           name="Condition"
           listOfElements={filteringInformation.Condition}
-          clickedValue={(condition) => setCondition(condition)}
+          clickedValue={(condition) => setState("setCondition", { condition })}
         />
         <MultiSelect
           name="Style"
           listOfElements={filteringInformation.Style}
-          clickedValue={(style) => setStyle(style)}
+          clickedValue={(style) => setState("setStyle", { style })}
         />
         <MultiSelect
           name="Display"
           listOfElements={filteringInformation.Display}
-          clickedValue={(display) => setDisplay(display)}
+          clickedValue={(display) => setState("setDisplay", { display })}
         />
         <MultiSelect
           name="Gender"
           listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
+          clickedValue={(gender) => setState("setGender", { gender })}
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
       </>
     );
   }
-  if (subcategoryName == "Shoes") {
+  if (state.selectedSubcategory == "Shoes") {
     return (
       <>
         <MultiSelect
           name="Type"
           listOfElements={filteringInformation.Type}
-          clickedValue={(type) => setType(type)}
+          clickedValue={(type) => setState("setType", { type })}
         />
         <MultiSelect
           name="Style"
           listOfElements={filteringInformation.Style}
-          clickedValue={(style) => setStyle(style)}
+          clickedValue={(style) => setState("setStyle", { style })}
         />
         <MultiSelect
           name="Gender"
           listOfElements={filteringInformation.Gender}
-          clickedValue={(gender) => setGender(gender)}
+          clickedValue={(gender) => setState("setGender", { gender })}
         />
         <MultiSelect
           name="Colour"
           listOfElements={filteringInformation.Colour}
-          clickedValue={(colour) => setColour(colour)}
+          clickedValue={(colour) => setState("setColour", { colour })}
         />
         <MultiSelect
           name="Brand"
           listOfElements={filteringInformation.Brand}
-          clickedValue={(brand) => setBrand(brand)}
+          clickedValue={(brand) => setState("setBrand", { brand })}
         />
       </>
     );

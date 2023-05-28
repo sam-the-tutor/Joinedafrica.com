@@ -3,12 +3,11 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-
 import Header from "../appStructure/Header";
 import Settings from "../auth/Settings";
-import CreatePost from "./CreatePosts";
-import MyMessages from "./MyMessages";
-import MyPostings from "./MyPostings";
+import Messages from "./messages";
+import Postings from "./postings";
+import CreatePost from "./createposts";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,7 +77,10 @@ export default function MyAccount() {
           allowScrollButtonsMobile
         >
           <Tab
-            sx={{ alignItems: "start", textAlign: "left" }}
+            sx={{
+              alignItems: "start",
+              textAlign: "left",
+            }}
             label="My messages"
             {...a11yProps(0)}
           />
@@ -99,10 +101,11 @@ export default function MyAccount() {
           />
         </Tabs>
         <TabPanel value={value} index={0} style={{ width: "100%" }}>
-          <MyMessages />
+          <Messages />
         </TabPanel>
         <TabPanel value={value} index={1} style={{ width: "100%" }}>
-          <MyPostings />
+          {/* <MyPostings /> */}
+          <Postings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
           <Settings
@@ -110,6 +113,7 @@ export default function MyAccount() {
           />
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
+          {/* <CreatePost /> */}
           <CreatePost />
         </TabPanel>
       </Container>

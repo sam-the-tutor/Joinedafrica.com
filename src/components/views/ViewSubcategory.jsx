@@ -11,9 +11,9 @@ import {
 import { getErrorMessage } from "../../util/ErrorMessages";
 import { createObjectURLFromArrayOfBytes } from "../../util/functions";
 import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
-import { getFilterForSubcategory } from "../../util/posts/PostFiltering";
 import PostingCard from "../../util/reuseableComponents/PostingCard";
 import Header from "../appStructure/Header";
+import { getFilterForSubcategory } from "../MyAccount/createposts/util/postFiltering";
 
 /**
  * When the user clicks on a specific subcategory in the home page, this component is responsible for displaying all postings

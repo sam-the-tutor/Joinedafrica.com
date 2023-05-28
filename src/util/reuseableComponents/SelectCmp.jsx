@@ -8,9 +8,7 @@ import {
   RadioGroup,
 } from "@mui/material/";
 import React from "react";
-
-import filterSubcategory from "../posts/subCategoryFiltering";
-
+import filterSubcategory from "../../components/MyAccount/createposts/util/subCategoryFiltering";
 export function CheckboxCmp({ list }) {
   return (
     <FormGroup>

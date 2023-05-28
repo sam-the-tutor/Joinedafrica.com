@@ -1,7 +1,4 @@
-import {
-  CheckboxCmp,
-  ControlledRadioButtonsGroup,
-} from "../reuseableComponents/SelectCmp";
+import { ControlledRadioButtonsGroup } from "../../../../util/reuseableComponents/SelectCmp";
 
 export const filtering = [
   {
