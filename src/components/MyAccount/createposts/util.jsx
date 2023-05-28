@@ -1,104 +1,63 @@
-function updateSnackBarCmp() {
-  setShowSnackbarCmp(
-    <SnackbarCmp
-      message="Your post has been created! Go to My postings to see your post"
-      handleClose={(event, reason) => {
-        //the user has to click on the alert to close it.
-        if (reason != "clickaway") {
-          setShowSnackbarCmp(null);
-        }
-      }}
-    />
-  );
+import { Principal } from "@dfinity/principal";
+import { post } from "../../../authentication/post";
+import { uploadMultipleFiles } from "../../../authentication/post_assets";
+import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
+import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
+import getPostSpecificationFromForm from "./util/getPostSpecificationFromForm";
+
+function updateSnackBarCmp(setState) {
+  setState("setSnackBarCmp", {
+    showSnackbarCmp: (
+      <SnackbarCmp
+        message="Your post has been created! Go to My postings to see your post"
+        handleClose={(event, reason) => {
+          //the user has to click on the alert to close it.
+          if (reason != "clickaway") {
+            setState("setSnackBarCmp", { showSnackbarCmp: null });
+          }
+        }}
+      />
+    ),
+  });
 }
 
-function removeImage(imagePosition) {
-  const result = selectedImages.filter(
-    (image, index) => imagePosition != index
-  );
-  setSelectedImages(result);
-}
+export async function submitForm(state, setState) {
+  const MAX_LENGTH_OF_DESCRIPTION = 150;
 
-function addImages(event) {
-  if (selectedImages.length == MAXIMUM_NUMBER_OF_IMAGES) {
-    alert("The maximum number of images to add is " + MAXIMUM_NUMBER_OF_IMAGES);
-    return;
-  }
-  setSelectedImages([...selectedImages, event.target.files[0]]);
-}
-async function createPost(event) {
-  event.preventDefault();
-  if (productDescription.length < MAX_LENGTH_OF_DESCRIPTION) {
+  if (state.productDescription.length < MAX_LENGTH_OF_DESCRIPTION) {
     alert("Product description should be more than 149 characters");
     return;
   }
-  setIsLoading(true);
+  setState("setIsLoading", { isLoading: true });
   const userPrincipal = getFromSessionStorage("principalId", true);
   console.log(userPrincipal);
-  const post = {
+  const createdPost = {
     creationDateOfPost: new Date().toLocaleDateString(),
-    category: selectedCategory,
+    category: state.selectedCategory,
     postId: getUniqueId(),
-    subcategory: selectedSubcategory,
-    productTitle,
+    subcategory: state.selectedSubcategory,
+    productTitle: state.productTitle,
     creatorOfPostId: Principal.fromText(userPrincipal),
     isPublished: false,
-    amount,
-    productDescription,
-    condition,
+    amount: state.amount,
+    productDescription: state.productDescription,
+    condition: state.condition,
     productSpecification: {
-      ...getPostSpecificationFromForm(
-        selectedSubcategory,
-        model,
-        brand,
-        condition,
-        yearOfManufacture,
-        transmission,
-        type,
-        colour,
-        processor,
-        ram,
-        storageCapacity,
-        operatingSystem,
-        storageType,
-        gender,
-        formation,
-        bedrooms,
-        bathrooms,
-        hasParkingSpace,
-        numberOfPlots,
-        displayType,
-        style,
-        display,
-        isRegistered,
-        isFurnished,
-        formulation
-      ),
+      ...getPostSpecificationFromForm(state),
     },
   };
 
-  //paths to images stores the path to the images in the post asset canister
-  const pathsToImages = [];
-  await Promise.all(
-    selectedImages.map(async (image) => {
-      console.log(image);
-      //generating unique id each time for each image
-      const key = await uploadFileToPostAssetCanister(
-        image,
-        userPrincipal + "/post/" + getUniqueId()
-      );
-      pathsToImages.push(key);
-    })
+  createdPost.images = await uploadMultipleFiles(
+    state.selectedImages,
+    userPrincipal
   );
-
-  post.images = pathsToImages;
-  const authenticatedUser = await getAuthenticatedPostUser();
-  const result = await authenticatedUser.createPost(post);
+  const authenticatedUser = await post();
+  const result = await authenticatedUser.createPost(createdPost);
   if (result?.err) {
-    alert(getErrorMessage(result.err));
-    setIsLoading(false);
+    // alert(getErrorMessage(result.err));
+    setState("setIsLoading", { isLoading: false });
     return;
   }
-  setIsLoading(false);
-  updateSnackBarCmp();
+  setState("setIsLoading", { isLoading: false });
+  updateSnackBarCmp(setState);
 }

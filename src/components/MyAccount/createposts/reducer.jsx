@@ -1,29 +1,31 @@
+const MAXIMUM_NUMBER_OF_IMAGES = 3;
 export default function reducer(state, action) {
-  console.log(state);
-  console.log(action);
   switch (action.type) {
-    case "setCategoryName": {
-      return {
-        ...state,
-        categoryName: action.value,
-      };
-    }
-    case "setListOfSubcategories": {
-      return {
-        ...state,
-        subCategories: action.value,
-      };
-    }
-    case "setSelectedSubcategory": {
-      return {
-        ...state,
-        selectedSubcategory: action.value,
-      };
-    }
     case "selectedImages": {
+      if (state.selectedImages.length == MAXIMUM_NUMBER_OF_IMAGES) {
+        alert(
+          "The maximum number of images to add is " + MAXIMUM_NUMBER_OF_IMAGES
+        );
+        return state;
+      }
       return {
         ...state,
-        selectedImages: [...state.selectedImages, value],
+        selectedImages: [...state.selectedImages, action.value],
+      };
+    }
+    case "removeImage": {
+      const result = state.selectedImages.filter(
+        (_, index) => action.value != index
+      );
+      return {
+        ...state,
+        selectedImages: result,
+      };
+    }
+    default: {
+      return {
+        ...state,
+        ...action.value,
       };
     }
   }

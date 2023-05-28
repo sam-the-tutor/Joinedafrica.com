@@ -1,6 +1,7 @@
 // Create asset manager instance
 import { AssetManager } from "@dfinity/assets";
 import { HttpAgent } from "@dfinity/agent";
+import { getUniqueId } from "../util/functions";
 
 const agent = new HttpAgent(); // Agent with an authorized identity
 
@@ -61,4 +62,21 @@ export function deletePostImagesFromPostAssetCanister(images) {
   images.forEach(async (image) => {
     await removeFileFromPostAssetCanister(image);
   });
+}
+
+export async function uploadMultipleFiles(images, userPrincipal) {
+  //paths to images stores the path to the images in the post asset canister
+  const pathsToImages = [];
+  await Promise.all(
+    images.map(async (image) => {
+      console.log(image);
+      //generating unique id each time for each image
+      const key = await uploadFileToPostAssetCanister(
+        image,
+        userPrincipal + "/post/" + getUniqueId()
+      );
+      pathsToImages.push(key);
+    })
+  );
+  return pathsToImages;
 }

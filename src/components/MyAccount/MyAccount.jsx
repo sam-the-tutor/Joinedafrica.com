@@ -3,11 +3,8 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-
 import Header from "../appStructure/Header";
 import Settings from "../auth/Settings";
-// import CreatePost from "./CreatePosts";
-
 import Messages from "./messages";
 import Postings from "./postings";
 import CreatePost from "./createposts";
