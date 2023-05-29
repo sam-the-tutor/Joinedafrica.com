@@ -1,50 +1,24 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import MyAccount from "./components/MyAccount/MyAccount";
-import Body from "./components/appStructure/Body";
-import CreateProfile from "./components/auth/CreateProfile";
-import ViewCategory from "./components/views/ViewCategory";
-import ViewPost from "./components/views/ViewPost";
-import ViewSubcategory from "./components/views/ViewSubcategory";
-import WelcomePage from "./components/welcomeToJoinedAfrica/WelcomePage";
+import CreateProfile from "./components/auth/createprofile/index.jsx";
+import Body from "./components/home/index.jsx";
+import MyAccount from "./components/myAccount/index.jsx.jsx";
+import ViewCategory from "./components/views/category/index.jsx";
+import ViewPost from "./components/views/post/index.jsx";
+import ViewSubcategory from "./components/views/subcategory/index.jsx";
+import WelcomePage from "./components/welcomeToJoinedAfrica/index.jsx";
 import { AppContext } from "./context";
-import { getFromSessionStorage } from "./util/functions";
-import { messageWorker } from "./util/webworkers/messageWorker";
 
 export default function App() {
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
-  const [newMessageNotification, setNewMessageNotification] = useState([]);
-
-  //once the user logs in or creates an account, start pulling for message notifications
-  useEffect(() => {
-    async function getAllNotifications() {
-      if (getFromSessionStorage("isLoggedIn", false)) {
-        console.log("her");
-        messageWorker(
-          newMessageNotification,
-          setNewMessageNotification,
-          "getAllNotifications"
-        );
-      }
-    }
-    getAllNotifications();
-  }, []);
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
     },
   });
-
-  const stateValues = {
-    authenticatedUser,
-    newMessageNotification,
-    setAuthenticatedUser,
-    setNewMessageNotification,
-  };
-
+  const stateValues = {};
   return (
     <AppContext.Provider value={stateValues}>
       <ThemeProvider theme={darkTheme}>

@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
+import { post as postCanister } from "../../canisters/post";
+import { getFileFromPostAssetCanister } from "../../canisters/post_assets";
 import { getErrorMessage } from "../ErrorMessages";
-import { getAuthenticatedPostUser } from "../auth";
 import { createObjectURLFromArrayOfBytes } from "../functions";
-import { getFileFromPostAssetCanister } from "../postAssetCanisterFunctions";
 import PopoverCmp from "./PopoverCmp";
 import SnackbarCmp from "./SnackbarCmp";
 
@@ -66,7 +66,7 @@ export default function PostingCard({
     updateSnackBarCmp(message);
   }
   async function markPostAsPublishedInPostCanister(updatedPost) {
-    const authenticatedUser = await getAuthenticatedPostUser();
+    const authenticatedUser = await postCanister();
     const post = await authenticatedUser.markPostAsPublished(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));
