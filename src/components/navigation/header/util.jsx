@@ -17,3 +17,4 @@ export async function setUserProfileDetails(principal) {
     setSessionStorage("isLoggedIn", "true", false);
   }
 }
+
