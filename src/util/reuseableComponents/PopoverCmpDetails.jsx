@@ -27,7 +27,7 @@ export default function PopoverCmpDetails({
           <ListItemText primary="View created post" />
         </ListItemButton>
       </ListItem>
-      {canOnlyMeSeeThisPost ? (
+      {canOnlyMeSeeThisPost && (
         <>
           {isPublished ? (
             <>
@@ -55,14 +55,6 @@ export default function PopoverCmpDetails({
               </ListItemButton>
             </ListItem>
           )}
-        </>
-      ) : (
-        <>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Message creator of post" />
-            </ListItemButton>
-          </ListItem>
         </>
       )}
     </List>
