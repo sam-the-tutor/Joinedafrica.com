@@ -121,7 +121,7 @@ export default function Header({ refreshComponent }) {
               </Grid>
               <Grid item sx={{ display: { xs: "none", md: "block" } }}>
                 <img
-                  src="./Logo_without_background.png"
+                  src="/Logo_without_background.png"
                   style={{ width: "80px" }}
                 />
               </Grid>

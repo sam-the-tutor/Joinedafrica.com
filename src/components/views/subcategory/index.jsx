@@ -33,36 +33,17 @@ export default function ViewSubcategory() {
       if (result?.err) {
         alert(getErrorMessage(result.err));
       } else {
-        //Looping through each subcategory and adding the profile picture of each posts createor in
-        //the top10Subcategories list
-        var modifiedPosts = [];
-        await Promise.all(
-          result.ok.map(async (createdPost) => {
-            const creatorOfPost = await profile.getUserProfilePicture(
-              createdPost.creatorOfPostId
-            );
-            const iamgeFile = await getFileFromPostAssetCanister(
-              creatorOfPost.ok.profilePicture
-            );
-            modifiedPosts.push({
-              ...createdPost,
-              creatorProfilePicture: createObjectURLFromArrayOfBytes(
-                iamgeFile._content
-              ),
-            });
-          })
-        );
-        setPosts(modifiedPosts);
+        setPosts(result.ok);
       }
       setLoading(false);
-      return modifiedPosts;
+      // return modifiedPosts;
     }
     getAllPostingsInSubcategory();
   }, []);
   return (
     <Box>
       <Header />
-      <Box style={{ display: "flex" }}>
+      <Box style={{ display: "flex", marginTop: "40px" }}>
         <DrawerContainer variant="permanent" anchor="left">
           <Toolbar />
           <TypographyCmp variant="h6">Filter</TypographyCmp>

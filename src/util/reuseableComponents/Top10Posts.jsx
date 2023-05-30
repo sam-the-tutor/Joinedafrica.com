@@ -17,12 +17,8 @@ export default function Top10Posts({ name, posts }) {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {posts.map((posting, index) => (
-          <Grid item xs={2} sm={4} md={4} key={index}>
-            <PostingCard
-              post={posting}
-              userProfile={posting.creatorProfilePicture}
-              canOnlyMeSeeThisPost={false}
-            />
+          <Grid item xs={12} sm={4} key={index}>
+            <PostingCard post={posting} canOnlyMeSeeThisPost={false} />
           </Grid>
         ))}
       </Grid>

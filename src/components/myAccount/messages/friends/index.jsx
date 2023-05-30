@@ -40,7 +40,7 @@ export default function Friends({ setIsFriendSelected }) {
       md={3}
       style={{
         borderRight: ismediumScreenSizeAndBelow ? "unset" : "1px solid white",
-        height: "70vh",
+        height: "80vh",
       }}
     >
       <Grid item xs={12} style={{ padding: "10px" }}>

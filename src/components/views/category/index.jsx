@@ -6,6 +6,7 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  Button,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,6 +18,7 @@ import { TypographyCmp, DrawerContainer } from "./style";
 import { getSubcategory } from "../../myAccount/createposts/listOfCategories";
 import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import Top10Posts from "../../../util/reuseableComponents/Top10Posts";
+import LeftBar from "./filter";
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
  * in that category
@@ -26,6 +28,7 @@ export default function ViewCategory() {
   const { categoryName } = useParams();
   const [loading, setLoading] = useState(false);
   const [top10Posts, setTop10Posts] = useState([]);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     async function getPostings() {
@@ -36,73 +39,56 @@ export default function ViewCategory() {
       const nonEmptySubcategory = postings.ok.filter(
         (posting) => posting.post.length > 0
       );
-      const top10Subategories = [];
-
-      //Looping through each subcategory and adding the profile picture of each posts createor in
-      //the top10Subcategories list
-
-      await Promise.all(
-        nonEmptySubcategory.map(async (posting) => {
-          const subcatgory = [];
-          await Promise.all(
-            posting.post.map(async (createdPost) => {
-              const creatorOfPost = await profile.getUserProfilePicture(
-                createdPost.creatorOfPostId
-              );
-              console.log(creatorOfPost);
-              const iamgeFile = await getFileFromPostAssetCanister(
-                creatorOfPost.ok.profilePicture
-              );
-              subcatgory.push({
-                ...createdPost,
-                creatorProfilePicture: createObjectURLFromArrayOfBytes(
-                  iamgeFile._content
-                ),
-              });
-            })
-          );
-
-          top10Subategories.push({
-            subCategoryName: posting.subCategoryName,
-            post: subcatgory,
-          });
-        })
-      );
-      setTop10Posts(top10Subategories);
+      setTop10Posts(nonEmptySubcategory);
       setLoading(false);
     }
     getPostings();
   }, []);
+
   return (
     <Box>
       <Header />
-      <Box style={{ display: "flex" }}>
-        <DrawerContainer variant="permanent" anchor="left">
-          <Toolbar />
-          <TypographyCmp variant="h6">Choose subcategory</TypographyCmp>
-          <List>
-            {getSubcategory(categoryName).map((subcategory, index) => (
-              <ListItem key={index}>
-                <ListItemButton
-                  onClick={() =>
-                    navigate("../view/" + categoryName + "/" + subcategory)
-                  }
-                >
-                  <ListItemText primary={subcategory} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </DrawerContainer>
+      <Box style={{ display: "flex", marginTop: "20px" }}>
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <DrawerContainer variant="permanent" anchor="left">
+            <Toolbar />
+            <TypographyCmp variant="h6">All subcategories</TypographyCmp>
+            <List>
+              {getSubcategory(categoryName).map((subcategory, index) => (
+                <ListItem key={index}>
+                  <ListItemButton
+                    onClick={() =>
+                      navigate("../view/" + categoryName + "/" + subcategory)
+                    }
+                  >
+                    <ListItemText primary={subcategory} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </DrawerContainer>
+        </Box>
+
         <Box style={{ padding: "24px", width: "100%" }}>
           <Toolbar />
           {loading ? (
             <div>Loading...</div>
           ) : (
             <>
+              <Button
+                sx={{
+                  marginBottom: "24px",
+                  padding: "0",
+                  display: { xs: "block", md: "none" },
+                }}
+                onClick={() => setMobileOpen(true)}
+              >
+                Choose subcategory
+              </Button>
               <Typography>
                 Showing top 10 postings from {categoryName}
               </Typography>
+
               {top10Posts.map((post, index) => (
                 <Top10Posts
                   key={index}
@@ -113,6 +99,11 @@ export default function ViewCategory() {
             </>
           )}
         </Box>
+        <LeftBar
+          open={mobileOpen}
+          close={() => setMobileOpen(false)}
+          categoryName={categoryName}
+        />
       </Box>
     </Box>
   );

@@ -25,7 +25,6 @@ import SnackbarCmp from "./SnackbarCmp";
  */
 export default function PostingCard({
   post,
-  userProfile,
   canOnlyMeSeeThisPost,
   setShowDeletePostPopup,
   setSelectedPostId,
@@ -76,7 +75,7 @@ export default function PostingCard({
     setUpdatedPost(updatedPost);
   }
   async function updatePostDetailsInPostCanister(updatedPost) {
-    const authenticatedUser = await getAuthenticatedPostUser();
+    const authenticatedUser = await postCanister();
     await authenticatedUser.removePostFromMarketplace(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));
@@ -111,9 +110,8 @@ export default function PostingCard({
     <Box>
       {updatedPost && (
         <>
-          <Card sx={{ maxWidth: 345 }}>
+          <Card>
             <CardHeader
-              avatar={<Avatar src={userProfile} />}
               action={
                 <IconButton
                   onClick={(event) => setPopupPosition(event.currentTarget)}
@@ -127,7 +125,11 @@ export default function PostingCard({
                     "..."
                   : updatedPost.productTitle
               }
-              subheader={"Posted at " + updatedPost.creationDateOfPost}
+              subheader={
+                canOnlyMeSeeThisPost
+                  ? "Posted at " + updatedPost.creationDateOfPost
+                  : ""
+              }
             />
 
             <CardMedia
@@ -136,18 +138,6 @@ export default function PostingCard({
               image={postCardDisplayImage}
               alt="User created posting"
             />
-
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {updatedPost.productDescription.length >
-                MAX_LENGTH_OF_DESCRIPTION
-                  ? updatedPost.productDescription.substring(
-                      0,
-                      MAX_LENGTH_OF_DESCRIPTION
-                    ) + "..."
-                  : updatedPost.productDescription}
-              </Typography>
-            </CardContent>
             <Divider />
             <Box
               style={{
