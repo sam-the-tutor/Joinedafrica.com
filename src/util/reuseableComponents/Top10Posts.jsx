@@ -11,11 +11,7 @@ export default function Top10Posts({ name, posts }) {
       <Typography style={{ marginBottom: "20px" }} variant="h5">
         {name}
       </Typography>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
+      <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         {posts.map((posting, index) => (
           <Grid item xs={12} sm={4} key={index}>
             <PostingCard post={posting} canOnlyMeSeeThisPost={false} />

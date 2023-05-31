@@ -56,6 +56,7 @@ export default function Header({ refreshComponent }) {
         setIsLoading(true);
         await setUserProfileDetails(principal);
         setIsLoading(false);
+        setMobileMoreAnchorEl(null);
         setIsUserLoggedIn(true);
       }
     }

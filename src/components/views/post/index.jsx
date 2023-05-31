@@ -7,6 +7,7 @@ import {
   Container,
   TextField,
   Typography,
+  Paper,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -23,6 +24,7 @@ import { conversation } from "../../../canisters/conversation";
 import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { MessageCmp } from "./style";
 import { extractProductSpecification } from "./util";
+import BasicTable from "./table";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -128,7 +130,7 @@ export default function ViewPost() {
           <>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
               {/* right component */}
-              <Box style={{ width: "600px" }}>
+              <Box style={{ width: "600px" }} component={Paper}>
                 <CarouselCmp images={postImages} />
                 <Box style={{ margin: "30px 0" }}>
                   <Box style={{ marginBottom: "20px" }}>
@@ -137,7 +139,7 @@ export default function ViewPost() {
                       {post.amount} ckBTC
                     </Typography>
                   </Box>
-
+                  {/* 
                   {Object.entries(productSpecification).map(
                     ([specification, value], index) => (
                       <Box
@@ -153,7 +155,8 @@ export default function ViewPost() {
                         <Typography>{value}</Typography>
                       </Box>
                     )
-                  )}
+                  )} */}
+                  <BasicTable />
                   <Box>
                     <Typography variant="h6" style={{ margin: "20px 0" }}>
                       Description
@@ -163,22 +166,24 @@ export default function ViewPost() {
                 </Box>
               </Box>
               {/* left component */}
-              <MessageCmp>
-                <TextField
-                  placeholder="Send a message to the creator of the post."
-                  multiline
-                  rows={7}
-                  style={{ marginBottom: "15px" }}
-                  onChange={(event) => setUserMessage(event.target.value)}
-                />
-                <Button
-                  variant="outlined"
-                  style={{ height: "50px" }}
-                  onClick={sendMessage}
-                >
-                  {sendMessageProgress || "Send message"}
-                </Button>
-              </MessageCmp>
+              <Box component={Paper}>
+                <MessageCmp>
+                  <TextField
+                    placeholder="Send a message to the creator of the post."
+                    multiline
+                    rows={7}
+                    style={{ marginBottom: "15px" }}
+                    onChange={(event) => setUserMessage(event.target.value)}
+                  />
+                  <Button
+                    variant="outlined"
+                    style={{ height: "50px" }}
+                    onClick={sendMessage}
+                  >
+                    {sendMessageProgress || "Send message"}
+                  </Button>
+                </MessageCmp>
+              </Box>
             </Box>
           </>
         )}
