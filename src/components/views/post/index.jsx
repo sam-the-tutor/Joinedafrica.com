@@ -8,6 +8,8 @@ import {
   TextField,
   Typography,
   Paper,
+  Grid,
+  Toolbar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -25,6 +27,8 @@ import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { MessageCmp } from "./style";
 import { extractProductSpecification } from "./util";
 import BasicTable from "./table";
+import ReactImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -56,7 +60,11 @@ export default function ViewPost() {
         response.ok.images.map(async (image) => {
           //generating unique id each time for each image
           const file = await getFileFromPostAssetCanister(image);
-          images.push(createObjectURLFromArrayOfBytes(file._content));
+          const url = createObjectURLFromArrayOfBytes(file._content);
+          images.push({
+            original: url,
+            thumbnail: url,
+          });
         })
       );
       setPostImages(images);
@@ -118,20 +126,22 @@ export default function ViewPost() {
   return (
     <Box>
       <Header />
+      <Toolbar />
       <Container
         style={{
           marginBottom: "100px",
-          marginTop: "100px",
+          marginTop: "50px",
         }}
       >
         {loading ? (
           LoadingCmp(loading)
         ) : (
           <>
-            <Box style={{ display: "flex", justifyContent: "space-between" }}>
+            <Grid container spacing={3}>
               {/* right component */}
-              <Box style={{ width: "600px" }} component={Paper}>
-                <CarouselCmp images={postImages} />
+              <Grid item md={9} xs={12}>
+                {/* <CarouselCmp images={postImages} /> */}
+                <ReactImageGallery items={postImages} />
                 <Box style={{ margin: "30px 0" }}>
                   <Box style={{ marginBottom: "20px" }}>
                     <Typography gutterBottom>{post.productTitle}</Typography>
@@ -164,10 +174,10 @@ export default function ViewPost() {
                     <Typography>{post.productDescription}</Typography>
                   </Box>
                 </Box>
-              </Box>
+              </Grid>
               {/* left component */}
-              <Box component={Paper}>
-                <MessageCmp>
+              <Grid item md={3} xs={12}>
+                <Box style={{ display: "flex", flexDirection: "column" }}>
                   <TextField
                     placeholder="Send a message to the creator of the post."
                     multiline
@@ -182,9 +192,9 @@ export default function ViewPost() {
                   >
                     {sendMessageProgress || "Send message"}
                   </Button>
-                </MessageCmp>
-              </Box>
-            </Box>
+                </Box>
+              </Grid>
+            </Grid>
           </>
         )}
       </Container>
