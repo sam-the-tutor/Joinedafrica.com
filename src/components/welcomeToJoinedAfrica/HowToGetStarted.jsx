@@ -5,6 +5,7 @@ import StepContent from "@mui/material/StepContent";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 import * as React from "react";
 
 const steps = [
@@ -32,6 +33,7 @@ const steps = [
 ];
 
 export default function HowToGetStarted() {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -47,19 +49,11 @@ export default function HowToGetStarted() {
   };
 
   return (
-    <Box style={{ margin: "0 auto" }}>
+    <Box>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
-            <StepLabel
-            //   optional={
-            //     index === 2 ? (
-            //       <Typography variant="caption">Last step</Typography>
-            //     ) : null
-            //   }
-            >
-              {step.label}
-            </StepLabel>
+            <StepLabel>{step.label}</StepLabel>
             <StepContent>
               <Typography style={{ width: "900px", color: "#d8d8df" }}>
                 {step.description}
@@ -108,6 +102,15 @@ export default function HowToGetStarted() {
           </Button>
         </Box>
       )}
+      <Box style={{ textAlign: "center" }}>
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={() => navigate("./home")}
+        >
+          Visit site
+        </Button>
+      </Box>
     </Box>
   );
 }

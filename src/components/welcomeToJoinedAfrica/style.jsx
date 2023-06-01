@@ -13,7 +13,7 @@ export const Greeting = styled(Box)({
 export const Introduction = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
-  padding: "50px",
+  // padding: "50px",
 });
 export const HowWeStandOutContainer = styled(Box)({
   display: "flex",
