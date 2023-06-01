@@ -5,26 +5,28 @@ import {
   Button,
   CircularProgress,
   Container,
-  TextField,
-  Typography,
+  Grid,
   Paper,
+  TextField,
+  Toolbar,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import ReactImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 import { useParams } from "react-router";
+
+import { conversation } from "../../../canisters/conversation";
+import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import { post as postCanister } from "../../../declarations/post";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../../util/functions";
-import CarouselCmp from "../../../util/reuseableComponents/CarouselCmp";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import Header from "../../navigation/header";
-import { post as postCanister } from "../../../declarations/post";
-import { conversation } from "../../../canisters/conversation";
-import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
-import { MessageCmp } from "./style";
 import { extractProductSpecification } from "./util";
-import BasicTable from "./table";
 
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
@@ -56,11 +58,16 @@ export default function ViewPost() {
         response.ok.images.map(async (image) => {
           //generating unique id each time for each image
           const file = await getFileFromPostAssetCanister(image);
-          images.push(createObjectURLFromArrayOfBytes(file._content));
+          const url = createObjectURLFromArrayOfBytes(file._content);
+          images.push({
+            original: url,
+            thumbnail: url,
+          });
         })
       );
       setPostImages(images);
       setProductSpecification(extractProductSpecification(response.ok));
+      console.log(productSpecification);
       setLoading(false);
     }
     getPost();
@@ -89,16 +96,10 @@ export default function ViewPost() {
       const chatMessage = {
         messageContent: userMessage,
         sender: Principal.fromText(loggedInUserPrincipalId),
-        mainReceiver: post.creatorOfPostId,
+        receiver: post.creatorOfPostId,
         time: new Date().toLocaleTimeString(),
         date: new Date().toLocaleDateString(),
-        secondReceiver: "",
       };
-      //send notification message to the creators posts notification
-      //   const authenticatedWorker =
-      //     await getAuthenticatedMessageNotificationWorker();
-      //   await authenticatedWorker.sendNotification(chatMessage);
-      //create a conversation between me and the creator of post.. also send the message there too
       const authenticatedUser = await conversation();
       const result = await authenticatedUser.sendMessage(chatMessage);
       console.log(result);
@@ -118,34 +119,47 @@ export default function ViewPost() {
   return (
     <Box>
       <Header />
+      <Toolbar />
       <Container
         style={{
           marginBottom: "100px",
-          marginTop: "100px",
+          marginTop: "50px",
         }}
       >
         {loading ? (
           LoadingCmp(loading)
         ) : (
           <>
-            <Box style={{ display: "flex", justifyContent: "space-between" }}>
+            <Grid container spacing={3}>
               {/* right component */}
-              <Box style={{ width: "600px" }} component={Paper}>
-                <CarouselCmp images={postImages} />
-                <Box style={{ margin: "30px 0" }}>
-                  <Box style={{ marginBottom: "20px" }}>
-                    <Typography gutterBottom>{post.productTitle}</Typography>
-                    <Typography style={{ color: "#37a864" }}>
-                      {post.amount} ckBTC
-                    </Typography>
-                  </Box>
-                  {/* 
+              <Grid item md={9} xs={12}>
+                <Box style={{ marginBottom: "20px" }}>
+                  <Typography variant="h5" gutterBottom>
+                    {post.productTitle}
+                  </Typography>
+                  <Typography variant="h6" style={{ color: "#37a864" }}>
+                    {post.amount} ckBTC
+                  </Typography>
+                </Box>
+                <ReactImageGallery items={postImages} />
+                <Box
+                  style={{ margin: "30px 0", padding: "24px" }}
+                  component={Paper}
+                >
+                  <Typography
+                    variant="h6"
+                    style={{
+                      margin: "20px 0",
+                      color: "rgba(255, 255, 255, 0.7)",
+                    }}
+                  >
+                    Specification
+                  </Typography>
                   {Object.entries(productSpecification).map(
                     ([specification, value], index) => (
                       <Box
                         style={{
                           display: "flex",
-                          color: "rgba(255, 255, 255, 0.7)",
                         }}
                         key={index}
                       >
@@ -155,19 +169,24 @@ export default function ViewPost() {
                         <Typography>{value}</Typography>
                       </Box>
                     )
-                  )} */}
-                  <BasicTable />
+                  )}
                   <Box>
-                    <Typography variant="h6" style={{ margin: "20px 0" }}>
+                    <Typography
+                      variant="h6"
+                      style={{
+                        margin: "20px 0",
+                        color: "rgba(255, 255, 255, 0.7)",
+                      }}
+                    >
                       Description
                     </Typography>
                     <Typography>{post.productDescription}</Typography>
                   </Box>
                 </Box>
-              </Box>
+              </Grid>
               {/* left component */}
-              <Box component={Paper}>
-                <MessageCmp>
+              <Grid item md={3} xs={12}>
+                <Box style={{ display: "flex", flexDirection: "column" }}>
                   <TextField
                     placeholder="Send a message to the creator of the post."
                     multiline
@@ -182,9 +201,9 @@ export default function ViewPost() {
                   >
                     {sendMessageProgress || "Send message"}
                   </Button>
-                </MessageCmp>
-              </Box>
-            </Box>
+                </Box>
+              </Grid>
+            </Grid>
           </>
         )}
       </Container>

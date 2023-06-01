@@ -262,7 +262,6 @@ export default function getPostSpecificationFromForm(state) {
       Fashion: {
         Watches: {
           Gender: state.gender,
-          Type: state.type,
           Display: state.display,
           Style: state.style,
           Brand: state.brand,
