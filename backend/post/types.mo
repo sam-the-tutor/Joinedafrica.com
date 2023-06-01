@@ -171,7 +171,6 @@ module {
                     Brand : Text;
                     Style : Text;
                     Display : Text;
-                    Type : Text;
                 };
                 #Shoes : {
                     Gender : Text;

@@ -32,15 +32,15 @@ shared ({ caller = initializer }) actor class () {
     public shared ({ caller }) func sendMessage(message : Message) : async Result.Result<(), Error> {
         let authorized = await ProfileCanister.isUserAuthorized(caller);
         if (not authorized) return #err(#UnAuthorizedUser);
-        if (Principal.isAnonymous(caller) or Principal.equal(message.sender, message.mainReceiver)) {
+        if (Principal.equal(message.sender, message.receiver)) {
             return #err(#UnAuthorizedUser);
         };
-        var friend = utils.sortPrincipals(caller, message.mainReceiver);
+        var friend = utils.sortPrincipals(caller, message.receiver);
         switch (Trie.get(conversations, key(friend), Text.equal)) {
             case null {
                 //caller and reciever haven't messaged each other before
-                addUserToFriendList(caller, message.mainReceiver);
-                addUserToFriendList(message.mainReceiver, caller);
+                addUserToFriendList(caller, message.receiver);
+                addUserToFriendList(message.receiver, caller);
                 conversations := Trie.put(conversations, key(friend), Text.equal, List.push(message, List.nil())).0;
             };
             case (?list) {
