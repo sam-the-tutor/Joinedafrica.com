@@ -1,6 +1,6 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SendIcon from "@mui/icons-material/Send";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import { profile } from "../../../canisters/profile";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { getUniqueId, setSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import { getCities } from "../../myAccount/createposts/listOfCategories"
 import Header from "../../navigation/header";
 import { internet_identity } from "../Login";
 import { IdentitySetup, Image, ImageContainer } from "./style";
@@ -20,6 +21,7 @@ export default function CreateProfile() {
     firstName: "",
     lastName: "",
     email: "",
+    location : "",
   });
   const [isLoading, setIsLoading] = useState(false);
   // navigation so we can go back to the home page after saving the users profile
@@ -40,6 +42,7 @@ export default function CreateProfile() {
     }
     setIsLoading(true);
     const createdProfile = { ...userProfile };
+    console.log(createdProfile)
     const profileImagePath = principal + "/profile/" + getUniqueId();
     console.log(userProfile.profilePicture);
     const key = await uploadFileToPostAssetCanister(
@@ -63,6 +66,7 @@ export default function CreateProfile() {
       setSessionStorage("lastName", userProfile.lastName, false);
       setSessionStorage("email", userProfile.email, true);
       setSessionStorage("principalId", principal, true);
+      setSessionStorage("location", userProfile.location, true);
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
       navigate("/home");
@@ -133,6 +137,24 @@ export default function CreateProfile() {
             setProfile({ ...userProfile, email: e.target.value })
           }
         />
+
+
+        <InputLabel id="demo-simple-select-label" sx={{fontSize:20, mt:2}}>Location</InputLabel>
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+            fullWidth
+            onChange={
+              e=>{setProfile({...userProfile,location : e.target.value})
+            }
+          }
+          >
+            {
+              getCities().map((city,index)=><MenuItem value={city}>{city}</MenuItem>)
+            }
+          </Select>
+
         <IdentitySetup
           onClick={async () => setPrincipal(await internet_identity())}
         >
