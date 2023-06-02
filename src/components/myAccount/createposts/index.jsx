@@ -14,7 +14,7 @@ import React, { useState, useReducer } from "react";
 import { useTheme } from "@mui/material/styles";
 import { PostImage } from "./style";
 import { post } from "../../../canisters/post";
-import { getCategoryNames, getSubcategory } from "./listOfCategories";
+import { getCategoryNames, getSubcategory, getCities } from "./listOfCategories";
 
 import { state as initialState } from "./state";
 import { MultiSelect } from "../../../util/reuseableComponents/MultiSelect";
@@ -66,6 +66,14 @@ export default function CreatePost() {
             listOfElements={state.subCategories}
             clickedValue={(selectedSubcategory) =>
               setState("setSelectedSubcategory", { selectedSubcategory })
+            }
+          />
+
+          <MultiSelect
+            name="Location"
+            listOfElements={getCities()}
+            clickedValue={(selectedCity) =>
+              setState("location", { selectedCity })
             }
           />
         </Stack>

@@ -15,6 +15,7 @@ module {
         subcategory : Text;
         productTitle : Text;
         amount : Text;
+        location : Text;
         productDescription : Text;
         condition : Text;
         //very specific description of a post

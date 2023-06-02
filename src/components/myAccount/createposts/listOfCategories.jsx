@@ -79,3 +79,9 @@ export function getSubcategory(categoryName) {
     if (categories[i].name === categoryName) return categories[i].subcategory;
   }
 }
+
+
+
+export function getCities(){
+  return ["Abuja","Lagos","Port Harcout"]
+}
