@@ -15,19 +15,29 @@ export default function WelcomePage() {
   const navigate = useNavigate();
   return (
     <Box>
-      <Box style={{ padding: "50px" }}>
+      <Box sx={{ padding: { xs: "0 20px 50px 20px", md: "50px" } }}>
         <Introduction>
           <Box>
             <Box
               component="img"
               src="./Logo_without_background.png"
               alt="Joined Africa logo"
+              sx={{ width: { xs: "100px", sm: "150px", md: "200px" } }}
             />
             <Box>
-              <Typography variant="h1" sx={{ fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: { xs: "50px", sm: "80px", md: "96px" },
+                }}
+              >
                 Joined Africa
               </Typography>
-              <Typography style={{ color: "#d8d8df" }}>
+              <Typography
+                sx={{
+                  color: "#d8d8df",
+                  margin: { xs: "20px 0", md: "initial" },
+                }}
+              >
                 Is a marketplace where Africans can buy and sell to each other
                 using one currency
               </Typography>
@@ -38,7 +48,9 @@ export default function WelcomePage() {
               component="img"
               src="./Connected_Africa.png"
               alt="Connected Africa"
-              sx={{ display: { xs: "none", md: "block" } }}
+              sx={{
+                display: { xs: "none", md: "block" },
+              }}
             />
           </Box>
         </Introduction>
@@ -55,12 +67,21 @@ export default function WelcomePage() {
 
       <Box>
         <Box
-          style={{ backgroundColor: "white", color: "black", padding: "50px" }}
+          sx={{
+            backgroundColor: "white",
+            color: "black",
+            padding: { md: "50px", xs: "30px 20px" },
+          }}
         >
           <Typography
             variant="h4"
             gutterBottom
-            sx={{ textDecoration: "underline", textAlign: "center" }}
+            sx={{
+              textDecoration: "underline",
+              textAlign: "center",
+              fontSize: { xs: "24px", md: "34px" },
+              marginBottom: { xs: "20px", md: "initial" },
+            }}
           >
             Who we are
           </Typography>
@@ -79,9 +100,9 @@ export default function WelcomePage() {
         </Box>
 
         <Box
-          style={{
+          sx={{
             backgroundColor: "black",
-            padding: "50px",
+            padding: { xs: "30px 20px", md: "50px" },
           }}
         >
           <Typography
@@ -91,6 +112,8 @@ export default function WelcomePage() {
               textDecoration: "underline",
               textAlign: "center",
               color: "white",
+              fontSize: { xs: "24px", md: "34px" },
+              marginBottom: { xs: "20px", md: "initial" },
             }}
           >
             Let's get started!

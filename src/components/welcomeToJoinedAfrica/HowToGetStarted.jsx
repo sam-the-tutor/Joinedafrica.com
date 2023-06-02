@@ -55,13 +55,13 @@ export default function HowToGetStarted() {
           <Step key={step.label}>
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
-              <Typography style={{ width: "900px", color: "#d8d8df" }}>
+              <Typography style={{ color: "#d8d8df" }}>
                 {step.description}
               </Typography>
               <img
                 src={step.imgSrc}
                 style={{
-                  width: "900px",
+                  width: "100%",
                   marginTop: "30px",
                   marginBottom: "30px",
                 }}
