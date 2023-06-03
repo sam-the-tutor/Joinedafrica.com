@@ -40,6 +40,7 @@ export async function submitForm(state, setState) {
     creatorOfPostId: Principal.fromText(userPrincipal),
     isPublished: false,
     amount: state.amount,
+    location: state.location,
     productDescription: state.productDescription,
     condition: state.condition,
     productSpecification: {

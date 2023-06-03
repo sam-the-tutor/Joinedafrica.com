@@ -10,6 +10,7 @@ export const state = {
   productDescription: "",
   condition: "",
   model: "",
+  location: "",
   processor: "",
   numberOfPlots: "",
   formulation: "",

@@ -260,6 +260,89 @@ shared ({ caller = initializer }) actor class () {
     });
   };
 
+
+
+
+
+
+//my edited functions
+
+  public shared query func myFunc1(category : Category,location : Text) : async Result<[Post], Error> {
+    let top10Posts = Buffer.Buffer<Post>(0);
+    //get all subcategories in a category
+    let subCategories : [Subcategory] = DatabaseStructure.getSubcategory(category);
+    //get the top 10 posts in a subcategory
+  
+    for (subcategory in subCategories.vals()) {
+      switch (_myFunc2(category, subcategory,location)) {
+        case (#ok(posts)) {
+          for(post in posts.vals()){
+              top10Posts.add(post);
+          }
+        };
+        //the failure could be one of the error messages
+        case (#err(failure)) return #err(failure);
+      };
+    };
+  
+    return #ok(Buffer.toArray(top10Posts));
+  };
+
+
+
+private func _myFunc2(category : Category, subcategory : Subcategory, location : Text) : Result.Result<[Post], Error> {
+    let top10Posts = Buffer.Buffer<Post>(0);
+    switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
+      case null return #err(#CategoryNotFound);
+      case (?subTrie) {
+        switch (Trie.get(subTrie, categoryKey(subcategory), Text.equal)) {
+          case null return #err(#SubcategoryNotFound);
+          case (?listOfPostIds) {
+            let arrayOfPostIds = List.toArray(listOfPostIds);
+            var index = 0;
+            //if we get to the 11th post, we break the loop
+            while (index < arrayOfPostIds.size() and index < 2) {
+              switch (getPostById(arrayOfPostIds[index])) {
+                case (#ok(post)) {
+                  if(post.location == location){
+                  top10Posts.add(post);
+                  }
+
+                };
+                case (#err(failure)) return #err(failure);
+              };
+              index := index + 1;
+            };
+          };
+        };
+      };
+    };
+    return #ok(Buffer.toArray(top10Posts));
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   func hashKey(t : UserId) : Trie.Key<UserId> {
     { hash = Principal.hash(t); key = t };
   };
