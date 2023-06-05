@@ -25,11 +25,13 @@ import ProfileIcon from "./profileIcon";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
 import { setUserProfileDetails } from "./util";
+import { getFromSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../../auth/Login";
 import LeftBar from "../leftbar";
 
-export default function Header({ refreshComponent }) {
+
+export default function Header({ setUserLocation,refreshComponent }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -51,6 +53,7 @@ export default function Header({ refreshComponent }) {
     console.log(principal);
     async function getUserProfile() {
       //making sure the actor isn't null.
+     
       console.log(principal);
       if (principal.length > 0) {
         setIsLoading(true);
@@ -58,6 +61,7 @@ export default function Header({ refreshComponent }) {
         setIsLoading(false);
         setMobileMoreAnchorEl(null);
         setIsUserLoggedIn(true);
+        setUserLocation(getFromSessionStorage("location",false))
       }
     }
     getUserProfile();
