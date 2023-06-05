@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import {
   Card,
   CardHeader,
@@ -13,14 +13,28 @@ import {
   Button,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { getFileFromPostAssetCanister } from "../../canisters/post_assets";
+import {createObjectURLFromArrayOfBytes  } from "../../util/functions"
 
 
-export default function Content() {
+
+export default function Content({post}) {
+
+  const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
+
+  useEffect(() => {
+    async function loadPost() {
+      const file = await getFileFromPostAssetCanister(post.images[0]);
+      setPostCardDisplayImage(createObjectURLFromArrayOfBytes(file._content));
+    }
+    loadPost();
+  }, []);
   return (
-    <Card sx={{ width: "250px" }}>
+    <Card sx={{ width: "250px", margin: 1 }}>
       <CardMedia
-        src="https://picsum.photos/id/0/5000/3333"
+        src={postCardDisplayImage}
         height="200"
+        sx={{objectFit: "contain"}}
         component="img"
       />
 
@@ -30,7 +44,7 @@ export default function Content() {
       <Grid container>
         <Grid item xs={12}>
         <Typography>
-            Laptop 2019-edition 4gb Ram  Laptop 2019-edition 4gb Ram
+            {post.productTitle}
         </Typography>
         </Grid>
   
@@ -39,11 +53,10 @@ export default function Content() {
           <FavoriteBorderIcon />
         </IconButton>
         <Typography sx={{marginTop: "10px",marginLeft:"15px"}}>
-            15 USDT
+            {post.amount} USDT
         </Typography>
         </Grid>
         <Grid item xs={10}>
-        <Button fullWidth={true} variant="outlined" sx={{textAlign:"center"}}>View</Button>
         </Grid>
        </Grid>
       </CardActions>

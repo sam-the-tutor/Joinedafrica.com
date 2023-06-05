@@ -6,9 +6,11 @@ export async function internet_identity() {
       disableDefaultIdleCallback: true,
     },
   });
+
   if (await authClient.isAuthenticated()) {
     const identity = await authClient.getIdentity();
     return identity.getPrincipal().toText();
+    
   } else {
     await authClient.login({
       identityProvider: process.env.INTERNET_IDENTITY_URL,

@@ -13,7 +13,6 @@ import {
 import React, { useState, useReducer } from "react";
 import { useTheme } from "@mui/material/styles";
 import { PostImage } from "./style";
-import { post } from "../../../canisters/post";
 import { getCategoryNames, getSubcategory, getCities } from "./listOfCategories";
 
 import { state as initialState } from "./state";
@@ -41,6 +40,7 @@ export default function CreatePost() {
 
   function submitPost(event) {
     event.preventDefault();
+    console.log("My state : ", state)
     submitForm(state, setState);
   }
 
@@ -73,7 +73,7 @@ export default function CreatePost() {
             name="Location"
             listOfElements={getCities()}
             clickedValue={(selectedCity) =>
-              setState("location", { selectedCity })
+              setState("location",{location : selectedCity})
             }
           />
         </Stack>
