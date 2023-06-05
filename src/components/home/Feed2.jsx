@@ -7,19 +7,18 @@ import {TopPosts}  from "../../util/reuseableComponents/Top10Posts"
 export default function Feed() {
 
   return (
-    <Box sx={{mt:"100px"}}>
-    
+    <Box style={{ margin: "10px", padding: "4px", width:"100%" } } >
+    <Toolbar />
     <Typography sx={{textAlign:"center",background: "White", color: "black"}} >Latest</Typography>
-    <Box style={{ margin: "10px", padding: "4px",display:"flex" }}>
+    <Box style={{ margin: "10px", padding: "4px" } }>
   {
   categories.map(cat =>{
   return(
-
-  <Grid>
-
+  <Grid container   >
   <Typography sx={{backgroundColor: "brown"}}>{cat.name}</Typography>
-  
+  <Grid container   >
     {TopPosts(cat.name)}
+  </Grid>
   </Grid>
   )})
   }

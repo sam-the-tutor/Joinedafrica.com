@@ -13,6 +13,7 @@ import { getCities } from "../../myAccount/createposts/listOfCategories"
 import Header from "../../navigation/header";
 import { internet_identity } from "../Login";
 import { IdentitySetup, Image, ImageContainer } from "./style";
+import {MultiSelect} from "../../../util/reuseableComponents/MultiSelect"
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -138,22 +139,13 @@ export default function CreateProfile() {
           }
         />
 
-
-        <InputLabel id="demo-simple-select-label" sx={{fontSize:20, mt:2}}>Location</InputLabel>
-        <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-            fullWidth
-            onChange={
-              e=>{setProfile({...userProfile,location : e.target.value})
+        <MultiSelect
+            name="Location"
+            listOfElements={getCities()}
+            clickedValue={(selectedCity) =>
+              setProfile({...userProfile,location : selectedCity})
             }
-          }
-          >
-            {
-              getCities().map((city,index)=><MenuItem value={city}>{city}</MenuItem>)
-            }
-          </Select>
+        />
 
         <IdentitySetup
           onClick={async () => setPrincipal(await internet_identity())}

@@ -4,19 +4,17 @@ import PostingCard from "./PostingCard";
 import { post } from "../../declarations/post"
 import Content from "../../components/home/Content"
 
-/**
- * This component is reponsible for displaying the top10 posts in the homepage and category page of a post
- */
 
 
+//Posts to be displayed when the user id logged in
 export default function Top10Posts(category, location) {
 
   const [results, setResults] = useState([])
 
-  post.myFunc1(category,location).then(values=>setResults(values.ok))
+  post.locationSpecificPosts(category,location).then(values=>setResults(values.ok))
 
   const myPosts = results.map((posting, index) => <Grid item xs={12} sm={4} ><PostingCard post={posting} canOnlyMeSeeThisPost={false} key={index}/></Grid>)
-  console.log("ppoosts :",results)
+ // console.log("ppoosts :",results)
   return (
   <Box style={{ marginTop: "20px", marginBottom: "20px" }} key={category} >
     <Grid container spacing={{ xs: 2}} columns={{ xs: 4, sm: 2, md: 4 }}>
@@ -24,23 +22,26 @@ export default function Top10Posts(category, location) {
     </Grid>
   </Box>
 );
-}
+};
 
 
+//Posts to be displayed when the user is not logged in.
 export function TopPosts(category) {
 
   const [results, setResults] = useState([])
 
   post.getTop10PostingsInCategory(category)
-  .then(values=>setResults(values.ok)
-  )
-  //console.log("2nd results :",results)
-  const myPosts = results.map((posting, index) => <Grid item><Content post={posting} key={index}/></Grid>)
- 
+  .then(values=>setResults(values.ok))
+
+  const myPosts = results.map((posting, index) => <Grid item xs={12} sm={4} ><PostingCard post={posting} canOnlyMeSeeThisPost={false} key={index}/></Grid>)
+  //console.log("ppoosts :",results)
   return (
-    <Grid>
+  <Box style={{ marginTop: "20px", marginBottom: "20px" }} key={category} >
+    <Grid container spacing={{ xs: 2 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {myPosts}
-      </Grid>
+    </Grid>
+  </Box>
 );
 }
+
 
