@@ -80,8 +80,6 @@ export function getSubcategory(categoryName) {
   }
 }
 
-
-
-export function getCities(){
-  return ["Abuja","Lagos","Port Harcout"]
+export function getCities() {
+  return ["Abuja", "Lagos", "Port Harcourt"];
 }

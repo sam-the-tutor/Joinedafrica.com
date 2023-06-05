@@ -17,7 +17,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { InputContainer, SearchIconCmp } from "./style";
 import { useTheme } from "@mui/material/styles";
@@ -28,11 +28,13 @@ import { setUserProfileDetails } from "./util";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../../auth/Login";
 import LeftBar from "../leftbar";
+import { AppContext } from "../../../context";
+import { getFromSessionStorage } from "../../../util/functions";
 
 export default function Header({ refreshComponent }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
+  const { setIsUserLoggedIn } = useContext(AppContext);
   const [principal, setPrincipal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,9 +42,7 @@ export default function Header({ refreshComponent }) {
     useTheme().breakpoints.down("md")
   );
 
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(
-    sessionStorage.getItem("isLoggedIn") == "true"
-  );
+  const isUserLoggedIn = useRef(getFromSessionStorage("isLoggedIn") == "true");
 
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
@@ -155,7 +155,7 @@ export default function Header({ refreshComponent }) {
                 </Grid>
               )}
             <Grid item>
-              {isUserLoggedIn ? (
+              {isUserLoggedIn.current ? (
                 <Grid item>
                   <ProfileIcon refreshComponent={refreshComponent} />
                 </Grid>

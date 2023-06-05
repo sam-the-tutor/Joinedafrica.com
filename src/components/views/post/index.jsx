@@ -11,7 +11,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ReactImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useParams } from "react-router";
@@ -20,6 +20,7 @@ import { conversation } from "../../../canisters/conversation";
 import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { post as postCanister } from "../../../declarations/post";
 import { getErrorMessage } from "../../../util/ErrorMessages";
+import { ref, set, push } from "firebase/database";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
@@ -27,7 +28,8 @@ import {
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import Header from "../../navigation/header";
 import { extractProductSpecification } from "./util";
-
+// import {AppContext} from "../../../../"
+import { AppContext } from "../../../context";
 /**
  * When the user clicks on a specific post, this component is responsible for displaying all required information about the post
  * @returns returns all required information about a selected post
@@ -40,6 +42,8 @@ export default function ViewPost() {
   const [productSpecification, setProductSpecification] = useState({});
   const [sendMessageProgress, setSendMessageProgress] = useState(null);
   const [userMessage, setUserMessage] = useState("");
+  const { firebaseDB } = useContext(AppContext);
+
   useEffect(() => {
     async function getPost() {
       setLoading(true);
@@ -92,7 +96,7 @@ export default function ViewPost() {
           <Typography>Sending...</Typography>
         </Box>
       );
-      //send the message to the other friends
+      //send the message to the other friend
       const chatMessage = {
         messageContent: userMessage,
         sender: Principal.fromText(loggedInUserPrincipalId),
@@ -102,6 +106,9 @@ export default function ViewPost() {
       };
       const authenticatedUser = await conversation();
       const result = await authenticatedUser.sendMessage(chatMessage);
+      //send message notification to the receiver
+      const messageRef = ref(firebaseDB, post.creatorOfPostId.toText());
+      set(push(messageRef), chatMessage);
       console.log(result);
       if (result?.err) {
         alert("error");
