@@ -14,7 +14,11 @@ import React, { useState, useReducer } from "react";
 import { useTheme } from "@mui/material/styles";
 import { PostImage } from "./style";
 import { post } from "../../../canisters/post";
-import { getCategoryNames, getSubcategory, getCities } from "./listOfCategories";
+import {
+  getCategoryNames,
+  getSubcategory,
+  getCities,
+} from "./listOfCategories";
 
 import { state as initialState } from "./state";
 import { MultiSelect } from "../../../util/reuseableComponents/MultiSelect";
@@ -30,11 +34,8 @@ export default function CreatePost() {
     theme.breakpoints.down("md")
   );
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [isLoading, setIsLoading] = useState(false);
-  const [, setShowSnackbarCmp] = useState(null);
 
   //maximum length of characters and number of images
-
   function setState(type, value) {
     dispatch({ type, value });
   }

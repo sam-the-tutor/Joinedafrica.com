@@ -1,78 +1,61 @@
+import { Principal } from "@dfinity/principal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
   Button,
   Divider,
   Grid,
   List,
-  ListItemText,
   ListItem,
+  ListItemText,
   Paper,
   TextField,
   useMediaQuery,
 } from "@mui/material";
+import { push, ref, set } from "firebase/database";
 import { useTheme } from "@mui/material/styles";
-import React, { useEffect, useState, useRef, useContext } from "react";
-import { loadNewMessages } from "./util";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
 import { conversation as conversationCanister } from "../../../../canisters/conversation";
-import { getFromSessionStorage } from "../../../../util/functions";
-import { Principal } from "@dfinity/principal";
-import { ref, set, push, remove } from "firebase/database";
 import { AppContext } from "../../../../context";
+import { getFromSessionStorage } from "../../../../util/functions";
+import { getMyMessages, loadNewMessagesFromFirebase } from "./util";
+
 export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const [conversation, setConversation] = useState("");
   const [myMessages, setMyMessages] = useState([]);
   const messageEndRef = useRef(null);
   const myPrincipal = useRef(getFromSessionStorage("principalId", true));
   const { firebaseDB, newMessageNotifications } = useContext(AppContext);
-  //i can get the users principal from thier profile picture
+
   const theme = useTheme();
   const ismediumScreenSizeAndBelow = useMediaQuery(
-    theme.breakpoints.down("md")
-  );
+    theme.breakpoints.down("md"))
   useEffect(() => {
     setTimeout(
       () => messageEndRef.current.scrollIntoView({ behavior: "smooth" }),
       500
     );
   });
+
   useEffect(() => {
     async function init() {
-      const chatMessages = await loadNewMessages(
-        isFriendSelected.profilePicture
-      );
+      const chatMessages = await getMyMessages(isFriendSelected.profilePicture);
       setMyMessages(chatMessages);
-      // messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
     init();
   }, []);
 
   useEffect(() => {
-    function loadNewMessagesFromFirebase() {
-      const myFriendPrincipal = isFriendSelected.profilePicture.substring(
-        0,
-        63
+    function init() {
+      const newMessages = loadNewMessagesFromFirebase(
+        isFriendSelected,
+        newMessageNotifications,
+        firebaseDB
       );
-      const newMessagesFromSelectedFriend = [];
-      const newMessagesFromOtherFriends = [];
-      newMessageNotifications.forEach((message) => {
-        const sendersPrincipal = Principal.from(message.sender).toText();
-        if (sendersPrincipal === myFriendPrincipal) {
-          newMessagesFromSelectedFriend.push(message);
-        } else {
-          newMessagesFromOtherFriends.push(message);
-        }
-      });
-      setMyMessages([...myMessages, ...newMessagesFromSelectedFriend]);
-      removeSeenMessageNotifications(newMessagesFromSelectedFriend);
+      setMyMessages([...myMessages, ...newMessages]);
     }
-    loadNewMessagesFromFirebase();
+    init();
   }, [newMessageNotifications]);
-
-  function removeSeenMessageNotifications(newMessagesFromSelectedFriend) {
-    newMessagesFromSelectedFriend.forEach((message) => {
-      remove(ref(firebaseDB, `${myPrincipal.current}/${message.id}`));
-    });
-  }
 
   async function sendMessage() {
     const myFriendPrincipal = isFriendSelected.profilePicture.substring(0, 63);
@@ -83,9 +66,7 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
       time: new Date().toLocaleTimeString(),
       date: new Date().toLocaleDateString(),
     };
-    //display the new message in the senders chatbox
     setMyMessages([...myMessages, chatMessage]);
-    // messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     setConversation("");
     //send and save the chat message in the backend and firebase
     const authenticatedUser = await conversationCanister();
@@ -94,6 +75,7 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
     const messageRef = ref(firebaseDB, myFriendPrincipal);
     set(push(messageRef), chatMessage);
   }
+
   return (
     <>
       {/* only display the back button when the viewport is medium size and below */}
@@ -129,6 +111,11 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
                           }
                     }
                     primary={message.messageContent}
+                    secondary={message.time + ", " + message.date}
+                    secondaryTypographyProps={{
+                      color: "black",
+                      textAlign: "right",
+                    }}
                   />
                 </Grid>
               </ListItem>

@@ -10,24 +10,22 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import { getFromSessionStorage } from "../../../../util/functions";
 import { useTheme } from "@mui/material/styles";
 
 import { getAllMyFriends } from "./util";
 
 export default function Friends({ setIsFriendSelected }) {
   const [allMyFriends, setAllMyFriends] = useState([]);
-  const [myPrincipal, setMyPrincipal] = useState("");
   const theme = useTheme();
+
   const ismediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
+
   useEffect(() => {
     async function init() {
-      //show set loading
       const friends = await getAllMyFriends();
       setAllMyFriends(friends);
-      // setMyPrincipal(getFromSessionStorage("principalId", true));
     }
     init();
   }, []);
@@ -55,7 +53,6 @@ export default function Friends({ setIsFriendSelected }) {
           <ListItem
             key={index}
             style={{ cursor: "pointer" }}
-            // onClick={() => getMyMessages(profile.profilePicture)}
             onClick={() => setIsFriendSelected(profile)}
           >
             <ListItemIcon>
