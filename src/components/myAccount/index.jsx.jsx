@@ -70,7 +70,6 @@ export default function MyAccount() {
           variant={ismediumScreenSizeAndBelow ? "scrollable" : "fullWidth"}
           value={value}
           onChange={handleChange}
-          // scrollButtons
           allowScrollButtonsMobile
         >
           <Tab
@@ -101,7 +100,6 @@ export default function MyAccount() {
           <Messages />
         </TabPanel>
         <TabPanel value={value} index={1} style={{ width: "100%" }}>
-          {/* <MyPostings /> */}
           <Postings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>

@@ -1,6 +1,6 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import CreateProfile from "./components/auth/createprofile/index.jsx";
@@ -11,14 +11,61 @@ import ViewPost from "./components/views/post/index.jsx";
 import ViewSubcategory from "./components/views/subcategory/index.jsx";
 import WelcomePage from "./components/welcomeToJoinedAfrica/index.jsx";
 import { AppContext } from "./context";
+import { ref, onValue } from "firebase/database";
+import { getFromSessionStorage } from "./util/functions.jsx";
+import startFirebase from "./config/firebase.jsx";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 export default function App() {
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
-  const stateValues = {};
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [firebaseDB, setFirebaseDB] = useState(null);
+  const [newMessageNotifications, setNewMessageNotifications] = useState([]);
+  const stateValues = {
+    isUserLoggedIn,
+    setIsUserLoggedIn,
+    firebaseDB,
+    setFirebaseDB,
+    newMessageNotifications,
+    setNewMessageNotifications,
+  };
+
+  useEffect(() => {
+    if (
+      isUserLoggedIn ||
+      getFromSessionStorage("isLoggedIn", false) == "true"
+    ) {
+      function checkForMessageNotificationsFromFirebase() {
+        const database = startFirebase();
+        setFirebaseDB(database);
+        const loggedInUserPrincipal = getFromSessionStorage(
+          "principalId",
+          true
+        );
+        //listen for new messages
+        onValue(ref(database, `${loggedInUserPrincipal}`), (snapshot) => {
+          if (snapshot.exists()) {
+            const messages = [];
+            snapshot.forEach((child) =>
+              messages.push({ id: child.key, ...child.val() })
+            );
+            setNewMessageNotifications(messages);
+            // snapshot.forEac((child) => console.log(child.val()));
+            // setNewMessageNotifications([
+            //   ...newMessageNotifications,
+            //   snapshot.val(),
+            // ]);
+            // console.log(snapshot.val());
+          }
+        });
+      }
+      checkForMessageNotificationsFromFirebase();
+    }
+  }, [isUserLoggedIn]);
   return (
     <AppContext.Provider value={stateValues}>
       <ThemeProvider theme={darkTheme}>

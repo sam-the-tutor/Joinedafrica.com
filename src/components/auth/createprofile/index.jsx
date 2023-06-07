@@ -1,7 +1,16 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SendIcon from "@mui/icons-material/Send";
-import { Box, Button, Container, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { uploadFileToPostAssetCanister } from "../../../canisters/post_assets";
@@ -9,10 +18,11 @@ import { profile } from "../../../canisters/profile";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { getUniqueId, setSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import { getCities } from "../../myAccount/createposts/listOfCategories"
+import { getCities } from "../../myAccount/createposts/listOfCategories";
 import Header from "../../navigation/header";
 import { internet_identity } from "../Login";
 import { IdentitySetup, Image, ImageContainer } from "./style";
+import { AppContext } from "../../../context";
 
 export default function CreateProfile() {
   const [principal, setPrincipal] = useState("");
@@ -21,11 +31,12 @@ export default function CreateProfile() {
     firstName: "",
     lastName: "",
     email: "",
-    location : "",
+    location: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   // navigation so we can go back to the home page after saving the users profile
   const navigate = useNavigate();
+  const { isUserLoggedIn, setIsUserLoggedIn } = useContext(AppContext);
 
   /**
    *  When the user submits the form, the users profile is sent to the post asset canister, the users information
@@ -42,7 +53,7 @@ export default function CreateProfile() {
     }
     setIsLoading(true);
     const createdProfile = { ...userProfile };
-    console.log(createdProfile)
+    console.log(createdProfile);
     const profileImagePath = principal + "/profile/" + getUniqueId();
     console.log(userProfile.profilePicture);
     const key = await uploadFileToPostAssetCanister(
@@ -66,9 +77,10 @@ export default function CreateProfile() {
       setSessionStorage("lastName", userProfile.lastName, false);
       setSessionStorage("email", userProfile.email, true);
       setSessionStorage("principalId", principal, true);
-      setSessionStorage("location", userProfile.location, true);
+      setSessionStorage("location", userProfile.location, false);
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
+      setIsUserLoggedIn(true);
       navigate("/home");
     }
     setIsLoading(false);
@@ -138,22 +150,19 @@ export default function CreateProfile() {
           }
         />
 
-
-        <InputLabel id="demo-simple-select-label" sx={{fontSize:20, mt:2}}>Location</InputLabel>
+        <InputLabel id="demo-simple-select-label" sx={{ fontSize: 20, mt: 2 }}>
+          Location
+        </InputLabel>
         <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-            fullWidth
-            onChange={
-              e=>{setProfile({...userProfile,location : e.target.value})
-            }
-          }
-          >
-            {
-              getCities().map((city,index)=><MenuItem value={city}>{city}</MenuItem>)
-            }
-          </Select>
+          fullWidth
+          onChange={(e) => {
+            setProfile({ ...userProfile, location: e.target.value });
+          }}
+        >
+          {getCities().map((city, index) => (
+            <MenuItem key = {index} value={city}>{city}</MenuItem>
+          ))}
+        </Select>
 
         <IdentitySetup
           onClick={async () => setPrincipal(await internet_identity())}
