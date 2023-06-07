@@ -5,8 +5,10 @@ import {
   Divider,
   Grid,
   List,
+  Box,
   ListItem,
   ListItemText,
+  Typography,
   Paper,
   TextField,
   useMediaQuery,
@@ -23,13 +25,15 @@ import { getMyMessages, loadNewMessagesFromFirebase } from "./util";
 export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const [conversation, setConversation] = useState("");
   const [myMessages, setMyMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const messageEndRef = useRef(null);
   const myPrincipal = useRef(getFromSessionStorage("principalId", true));
   const { firebaseDB, newMessageNotifications } = useContext(AppContext);
 
   const theme = useTheme();
   const ismediumScreenSizeAndBelow = useMediaQuery(
-    theme.breakpoints.down("md"))
+    theme.breakpoints.down("md")
+  );
   useEffect(() => {
     setTimeout(
       () => messageEndRef.current.scrollIntoView({ behavior: "smooth" }),
@@ -38,24 +42,32 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   });
 
   useEffect(() => {
-    async function init() {
-      const chatMessages = await getMyMessages(isFriendSelected.profilePicture);
-      setMyMessages(chatMessages);
+    if (isFriendSelected) {
+      async function init() {
+        setLoading(true);
+        const chatMessages = await getMyMessages(
+          isFriendSelected.profilePicture
+        );
+        setMyMessages(chatMessages);
+        setLoading(false);
+      }
+      init();
     }
-    init();
-  }, []);
+  }, [isFriendSelected]);
 
   useEffect(() => {
     function init() {
-      const newMessages = loadNewMessagesFromFirebase(
-        isFriendSelected,
-        newMessageNotifications,
-        firebaseDB
-      );
-      setMyMessages([...myMessages, ...newMessages]);
+      if (isFriendSelected) {
+        const newMessages = loadNewMessagesFromFirebase(
+          isFriendSelected,
+          newMessageNotifications,
+          firebaseDB
+        );
+        setMyMessages([...myMessages, ...newMessages]);
+      }
     }
     init();
-  }, [newMessageNotifications]);
+  }, [newMessageNotifications, isFriendSelected]);
 
   async function sendMessage() {
     const myFriendPrincipal = isFriendSelected.profilePicture.substring(0, 63);
@@ -89,50 +101,69 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
         </Button>
       )}
 
-      <Grid item xs={12} md={9} component={Paper}>
-        <List style={{ height: "70vh", overflowY: "auto" }}>
-          {isFriendSelected ? (
-            myMessages.map((message, index) => (
-              <ListItem key={index}>
-                <Grid item xs={12}>
-                  <ListItemText
-                    sx={
-                      myPrincipal.current ===
-                      Principal.from(message.sender).toText()
-                        ? {
-                            bgcolor: "success.main",
-                            color: "success.contrastText",
-                            p: 2,
-                          }
-                        : {
-                            bgcolor: "primary.main",
-                            color: "primary.contrastText",
-                            p: 2,
-                          }
-                    }
-                    primary={message.messageContent}
-                    secondary={message.time + ", " + message.date}
-                    secondaryTypographyProps={{
-                      color: "black",
-                      textAlign: "right",
-                    }}
-                  />
-                </Grid>
-              </ListItem>
-            ))
+      <Grid
+        item
+        xs={12}
+        md={9}
+        component={Paper}
+        style={{
+          height: "500px",
+          position: "relative",
+        }}
+      >
+        <Box style={{ height: "400px", overflowY: "auto" }}>
+          {loading ? (
+            <Typography style={{ margin: "20px" }}>Loading...</Typography>
           ) : (
-            <ListItem style={{ textAlign: "center" }}>
-              You have to select a friend to view your message(s)
-            </ListItem>
+            <List>
+              {isFriendSelected ? (
+                myMessages.map((message, index) => (
+                  <ListItem key={index}>
+                    <Grid item xs={12}>
+                      <ListItemText
+                        sx={
+                          myPrincipal.current ===
+                          Principal.from(message.sender).toText()
+                            ? {
+                                bgcolor: "success.main",
+                                color: "success.contrastText",
+                                p: 2,
+                              }
+                            : {
+                                bgcolor: "primary.main",
+                                color: "primary.contrastText",
+                                p: 2,
+                              }
+                        }
+                        primary={message.messageContent}
+                        secondary={message.time + ", " + message.date}
+                        secondaryTypographyProps={{
+                          color: "black",
+                          textAlign: "right",
+                        }}
+                      />
+                    </Grid>
+                  </ListItem>
+                ))
+              ) : (
+                <ListItem style={{ textAlign: "center" }}>
+                  You have to select a friend to view your message(s)
+                </ListItem>
+              )}
+              <div ref={messageEndRef} />
+            </List>
           )}
-          <div ref={messageEndRef} />
-        </List>
+        </Box>
+
         <Divider />
         <Grid
           container
           justifyContent="space-around"
           alignItems="center"
-          style={{ marginBottom: "10px" }}
+          style={{
+            position: "absolute",
+            bottom: "20px",
+          }}
         >
           <Grid item xs={7}>
             <TextField

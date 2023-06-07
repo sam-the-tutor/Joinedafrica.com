@@ -18,6 +18,7 @@ import { getFileFromPostAssetCanister } from "../../canisters/post_assets";
 import { getErrorMessage } from "../ErrorMessages";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import PopoverCmp from "./PopoverCmp";
+import { useNavigate } from "react-router-dom";
 import SnackbarCmp from "./SnackbarCmp";
 
 /**
@@ -42,6 +43,7 @@ export default function PostingCard({
   const [loading, setLoading] = useState(false);
   //front page image of a posting card
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
+  const navigate = useNavigate();
 
   function updateSnackBarCmp(message) {
     setShowSnackbarCmp(
@@ -110,14 +112,21 @@ export default function PostingCard({
     <Box>
       {updatedPost && (
         <>
-          <Card>
+          <Card
+            onClick={() =>
+              !canOnlyMeSeeThisPost &&
+              navigate("../view/post/" + updatedPost.postId)
+            }
+          >
             <CardHeader
               action={
-                <IconButton
-                  onClick={(event) => setPopupPosition(event.currentTarget)}
-                >
-                  <MoreVertIcon />
-                </IconButton>
+                canOnlyMeSeeThisPost && (
+                  <IconButton
+                    onClick={(event) => setPopupPosition(event.currentTarget)}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                )
               }
               title={
                 updatedPost.productTitle.length > MAX_lENGTH_OF_TITLE
