@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import {
   Card,
   CardHeader,
@@ -13,13 +13,30 @@ import {
   Button,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { getFileFromPostAssetCanister } from "../../canisters/post_assets";
+import {createObjectURLFromArrayOfBytes  } from "../../util/functions"
 
-export default function Content() {
+
+
+
+export default function Content({post}) {
+
+  const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
+
+  useEffect(() => {
+    async function loadPost() {
+      const file = await getFileFromPostAssetCanister(post.images[0]);
+      setPostCardDisplayImage(createObjectURLFromArrayOfBytes(file._content));
+    }
+    loadPost();
+  }, []);
+
   return (
-    <Card sx={{ width: "250px" }}>
+    <Card sx={{ width: "250px", margin: 1 }}>
       <CardMedia
-        src="https://picsum.photos/id/0/5000/3333"
+        src={postCardDisplayImage}
         height="200"
+        sx={{objectFit: "contain"}}
         component="img"
       />
 
@@ -31,7 +48,6 @@ export default function Content() {
               Laptop 2019-edition 4gb Ram Laptop 2019-edition 4gb Ram
             </Typography>
           </Grid>
-
           <Grid item xs={12} sx={{ display: "flex" }}>
             <IconButton>
               <FavoriteBorderIcon />

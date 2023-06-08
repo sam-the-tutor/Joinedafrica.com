@@ -7,20 +7,36 @@ import {
   ListItemText,
   Toolbar,
   Grid,
+  Typography,
 } from "@mui/material";
-import React from "react";
+import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  createObjectURLFromArrayOfBytes,
+  getFromSessionStorage,
+  getUniqueId,
+  setSessionStorage,
+} from "../../util/functions";
 
 import { DrawerContainer, TypographyCmp } from "./style";
 import Feed from "./Feed";
+import Feed2 from "./Feed2";
 import Header from "../navigation/header";
 import { categories } from "../myAccount/createposts/listOfCategories";
 
+
 export default function Body() {
+
+  //track whether the user's location
+  const [userLocation,setUserLocation] = useState(getFromSessionStorage("location",false))
+
+ console.log("User login : ",userLocation)
   const navigate = useNavigate();
+
   return (
     <>
-      <Header />
+      <Header setUserLocation={setUserLocation}/>
       <Box sx={{ display: "flex" }}>
         <Box sx={{ display: { md: "block", xs: "none" } }}>
           <DrawerContainer variant="permanent" anchor="left">
@@ -42,7 +58,7 @@ export default function Body() {
             </List>
           </DrawerContainer>
         </Box>
-        <Feed />
+        { userLocation === null ? <Feed2 />: <Feed userLocation={userLocation}/> }
       </Box>
     </>
   );
