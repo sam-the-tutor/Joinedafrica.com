@@ -1,36 +1,27 @@
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import {
   AppBar,
-  Badge,
   Button,
-  Input,
-  Box,
-  Stack,
-  Toolbar,
-  Typography,
   Grid,
+  IconButton,
   Menu,
   MenuItem,
+  Toolbar,
+  Typography,
   useMediaQuery,
-  IconButton,
-  TextField,
 } from "@mui/material";
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import { InputContainer, SearchIconCmp } from "./style";
 import { useTheme } from "@mui/material/styles";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ProfileIcon from "./profileIcon";
-import MoreIcon from "@mui/icons-material/MoreVert";
-
+import { AppContext } from "../../../context;
 import { setUserProfileDetails } from "./util";
+
 import { getFromSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../../auth/Login";
 import LeftBar from "../leftbar";
-import { AppContext } from "../../../context";
-import { getFromSessionStorage } from "../../../util/functions";
 
 
 export default function Header({ setUserLocation,refreshComponent }) {
@@ -40,6 +31,9 @@ export default function Header({ setUserLocation,refreshComponent }) {
   const [principal, setPrincipal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navigate = useNavigate();
+
   const ismediumScreenSizeAndBelow = useMediaQuery(
     useTheme().breakpoints.down("md")
   );
@@ -121,8 +115,10 @@ export default function Header({ setUserLocation,refreshComponent }) {
                   <MenuIcon />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: "flex" }}>
-                <Typography variant="h6">Joined Africa</Typography>
+              <Grid item sx={{ display: "flex", cursor: "pointer" }}>
+                <Typography variant="h6" onClick={() => navigate("../home")}>
+                  Joined Africa
+                </Typography>
               </Grid>
               <Grid item sx={{ display: { xs: "none", md: "block" } }}>
                 <img
@@ -131,7 +127,10 @@ export default function Header({ setUserLocation,refreshComponent }) {
                 />
               </Grid>
             </Grid>
-            {currentPageLocation != "/my-account" &&
+
+            {/* search functionality isn't part of an MVP */}
+
+            {/* {currentPageLocation != "/my-account" &&
               currentPageLocation != "/create-profile" && (
                 <Grid item sx={{ display: { md: "block", xs: "none" } }}>
                   <Grid
@@ -157,7 +156,7 @@ export default function Header({ setUserLocation,refreshComponent }) {
                     </Grid>
                   </Grid>
                 </Grid>
-              )}
+              )} */}
             <Grid item>
               {isUserLoggedIn.current ? (
                 <Grid item>

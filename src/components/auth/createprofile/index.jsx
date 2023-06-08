@@ -91,7 +91,7 @@ export default function CreateProfile() {
       <Header />
       <Container
         component="form"
-        style={{ marginTop: "100px" }}
+        style={{ marginTop: "130px", marginBottom: "80px" }}
         onSubmit={handleSubmit}
       >
         <Typography variant="h5" gutterBottom style={{ textAlign: "center" }}>
@@ -160,7 +160,9 @@ export default function CreateProfile() {
           }}
         >
           {getCities().map((city, index) => (
-            <MenuItem key = {index} value={city}>{city}</MenuItem>
+            <MenuItem key={index} value={city}>
+              {city}
+            </MenuItem>
           ))}
         </Select>
 

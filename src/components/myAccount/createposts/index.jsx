@@ -155,7 +155,7 @@ export default function CreatePost() {
             name="setAmount"
             inputProps={{ min: "0", step: "any" }}
             onChange={(e) => setState("setAmount", { amount: e.target.value })}
-            label="Price (USDT)"
+            label="Price (BTC)"
           />
           {CreatePostSpecificationForm(state, setState)}
           <TextField

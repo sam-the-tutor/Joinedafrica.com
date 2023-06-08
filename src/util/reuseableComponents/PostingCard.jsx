@@ -162,7 +162,7 @@ export default function PostingCard({
                   alignItems: "center",
                 }}
               >
-                {updatedPost.amount} USDT
+                {updatedPost.amount} BTC
               </Typography>
               {loading && <CircularProgress size={35} />}
             </Box>

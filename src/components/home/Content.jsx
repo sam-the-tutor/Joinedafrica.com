@@ -18,6 +18,7 @@ import {createObjectURLFromArrayOfBytes  } from "../../util/functions"
 
 
 
+
 export default function Content({post}) {
 
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
@@ -29,6 +30,7 @@ export default function Content({post}) {
     }
     loadPost();
   }, []);
+
   return (
     <Card sx={{ width: "250px", margin: 1 }}>
       <CardMedia
@@ -40,25 +42,30 @@ export default function Content({post}) {
 
       <Divider />
       <CardActions>
-
-      <Grid container>
-        <Grid item xs={12}>
-        <Typography>
-            {post.productTitle}
-        </Typography>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography>
+              Laptop 2019-edition 4gb Ram Laptop 2019-edition 4gb Ram
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sx={{ display: "flex" }}>
+            <IconButton>
+              <FavoriteBorderIcon />
+            </IconButton>
+            <Typography sx={{ marginTop: "10px", marginLeft: "15px" }}>
+              15 BTC
+            </Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <Button
+              fullWidth={true}
+              variant="outlined"
+              sx={{ textAlign: "center" }}
+            >
+              View
+            </Button>
+          </Grid>
         </Grid>
-  
-      <Grid item xs={12} sx={{ display: "flex" }}>
-        <IconButton>
-          <FavoriteBorderIcon />
-        </IconButton>
-        <Typography sx={{marginTop: "10px",marginLeft:"15px"}}>
-            {post.amount} USDT
-        </Typography>
-        </Grid>
-        <Grid item xs={10}>
-        </Grid>
-       </Grid>
       </CardActions>
     </Card>
   );
