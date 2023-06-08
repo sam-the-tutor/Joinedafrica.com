@@ -14,6 +14,7 @@ import {
 import { categories } from "../../myAccount/createposts/listOfCategories";
 import { useNavigate } from "react-router-dom";
 import { DrawerContainer } from "./style";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 export default function LeftBar({ open, close }) {
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ export default function LeftBar({ open, close }) {
         zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
+      <Button onClick={close}>
+        <ArrowBackIosIcon />
+        Go Back
+      </Button>
+
       <img src="./Logo_without_background.png" style={{ width: "30%" }} />
       <Typography variant="h5">All categories</Typography>
 
@@ -41,7 +47,10 @@ export default function LeftBar({ open, close }) {
             </ListItemButton>
           </ListItem>
         ))}
-        <ListItem style={{ marginTop: "30px" }}>
+
+        {/* search functionality isn't part of an MVP */}
+
+        {/* <ListItem style={{ marginTop: "30px" }}>
           <Grid container alignItems="center" spacing={2}>
             <Grid item>
               <TextField placeholder="Search..." />
@@ -50,7 +59,7 @@ export default function LeftBar({ open, close }) {
               <Button variant="outlined">Search</Button>
             </Grid>
           </Grid>
-        </ListItem>
+        </ListItem> */}
       </List>
     </DrawerContainer>
   );

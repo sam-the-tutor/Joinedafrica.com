@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-
 export default function Content() {
   return (
     <Card sx={{ width: "250px" }}>
@@ -26,26 +25,31 @@ export default function Content() {
 
       <Divider />
       <CardActions>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography>
+              Laptop 2019-edition 4gb Ram Laptop 2019-edition 4gb Ram
+            </Typography>
+          </Grid>
 
-      <Grid container>
-        <Grid item xs={12}>
-        <Typography>
-            Laptop 2019-edition 4gb Ram  Laptop 2019-edition 4gb Ram
-        </Typography>
+          <Grid item xs={12} sx={{ display: "flex" }}>
+            <IconButton>
+              <FavoriteBorderIcon />
+            </IconButton>
+            <Typography sx={{ marginTop: "10px", marginLeft: "15px" }}>
+              15 BTC
+            </Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <Button
+              fullWidth={true}
+              variant="outlined"
+              sx={{ textAlign: "center" }}
+            >
+              View
+            </Button>
+          </Grid>
         </Grid>
-  
-      <Grid item xs={12} sx={{ display: "flex" }}>
-        <IconButton>
-          <FavoriteBorderIcon />
-        </IconButton>
-        <Typography sx={{marginTop: "10px",marginLeft:"15px"}}>
-            15 USDT
-        </Typography>
-        </Grid>
-        <Grid item xs={10}>
-        <Button fullWidth={true} variant="outlined" sx={{textAlign:"center"}}>View</Button>
-        </Grid>
-       </Grid>
       </CardActions>
     </Card>
   );

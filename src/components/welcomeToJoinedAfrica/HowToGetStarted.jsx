@@ -1,10 +1,14 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Step from "@mui/material/Step";
-import StepContent from "@mui/material/StepContent";
-import StepLabel from "@mui/material/StepLabel";
-import Stepper from "@mui/material/Stepper";
-import Typography from "@mui/material/Typography";
+import {
+  useMediaQuery,
+  Box,
+  Button,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import * as React from "react";
 
@@ -48,6 +52,11 @@ export default function HowToGetStarted() {
     setActiveStep(0);
   };
 
+  const theme = useTheme();
+  const ismediumScreenSizeAndBelow = useMediaQuery(
+    theme.breakpoints.down("md")
+  );
+
   return (
     <Box>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -58,14 +67,16 @@ export default function HowToGetStarted() {
               <Typography style={{ color: "#d8d8df" }}>
                 {step.description}
               </Typography>
-              <img
-                src={step.imgSrc}
-                style={{
-                  width: "100%",
-                  marginTop: "30px",
-                  marginBottom: "30px",
-                }}
-              />
+              {!ismediumScreenSizeAndBelow && (
+                <img
+                  src={step.imgSrc}
+                  style={{
+                    width: "100%",
+                    marginTop: "30px",
+                    marginBottom: "30px",
+                  }}
+                />
+              )}
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button
