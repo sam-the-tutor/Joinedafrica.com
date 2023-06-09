@@ -20,8 +20,8 @@ import {
 } from "../../util/functions";
 
 import { DrawerContainer, TypographyCmp } from "./style";
-import Feed from "./Feed";
-import Feed2 from "./Feed2";
+import ForLoggedInUser from "./ForLoggedInUser";
+import NotLoggedInUser from "./NotLoggedInUser";
 import Header from "../navigation/header";
 import { categories } from "../myAccount/createposts/listOfCategories";
 
@@ -58,7 +58,7 @@ export default function Body() {
             </List>
           </DrawerContainer>
         </Box>
-        { userLocation === null ? <Feed2 />: <Feed userLocation={userLocation}/> }
+        { userLocation === null ? <NotLoggedInUser />: <ForLoggedInUser userLocation={userLocation}/> }
       </Box>
     </>
   );

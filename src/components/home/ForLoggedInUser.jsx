@@ -4,7 +4,7 @@ import Content from "./Content";
 import { categories } from "../myAccount/createposts/listOfCategories"
 import Top10Posts  from "../../util/reuseableComponents/Top10Posts"
 
-export default function Feed({userLocation}) {
+export default function ForLoggedInUser({userLocation}) {
 
   return (
     <Box style={{ margin: "10px", padding: "4px", width:"100%" } } >
