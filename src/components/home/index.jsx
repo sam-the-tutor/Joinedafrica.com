@@ -9,7 +9,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -25,18 +25,18 @@ import NotLoggedInUser from "./NotLoggedInUser";
 import Header from "../navigation/header";
 import { categories } from "../myAccount/createposts/listOfCategories";
 
-
 export default function Body() {
-
   //track whether the user's location
-  const [userLocation,setUserLocation] = useState(getFromSessionStorage("location",false))
+  const [userLocation, setUserLocation] = useState(
+    getFromSessionStorage("location", false)
+  );
 
- console.log("User login : ",userLocation)
+  console.log("User login : ", userLocation);
   const navigate = useNavigate();
 
   return (
     <>
-      <Header setUserLocation={setUserLocation}/>
+      <Header setUserLocation={setUserLocation} />
       <Box sx={{ display: "flex" }}>
         <Box sx={{ display: { md: "block", xs: "none" } }}>
           <DrawerContainer variant="permanent" anchor="left">
@@ -58,7 +58,11 @@ export default function Body() {
             </List>
           </DrawerContainer>
         </Box>
-        { userLocation === null ? <NotLoggedInUser />: <ForLoggedInUser userLocation={userLocation}/> }
+        {userLocation === null ? (
+          <NotLoggedInUser />
+        ) : (
+          <ForLoggedInUser userLocation={userLocation} />
+        )}
       </Box>
     </>
   );

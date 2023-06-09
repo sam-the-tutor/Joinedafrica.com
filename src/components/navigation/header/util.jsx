@@ -1,13 +1,14 @@
-import React, {useState}  from "react"
+import React, { useState } from "react";
 import { profile } from "../../../canisters/profile";
-import { setSessionStorage,getFromSessionStorage } from "../../../util/functions";
+import { setSessionStorage } from "../../../util/functions";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 
 export async function setUserProfileDetails(principal) {
-
   const authenticatedProfileUser = await profile();
   let result = await authenticatedProfileUser.getUserProfile();
+  console.log(result);
   if (result?.err) {
-    //   alert(getErrorMessage(result.err));
+    alert(getErrorMessage(result.err));
   } else {
     const profile = { ...result.ok };
     //encrypt the users email, principalId and profilePicture only as they are confidential.
@@ -20,4 +21,3 @@ export async function setUserProfileDetails(principal) {
     setSessionStorage("isLoggedIn", "true", false);
   }
 }
-

@@ -167,7 +167,7 @@ export default function CreateProfile() {
         </Select>
 
         <IdentitySetup
-          onClick={async () => setPrincipal(await internet_identity())}
+          onClick={async () => await internet_identity(setPrincipal)}
         >
           <Typography style={{ marginRight: "5px" }}>
             Set up your identity
