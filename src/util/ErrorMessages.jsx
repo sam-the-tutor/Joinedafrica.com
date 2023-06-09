@@ -1,23 +1,25 @@
 //disply error message based on the error type
 
 export function getErrorMessage(error) {
-  console.log(error);
-  if (error.UnAuthorizedUser) {
-    return "Please log in or create an account";
-  }
-  if (error.UserNotFound) {
-    return "User not found";
-  }
-  if (error.UserAlreadyExists) {
-    return "User already exists";
-  }
-  if (error.PostNotFound) {
-    return "Post not found";
-  }
-  if (error.CategoryNotFound) {
-    return "Category not found";
-  }
-  if (error.SubcategoryNotFound) {
-    return "Subcategory not found";
+  switch (Object.keys(error)[0]) {
+    case "UnAuthorizedUser": {
+      return "User is unAuthorized";
+    }
+    case "UserNotFound":{
+      return "User not found";
+    }
+    case "UserAlreadyExists":{
+      return "User already exists";
+    }
+    case "PostNotFound":{
+      return "Post not found";
+    }
+    case "CategoryNotFound":{
+      return "Category not found";
+
+    }
+    case "SubcategoryNotFound":{
+      return "Subcategory not found";
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { AuthClient } from "@dfinity/auth-client";
-export async function internet_identity() {
+export async function internet_identity(setPrincipal) {
   const authClient = await AuthClient.create({
     idleOptions: {
       disableIdle: true,
@@ -8,15 +8,16 @@ export async function internet_identity() {
   });
 
   if (await authClient.isAuthenticated()) {
-    const identity = await authClient.getIdentity();
-    return identity.getPrincipal().toText();
-    
+    const identity = authClient.getIdentity();
+    setPrincipal(identity.getPrincipal().toText());
   } else {
-    await authClient.login({
+    authClient.login({
+      windowOpenerFeatures:
+        "toolbar=0,location=0,menubar=0,width=500,height=500,left=100,top=100",
       identityProvider: process.env.INTERNET_IDENTITY_URL,
-      onSuccess: async () => {
-        const identity = await authClient.getIdentity();
-        return identity.getPrincipal().toText();
+      onSuccess: () => {
+        const identity = authClient.getIdentity();
+        setPrincipal(identity.getPrincipal().toText());
       },
     });
   }

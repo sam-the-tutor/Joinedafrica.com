@@ -54,12 +54,6 @@ export default function App() {
               messages.push({ id: child.key, ...child.val() })
             );
             setNewMessageNotifications(messages);
-            // snapshot.forEac((child) => console.log(child.val()));
-            // setNewMessageNotifications([
-            //   ...newMessageNotifications,
-            //   snapshot.val(),
-            // ]);
-            // console.log(snapshot.val());
           }
         });
       }
