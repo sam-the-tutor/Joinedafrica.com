@@ -8,8 +8,11 @@ import Body from "./components/home/index.jsx";
 import MyAccount from "./components/myAccount/index.jsx.jsx";
 import ViewCategory from "./components/views/category/index.jsx";
 import ViewPost from "./components/views/post/index.jsx";
+
 import ViewSubcategory from "./components/views/subcategory/index.jsx";
 import WelcomePage from "./components/welcomeToJoinedAfrica/index.jsx";
+import Aboutus from "./components/welcomeToJoinedAfrica/aboutus/index.jsx";
+import Contactus from "./components/welcomeToJoinedAfrica/contactus/index.jsx";
 import { AppContext } from "./context";
 import { ref, onValue } from "firebase/database";
 import { getFromSessionStorage } from "./util/functions.jsx";
@@ -70,6 +73,8 @@ export default function App() {
             <Route exact path="home" element={<Body />}></Route>
             <Route exact path="my-account" element={<MyAccount />} />
             <Route exact path="view/post/:postId" element={<ViewPost />} />
+            <Route exact path="aboutus" element={<Aboutus />} />
+            <Route exact path="contactus" element={<Contactus />} />
             <Route
               exact
               path="view/category/:categoryName"

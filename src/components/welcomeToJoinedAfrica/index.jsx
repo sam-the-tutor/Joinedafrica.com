@@ -5,7 +5,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { Box, Button, Typography, Container } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { Introduction } from "./style";
 import HowToGetStarted from "./HowToGetStarted";
@@ -131,26 +131,43 @@ export default function WelcomePage() {
         }}
       >
         <Box>
-          <Button sx={{ color: "black" }}>About us</Button>
-          <Button sx={{ color: "black" }}>Contact us</Button>
-          <Button sx={{ color: "black" }}>Privacy policy</Button>
+          <Button sx={{ color: "black" }} onClick={() => navigate("./aboutus")}>
+            About us
+          </Button>
+          <Button
+            sx={{ color: "black" }}
+            onClick={() => navigate("./contactus")}
+          >
+            Contact us
+          </Button>
         </Box>
         <Box>
-          <Button sx={{ color: "black" }}>
-            <FacebookIcon />
-          </Button>
-          <Button sx={{ color: "black" }}>
-            <YouTubeIcon />
-          </Button>
-          <Button sx={{ color: "black" }}>
+          <a
+            href="https://www.linkedin.com/company/joinedafrica/"
+            style={{ color: "black", marginRight: "10px" }}
+          >
             <LinkedInIcon />
-          </Button>
-          <Button sx={{ color: "black" }}>
-            <TwitterIcon />
-          </Button>
-          <Button sx={{ color: "black" }}>
+          </a>
+          <a
+            href="https://www.instagram.com/joinedafrica/"
+            style={{ color: "black", marginRight: "10px" }}
+          >
             <InstagramIcon />
-          </Button>
+          </a>
+
+          <a
+            href="https://www.facebook.com/JoinedAfrica"
+            style={{ color: "black", marginRight: "10px" }}
+          >
+            <FacebookIcon />
+          </a>
+
+          <a
+            href="https://www.youtube.com/@JoinedAfrica/"
+            style={{ color: "black", marginRight: "10px" }}
+          >
+            <YouTubeIcon />
+          </a>
         </Box>
       </Box>
     </Box>

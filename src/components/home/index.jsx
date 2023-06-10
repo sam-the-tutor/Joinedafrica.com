@@ -58,11 +58,11 @@ export default function Body() {
             </List>
           </DrawerContainer>
         </Box>
-        {userLocation === null ? (
+        {/* {userLocation === null ? (
           <NotLoggedInUser />
         ) : (
           <ForLoggedInUser userLocation={userLocation} />
-        )}
+        )} */}
       </Box>
     </>
   );
