@@ -19,6 +19,8 @@ import { getSubcategory } from "../../myAccount/createposts/listOfCategories";
 import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import Top10Posts from "../../../util/reuseableComponents/Top10Posts";
 import LeftBar from "./filter";
+import { getErrorMessage } from "../../../util/ErrorMessages";
+
 /**
  * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
  * in that category
@@ -36,10 +38,15 @@ export default function ViewCategory() {
       //joinedafrica is making the call because the method it calls is public and doesn't
       //need authorization
       const postings = await post.getTop10PostingsInCategory(categoryName);
-      const nonEmptySubcategory = postings.ok.filter(
-        (posting) => posting.post.length > 0
-      );
-      setTop10Posts(nonEmptySubcategory);
+      if (postings?.err) {
+        alert(getErrorMessage(postings.err));
+      } else {
+        const nonEmptySubcategory = postings.ok.filter(
+          (posting) => posting.post.length > 0
+        );
+        setTop10Posts(nonEmptySubcategory);
+      }
+
       setLoading(false);
     }
     getPostings();
