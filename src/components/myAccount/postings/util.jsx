@@ -28,15 +28,14 @@ export async function getUserProfile() {
 }
 
 export function filterMyPostings(myPostings, selectedPostId) {
-  const newPostings = myPostings.filter((posting) => {
-    const targetPost = posting[0].postId == selectedPostId;
-    if (targetPost) {
-      deletePostImagesFromPostAssetCanister(posting[0].images);
-      return false;
-    }
-    return true;
-  });
-  return newPostings;
+  const result = [];
+  for (var i = 0; i < myPostings.length; i++) {
+    const post = myPostings[i][0];
+    if (post.postId == selectedPostId) {
+      deletePostImagesFromPostAssetCanister(post.images);
+    } else result.push(myPostings[i]);
+  }
+  return result;
 }
 
 export async function deletePost(selectedPostId) {
