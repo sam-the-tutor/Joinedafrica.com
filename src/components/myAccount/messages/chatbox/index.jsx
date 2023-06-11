@@ -20,7 +20,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { conversation as conversationCanister } from "../../../../canisters/conversation";
 import { AppContext } from "../../../../context";
 import { getFromSessionStorage } from "../../../../util/functions";
-import { getMyMessages, loadNewMessagesFromFirebase } from "./util";
+import {
+  getMyMessages,
+  loadNewMessagesFromFirebase,
+  removeSeenMessageNotifications,
+} from "./util";
 
 export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const [conversation, setConversation] = useState("");
@@ -63,7 +67,8 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
           newMessageNotifications,
           firebaseDB
         );
-        setMyMessages([...myMessages, ...newMessages]);
+        setMyMessages([...myMessages, ...newMessages[0]]);
+        removeSeenMessageNotifications(newMessages[0], firebaseDB);
       }
     }
     init();

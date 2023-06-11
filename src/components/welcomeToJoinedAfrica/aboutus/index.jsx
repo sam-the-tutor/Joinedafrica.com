@@ -1,10 +1,13 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Toolbar } from "@mui/material";
 import { team } from "./team";
-team;
+import Header from "../../navigation/header";
+
 export default function Aboutus() {
   return (
     <Box>
+      <Header />
+      <Toolbar />
       <Box style={{ margin: "20px" }}>
         <Typography style={{ textAlign: "center" }} variant="h3">
           Welcome to Joined Africa
@@ -52,7 +55,7 @@ export default function Aboutus() {
           <Typography>
             We value your feedback and suggestions as we strive to improve the
             platform continually. If you have any questions, concerns, or ideas
-            for site enhancements, please email us at joinedafrica.com.
+            for site enhancements, please email us at joinedafrica@gmail.com.
           </Typography>
         </Box>
         <Box style={{ margin: "20px" }}>
@@ -76,8 +79,17 @@ export default function Aboutus() {
         </Box>
       </Box>
 
-      <Box style={{ marginBottom:"40px", marginLeft:"20px", marginRight:"20px" }}>
-        <Typography style={{ textAlign: "center", marginBottom:"20px" }} variant="h4">
+      <Box
+        style={{
+          marginBottom: "40px",
+          marginLeft: "20px",
+          marginRight: "20px",
+        }}
+      >
+        <Typography
+          style={{ textAlign: "center", marginBottom: "20px" }}
+          variant="h4"
+        >
           Creators
         </Typography>
         <Box
@@ -89,15 +101,7 @@ export default function Aboutus() {
         >
           {team.map((member, index) => (
             <Box key={index}>
-              <img
-                src={member.image}
-                style={{
-                  width: "150px",
-                  objectFit: "cover",
-                  height: "150px",
-                  borderRadius: "50%",
-                }}
-              />
+              <img src={member.image} style={member.style} />
               <Typography>{member.name}</Typography>
             </Box>
           ))}

@@ -209,78 +209,27 @@ shared ({ caller = initializer }) actor class () {
     };
   };
 
+  // /**
+  //   Returns the top 10 postings from each subcategory in a category. This method doesn't need authentication
+  //   and can be accessed by a user without an account. The post has to be published to the market place before it
+  //   can be viewed by other users
+  // */
+  public shared query func getTop10PostingsInCategory(category : Category) : async Result<[Top10Posts], Error> {
 
-  //my edited functions
-  public shared query func getTop10PostingsInCategory(category : Category) : async Result<[Post], Error> {
-    let top10Posts = Buffer.Buffer<Post>(0);
+    let top10Posts = Buffer.Buffer<Top10Posts>(0);
     //get all subcategories in a category
     let subCategories : [Subcategory] = DatabaseStructure.getSubcategory(category);
     //get the top 10 posts in a subcategory
-
     for (subcategory in subCategories.vals()) {
       switch (_getTop10PostingsInCategory(category, subcategory)) {
-        case (#ok(posts)) {
-          for (post in posts.vals()) {
-            top10Posts.add(post);
-          };
-        };
+        case (#ok(posts)) top10Posts.add(posts);
         //the failure could be one of the error messages
         case (#err(failure)) return #err(failure);
       };
     };
-
     return #ok(Buffer.toArray(top10Posts));
   };
-
-  private func _getTop10PostingsInCategory(category : Category, subcategory : Subcategory) : Result.Result<[Post], Error> {
-    let top10Posts = Buffer.Buffer<Post>(0);
-    switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
-      case null return #err(#CategoryNotFound);
-      case (?subTrie) {
-        switch (Trie.get(subTrie, categoryKey(subcategory), Text.equal)) {
-          case null return #err(#SubcategoryNotFound);
-          case (?listOfPostIds) {
-            let arrayOfPostIds = List.toArray(listOfPostIds);
-            var index = 0;
-
-            //if we get to the 2nd post, we break the loop
-            while (index < arrayOfPostIds.size() and index < 2) {
-              switch (getPostById(arrayOfPostIds[index])) {
-                case (#ok(post)) {top10Posts.add(post);};
-                case (#err(failure)) return #err(failure);
-              };
-              index := index + 1;
-            };
-          };
-        };
-      };
-    };
-    return #ok(Buffer.toArray(top10Posts));
-  };
-
-    //my edited functions
-  public shared query func locationSpecificPosts(category : Category, location : Text) : async Result<[Post], Error> {
-    let top10Posts = Buffer.Buffer<Post>(0);
-    //get all subcategories in a category
-    let subCategories : [Subcategory] = DatabaseStructure.getSubcategory(category);
-    //get the top 10 posts in a subcategory
-
-    for (subcategory in subCategories.vals()) {
-      switch (_myFunc2(category, subcategory, location)) {
-        case (#ok(posts)) {
-          for (post in posts.vals()) {
-            top10Posts.add(post);
-          };
-        };
-        //the failure could be one of the error messages
-        case (#err(failure)) return #err(failure);
-      };
-    };
-
-    return #ok(Buffer.toArray(top10Posts));
-  };
-
-  private func _myFunc2(category : Category, subcategory : Subcategory, location : Text) : Result.Result<[Post], Error> {
+  private func _getTop10PostingsInCategory(category : Category, subcategory : Subcategory) : Result.Result<Top10Posts, Error> {
     let top10Posts = Buffer.Buffer<Post>(0);
     switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
       case null return #err(#CategoryNotFound);
@@ -291,13 +240,11 @@ shared ({ caller = initializer }) actor class () {
             let arrayOfPostIds = List.toArray(listOfPostIds);
             var index = 0;
             //if we get to the 11th post, we break the loop
-            while (index < arrayOfPostIds.size() and index < 2) {
+            while (index < arrayOfPostIds.size() and index < 11) {
               switch (getPostById(arrayOfPostIds[index])) {
                 case (#ok(post)) {
-                  if (post.location == location) {
-                    top10Posts.add(post);
-                  };
 
+                  top10Posts.add(post);
                 };
                 case (#err(failure)) return #err(failure);
               };
@@ -307,9 +254,11 @@ shared ({ caller = initializer }) actor class () {
         };
       };
     };
-    return #ok(Buffer.toArray(top10Posts));
+    return #ok({
+      post = Buffer.toArray(top10Posts);
+      name = subcategory;
+    });
   };
-
 
   func hashKey(t : UserId) : Trie.Key<UserId> {
     { hash = Principal.hash(t); key = t };

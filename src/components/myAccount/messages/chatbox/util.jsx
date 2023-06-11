@@ -24,6 +24,7 @@ function sort(newMessages) {
   });
 }
 // loads new messages from firebase and removes messages that are already seen from firebase
+//returns an array contains [newMessagesFromSelectedFriend, newMessagesFromOtherFriends]
 export function loadNewMessagesFromFirebase(
   isFriendSelected,
   newMessageNotifications,
@@ -32,6 +33,7 @@ export function loadNewMessagesFromFirebase(
   const myFriendPrincipal = isFriendSelected.profilePicture.substring(0, 63);
   const newMessagesFromSelectedFriend = [];
   const newMessagesFromOtherFriends = [];
+
   newMessageNotifications.forEach((message) => {
     const sendersPrincipal = Principal.from(message.sender).toText();
     if (sendersPrincipal === myFriendPrincipal) {
@@ -40,12 +42,11 @@ export function loadNewMessagesFromFirebase(
       newMessagesFromOtherFriends.push(message);
     }
   });
-  removeSeenMessageNotifications(newMessagesFromSelectedFriend, firebaseDB);
-  return newMessagesFromSelectedFriend;
+  return [newMessagesFromSelectedFriend, newMessagesFromOtherFriends];
 }
 
 //remove seen messages from firebase
-function removeSeenMessageNotifications(
+export function removeSeenMessageNotifications(
   newMessagesFromSelectedFriend,
   firebaseDB
 ) {

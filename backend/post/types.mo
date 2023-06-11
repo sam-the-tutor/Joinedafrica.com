@@ -197,7 +197,7 @@ module {
     };
 
     public type Top10Posts = {
-        subCategoryName : Subcategory;
+        name : Text;
         post : [Post];
     };
 

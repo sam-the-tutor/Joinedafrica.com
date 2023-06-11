@@ -20,8 +20,8 @@ import {
 } from "../../util/functions";
 
 import { DrawerContainer, TypographyCmp } from "./style";
-import ForLoggedInUser from "./ForLoggedInUser";
-import NotLoggedInUser from "./NotLoggedInUser";
+// import ForLoggedInUser from "./ForLoggedInUser";
+// import NotLoggedInUser from "./NotLoggedInUser";
 import Header from "../navigation/header";
 import { categories } from "../myAccount/createposts/listOfCategories";
 

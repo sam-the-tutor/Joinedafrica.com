@@ -2,12 +2,13 @@ import { conversation } from "../../../../canisters/conversation";
 import { profile } from "../../../../declarations/profile";
 import { getFileFromPostAssetCanister } from "../../../../canisters/post_assets";
 import { createObjectURLFromArrayOfBytes } from "../../../../util/functions";
+import { getErrorMessage } from "../../../../util/ErrorMessages";
 
 export async function getAllMyFriends() {
   const authenticatedUser = await conversation();
   const myFriends = await authenticatedUser.getAllMyFriends();
   if (myFriends?.err) {
-    alert("sdfas");
+    alert(getErrorMessage(myFriends.err));
     return;
   }
   const friendsList = [];
