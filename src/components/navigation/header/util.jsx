@@ -15,7 +15,6 @@ export async function setUserProfileDetails(principal) {
     setSessionStorage("firstName", profile.firstName, false);
     setSessionStorage("lastName", profile.lastName, false);
     setSessionStorage("email", profile.email, true);
-    setSessionStorage("location", profile.location, false);
     setSessionStorage("principalId", principal, true);
     setSessionStorage("profilePicture", profile.profilePicture, true);
     setSessionStorage("isLoggedIn", "true", false);

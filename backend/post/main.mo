@@ -181,8 +181,30 @@ shared ({ caller = initializer }) actor class () {
     };
   };
 
+  //caller doens't have to be authorized
+  public shared query func getTop10PostingsInHomepage() : async Result<[Top10Posts], Error> {
+    let top10Posts = Buffer.Buffer<Top10Posts>(0);
+    //get all subcategories in a category
+    let allCategories : [Category] = DatabaseStructure.getAllCategories();
+    for (category in allCategories.vals()) {
+      switch (_getTop10PostingsInHomepage(category)) {
+        case (#err(result)) return #err(result);
+        case (#ok(result)) {
+          var posts = Buffer.Buffer<Post>(0);
+          for (top10PostCategory in result.vals()) {
+            for (post in top10PostCategory.post.vals()) {
+              posts.add(post);
+            };
+          };
+          top10Posts.add({ name = category; post = Buffer.toArray(posts) });
+        };
+      };
+    };
+    return #ok(Buffer.toArray(top10Posts));
+  };
+
   /**
-    This function is accessible to everybody and doens't need the caller to be authorized
+    This function is accessible to everybody and doens't need the caller to be authorized.
   */
   public shared query func getAllPostingsInSubcategory(category : Category, subcategory : Subcategory) : async Result<[Post], Error> {
     switch (Trie.get(publishedPosts, categoryKey(category), Text.equal)) {
@@ -207,6 +229,22 @@ shared ({ caller = initializer }) actor class () {
         };
       };
     };
+  };
+
+  private func _getTop10PostingsInHomepage(category : Category) : Result<[Top10Posts], Error> {
+
+    let top10Posts = Buffer.Buffer<Top10Posts>(0);
+    //get all subcategories in a category
+    let subCategories : [Subcategory] = DatabaseStructure.getSubcategory(category);
+    //get the top 10 posts in a subcategory
+    for (subcategory in subCategories.vals()) {
+      switch (_getTop10PostingsInCategory(category, subcategory)) {
+        case (#ok(posts)) top10Posts.add(posts);
+        //the failure could be one of the error messages
+        case (#err(failure)) return #err(failure);
+      };
+    };
+    return #ok(Buffer.toArray(top10Posts));
   };
 
   // /**
@@ -243,7 +281,6 @@ shared ({ caller = initializer }) actor class () {
             while (index < arrayOfPostIds.size() and index < 11) {
               switch (getPostById(arrayOfPostIds[index])) {
                 case (#ok(post)) {
-
                   top10Posts.add(post);
                 };
                 case (#err(failure)) return #err(failure);

@@ -27,18 +27,13 @@
         "profile"
       ]
     },
-    "message_notification": {
-      "main": "backend/message_notification/main.mo",
-      "type": "motoko"
-    },
     "frontend": {
       "dependencies": [
         "internet_identity",
         "profile",
         "conversation",
         "post",
-        "post_assets",
-        "message_notification"
+        "post_assets"
       ],
       "type": "assets",
       "frontend": {

@@ -1,5 +1,6 @@
 import Type "types";
 import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 
 module {
     type Database = Type.Database;
@@ -63,11 +64,17 @@ module {
     ];
 
     public func getSubcategory(category : Category) : [Subcategory] {
-        var index = 0;
         for (databaseCategory in Database.vals()) {
             if (databaseCategory.name == category) return databaseCategory.subcategory;
         };
         //category can't be found
         return [];
+    };
+    public func getAllCategories() : [Category] {
+        let allCategories = Buffer.Buffer<Category>(0);
+        for (category in Database.vals()) {
+            allCategories.add(category.name);
+        };
+        return Buffer.toArray(allCategories);
     };
 };

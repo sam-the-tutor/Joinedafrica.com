@@ -42,12 +42,8 @@ export default function ViewCategory() {
       if (postings?.err) {
         alert(getErrorMessage(postings.err));
       } else {
-        // const nonEmptySubcategory = postings.ok.filter((posting) => {
-        //   return posting.length > 0;
-        // });
         setTop10Posts(postings.ok);
       }
-
       setLoading(false);
     }
     getPostings();
