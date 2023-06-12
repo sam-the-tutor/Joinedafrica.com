@@ -23,7 +23,7 @@ import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../../auth/Login";
 import LeftBar from "../leftbar";
 
-export default function Header({ setUserLocation, refreshComponent }) {
+export default function Header({ refreshComponent }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const { setIsUserLoggedIn } = useContext(AppContext);
@@ -54,12 +54,9 @@ export default function Header({ setUserLocation, refreshComponent }) {
         setIsLoading(false);
         setMobileMoreAnchorEl(null);
         isUserLoggedIn.current = true;
-        setUserLocation(getFromSessionStorage("location",false))
         //reload the application
         setIsUserLoggedIn(true);
       }
-
-      // setUserLocation(getFromSessionStorage("location", false));
     }
     getUserProfile();
     //set the users principal as a dependency incase the user already has an account and clicks on login
@@ -103,7 +100,6 @@ export default function Header({ setUserLocation, refreshComponent }) {
       </div>
     </Menu>
   );
-  const currentPageLocation = location.pathname;
   return (
     <>
       <AppBar

@@ -5,38 +5,36 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
-  Grid,
   Typography,
+  Toolbar
 } from "@mui/material";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
-import {
-  createObjectURLFromArrayOfBytes,
-  getFromSessionStorage,
-  getUniqueId,
-  setSessionStorage,
-} from "../../util/functions";
-
-import { DrawerContainer, TypographyCmp } from "./style";
-// import ForLoggedInUser from "./ForLoggedInUser";
-// import NotLoggedInUser from "./NotLoggedInUser";
-import Header from "../navigation/header";
+import { post } from "../../declarations/post";
+import { getErrorMessage } from "../../util/ErrorMessages";
+import { Top10Posts } from "../../util/reuseableComponents/Top10Posts";
 import { categories } from "../myAccount/createposts/listOfCategories";
+import Header from "../navigation/header";
+import { DrawerContainer, TypographyCmp } from "./style";
 
 export default function Body() {
-  //track whether the user's location
-  const [userLocation, setUserLocation] = useState(
-    getFromSessionStorage("location", false)
-  );
-
-  console.log("User login : ", userLocation);
-  const navigate = useNavigate();
-
+  const [top10Posts, setTop10Posts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function init(){
+      setLoading(true);
+      const postsInHomepage = await post.getTop10PostingsInHomepage();
+      if(postsInHomepage?.err){
+        alert(getErrorMessage(postsInHomepage.err))
+      }
+      else setTop10Posts(postsInHomepage.ok)
+      setLoading(false);
+    }
+    init();
+  },[])
   return (
     <>
-      <Header setUserLocation={setUserLocation} />
+      <Header />
       <Box sx={{ display: "flex" }}>
         <Box sx={{ display: { md: "block", xs: "none" } }}>
           <DrawerContainer variant="permanent" anchor="left">
@@ -58,11 +56,15 @@ export default function Body() {
             </List>
           </DrawerContainer>
         </Box>
-        {/* {userLocation === null ? (
-          <NotLoggedInUser />
-        ) : (
-          <ForLoggedInUser userLocation={userLocation} />
-        )} */}
+        <Box style={{ padding: "24px", width: "100%" }}>
+          <Toolbar />
+          {
+            loading ? <Typography>Loading...</Typography> : 
+            top10Posts.map((post, index) => (
+              <Top10Posts key={index} name={post.name} posts={post.post} />
+            ))
+          }
+          </Box>
       </Box>
     </>
   );

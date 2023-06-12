@@ -22,7 +22,10 @@ export default function Contactus() {
       first_name : firstName,
       last_name : lastName,
     email,
-       message
+       message,
+       to_email : 'joinedafrica@gmail.com',
+       from_name : firstName + " " + lastName,
+       from_email : email
     }
   emailjs.send('service_nt6ppc3', 'template_vnfynjw', data, "1vq_JEOR5WKAHBp0x")
       .then(function(response) {

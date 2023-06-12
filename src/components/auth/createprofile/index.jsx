@@ -77,7 +77,6 @@ export default function CreateProfile() {
       setSessionStorage("lastName", userProfile.lastName, false);
       setSessionStorage("email", userProfile.email, true);
       setSessionStorage("principalId", principal, true);
-      setSessionStorage("location", userProfile.location, false);
       setSessionStorage("profilePicture", key, true);
       setSessionStorage("isLoggedIn", "true", false);
       setIsUserLoggedIn(true);

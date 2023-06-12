@@ -173,7 +173,7 @@ export default function CreatePost() {
           />
         </Stack>
       </Box>
-      <Box style={{ marginTop: "40px" }}>
+      <Box style={{ marginTop: "40px", marginBottom:"30px" }}>
         <Button variant="outlined" endIcon={<SendIcon />} type="submit">
           Create post
         </Button>
