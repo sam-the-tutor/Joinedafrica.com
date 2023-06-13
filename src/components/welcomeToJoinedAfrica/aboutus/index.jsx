@@ -1,15 +1,13 @@
 import React from "react";
 import { Typography, Box, Toolbar } from "@mui/material";
 import { team } from "./team";
-import Header from "../../navigation/header";
 
 export default function Aboutus() {
   return (
     <Box>
-      <Header />
       <Toolbar />
-      <Box style={{ margin: "20px" }}>
-        <Typography style={{ textAlign: "center" }} variant="h3">
+      <Box  sx = {{marginTop: {md : "40px" , xs :"20px"}}}>
+        <Typography style={{ textAlign: "center" }} variant="h4">
           Welcome to Joined Africa
         </Typography>
       </Box>

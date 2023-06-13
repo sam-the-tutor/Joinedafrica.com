@@ -5,21 +5,22 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
-  Toolbar
+  Toolbar,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { post } from "../../declarations/post";
 import { getErrorMessage } from "../../util/ErrorMessages";
 import { Top10Posts } from "../../util/reuseableComponents/Top10Posts";
 import { categories } from "../myAccount/createposts/listOfCategories";
-import Header from "../navigation/header";
 import { DrawerContainer, TypographyCmp } from "./style";
 
 export default function Body() {
   const [top10Posts, setTop10Posts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     async function init(){
       setLoading(true);
@@ -34,7 +35,7 @@ export default function Body() {
   },[])
   return (
     <>
-      <Header />
+
       <Box sx={{ display: "flex" }}>
         <Box sx={{ display: { md: "block", xs: "none" } }}>
           <DrawerContainer variant="permanent" anchor="left">

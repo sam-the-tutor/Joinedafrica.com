@@ -35,7 +35,7 @@ export default function ViewSubcategory() {
   }, []);
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <Box style={{ display: "flex", marginTop: "40px" }}>
         <Box sx={{ display: { xs: "none", md: "block" } }}>
           <DrawerContainer variant="permanent" anchor="left">

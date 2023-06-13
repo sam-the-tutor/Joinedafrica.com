@@ -2,7 +2,6 @@ import React, {useRef, useState} from "react";
 import { Box, Typography, TextField ,Toolbar, Button} from "@mui/material";
 import emailjs from "@emailjs/browser";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import Header from "../../navigation/header";
 import { useNavigate } from "react-router-dom";
 
 export default function Contactus() {
@@ -44,9 +43,8 @@ export default function Contactus() {
   return (
     
     <Box>
-      <Header />
       <Toolbar />
-      <Typography variant="h4" style = {{textAlign:"center", margin:"20px"}}>Anything you want us to know?</Typography>
+      <Typography variant="h4" sx = {{textAlign:"center", margin:{md:"40px 20px 20px 20px", xs : "20px"}}}>Anything you want us to know?</Typography>
 
       <form  onSubmit={submit} style = {{margin:"20px"}}>
         <TextField name="first_name" required label="first name" variant="outlined" type="text" onChange = {e => setFirstName(e.target.value)} style = {{width:"100%", marginBottom:"20px"}}/>

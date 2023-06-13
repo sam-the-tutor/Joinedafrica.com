@@ -33,7 +33,7 @@ export default function LeftBar({ open, close }) {
         Go Back
       </Button>
 
-      <img src="./Logo_without_background.png" style={{ width: "30%" }} />
+      <img src="../../Logo_without_background.png" style={{ width: "30%" }} />
       <Typography variant="h5">All categories</Typography>
 
       <List>

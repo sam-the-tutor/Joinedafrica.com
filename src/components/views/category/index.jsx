@@ -11,7 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
-import Header from "../../navigation/header";
 import { post } from "../../../declarations/post";
 import { profile } from "../../../declarations/profile";
 import { TypographyCmp, DrawerContainer } from "./style";
@@ -51,7 +50,6 @@ export default function ViewCategory() {
 
   return (
     <Box>
-      <Header />
       <Box style={{ display: "flex", marginTop: "20px" }}>
         <Box sx={{ display: { xs: "none", md: "block" } }}>
           <DrawerContainer variant="permanent" anchor="left">

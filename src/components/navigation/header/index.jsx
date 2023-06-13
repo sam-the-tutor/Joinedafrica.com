@@ -38,6 +38,7 @@ export default function Header({ refreshComponent }) {
   );
 
   const isUserLoggedIn = useRef(getFromSessionStorage("isLoggedIn") == "true");
+  const currentBrowserPathname = window.location.pathname;
 
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
@@ -100,6 +101,9 @@ export default function Header({ refreshComponent }) {
       </div>
     </Menu>
   );
+console.log(currentBrowserPathname);
+  // in the homepage, we don't want to display the header
+  if(currentBrowserPathname == "/") return null;
   return (
     <>
       <AppBar

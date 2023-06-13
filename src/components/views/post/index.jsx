@@ -26,7 +26,6 @@ import {
   getFromSessionStorage,
 } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import Header from "../../navigation/header";
 import { extractProductSpecification } from "./util";
 // import {AppContext} from "../../../../"
 import { AppContext } from "../../../context";
@@ -125,7 +124,6 @@ export default function ViewPost() {
 
   return (
     <Box>
-      <Header />
       <Toolbar />
       <Container
         style={{

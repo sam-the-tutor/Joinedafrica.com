@@ -45,10 +45,12 @@ export default function Friends({ setIsFriendSelected }) {
         height: "500px",
       }}
     >
-      {" "}
+
       {loading ? (
         <Typography style={{ margin: "15px" }}>Loading...</Typography>
-      ) : (
+      ) : 
+        allMyFriends.length == 0 ?  <Typography style={{ margin: "15px" }}>You have no friends at the moment</Typography> : 
+      (
         <List>
           {allMyFriends.map((profile, index) => (
             <ListItem

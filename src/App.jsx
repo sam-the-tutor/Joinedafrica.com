@@ -17,6 +17,7 @@ import { AppContext } from "./context";
 import { ref, onValue } from "firebase/database";
 import { getFromSessionStorage } from "./util/functions.jsx";
 import startFirebase from "./config/firebase.jsx";
+import Header from "./components/navigation/header/index.jsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -68,6 +69,7 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <BrowserRouter>
+        <Header />
           <Routes>
             <Route exact path="/" element={<WelcomePage />}></Route>
             <Route exact path="home" element={<Body />}></Route>
