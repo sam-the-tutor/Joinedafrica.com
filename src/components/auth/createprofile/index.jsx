@@ -72,7 +72,7 @@ export default function CreateProfile() {
       //handle the error
       alert(getErrorMessage(result.err));
     } else {
-      //encrypt the users email and principalId and profilePicture only as they are confidential.
+      // encrypt the users email and principalId and profilePicture only as they are confidential.
       setSessionStorage("firstName", userProfile.firstName, false);
       setSessionStorage("lastName", userProfile.lastName, false);
       setSessionStorage("email", userProfile.email, true);
@@ -148,22 +148,17 @@ export default function CreateProfile() {
             setProfile({ ...userProfile, email: e.target.value })
           }
         />
-
-        <InputLabel id="demo-simple-select-label" sx={{ fontSize: 20, mt: 2 }}>
-          Location
-        </InputLabel>
-        <Select
+        <TextField
+          label="Country"
           fullWidth
-          onChange={(e) => {
-            setProfile({ ...userProfile, location: e.target.value });
-          }}
-        >
-          {getCities().map((city, index) => (
-            <MenuItem key={index} value={city}>
-              {city}
-            </MenuItem>
-          ))}
-        </Select>
+          placeholder = "Nigeria"
+          style={{ margin: "30px 0" }}
+          variant="outlined"
+          required
+          onChange={(e) =>
+            setProfile({ ...userProfile, location: e.target.value })
+          }
+        />
 
         <IdentitySetup
           onClick={async () => await internet_identity(setPrincipal)}

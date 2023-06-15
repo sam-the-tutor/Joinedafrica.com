@@ -23,51 +23,44 @@ import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../../auth/Login";
 import LeftBar from "../leftbar";
 
-export default function Header({ refreshComponent }) {
+export default function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const { setIsUserLoggedIn } = useContext(AppContext);
+  const {isUserLoggedIn, setIsUserLoggedIn } = useContext(AppContext);
   const [principal, setPrincipal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  const ismediumScreenSizeAndBelow = useMediaQuery(
-    useTheme().breakpoints.down("md")
-  );
-
-  const isUserLoggedIn = useRef(getFromSessionStorage("isLoggedIn") == "true");
+  
+  // const isUserLoggedIn = useRef(getFromSessionStorage("isLoggedIn") == "true");
   const currentBrowserPathname = window.location.pathname;
 
+  async function getUserProfile() {
+      setIsLoading(true);
+      await setUserProfileDetails(principal);
+      setIsLoading(false);
+      setMobileMoreAnchorEl(null);
+      setIsUserLoggedIn(true);
+  }
   /**
    * If the user already has an account, the user is able to log in and their information saved in session storage
    */
   useEffect(() => {
-    console.log(principal);
-    async function getUserProfile() {
-      //making sure the actor isn't null.
-
-      console.log(principal);
-      if (principal.length > 0) {
-        setIsLoading(true);
-        await setUserProfileDetails(principal);
-        setIsLoading(false);
-        setMobileMoreAnchorEl(null);
-        isUserLoggedIn.current = true;
-        //reload the application
-        setIsUserLoggedIn(true);
-      }
+    if(principal.length > 0){
+      getUserProfile();
     }
-    getUserProfile();
-    //set the users principal as a dependency incase the user already has an account and clicks on login
-    //not create account
   }, [principal]);
 
-  async function x() {
-    internet_identity().then((value) => console.log(value));
-    // console.log(y);
-  }
+  /**
+   * If the user doesn't have an account, then they have to create a profile. 
+   */
+  // useEffect(() => {
+  //   if(isUserLoggedIn){
+  //     getUserProfile();
+  //   }
+  // }, [isUserLoggedIn])
+
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -134,9 +127,9 @@ console.log(currentBrowserPathname);
               </Grid>
             </Grid>
             <Grid item>
-              {isUserLoggedIn.current ? (
+              {isUserLoggedIn ? (
                 <Grid item>
-                  <ProfileIcon refreshComponent={refreshComponent} />
+                  <ProfileIcon />
                 </Grid>
               ) : (
                 <Grid item container spacing={2}>

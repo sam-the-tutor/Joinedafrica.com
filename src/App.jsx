@@ -26,7 +26,7 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(getFromSessionStorage("isLoggedIn", false) == "true");
   const [firebaseDB, setFirebaseDB] = useState(null);
   const [newMessageNotifications, setNewMessageNotifications] = useState([]);
   const stateValues = {
@@ -39,10 +39,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (
-      isUserLoggedIn ||
-      getFromSessionStorage("isLoggedIn", false) == "true"
-    ) {
+    if (isUserLoggedIn) {
       function checkForMessageNotificationsFromFirebase() {
         const database = startFirebase();
         setFirebaseDB(database);

@@ -70,14 +70,17 @@ export default function CreatePost() {
               setState("setSelectedSubcategory", { selectedSubcategory })
             }
           />
-
-          <MultiSelect
-            name="Location"
-            listOfElements={getCities()}
-            clickedValue={(selectedCity) =>
-              setState("location",{location : selectedCity})
+          <TextField
+            label="Country"
+            fullWidth
+            placeholder = "Nigeria"
+            style={{ margin: "30px 0" }}
+            variant="outlined"
+            required
+            onChange={(e) =>
+              setState("location",{location : e.target.value})
             }
-          />
+        />
         </Stack>
       </Box>
       <Box style={{ marginBottom: "35px", marginTop: "35px" }}>

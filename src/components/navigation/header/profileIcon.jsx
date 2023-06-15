@@ -12,7 +12,7 @@ import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { logout } from "../../auth/Logout";
 // import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 
-export default function ProfileIcon({ refreshComponent }) {
+export default function ProfileIcon() {
   const navigate = useNavigate();
 
   const [profile, setUserProfile] = useState(null);
@@ -29,7 +29,7 @@ export default function ProfileIcon({ refreshComponent }) {
       setUserProfile(createObjectURLFromArrayOfBytes(file._content));
     }
     LoadProfile();
-  }, [refreshComponent]);
+  }, []);
   function logUserOut() {
     logout();
     navigate("/home");
