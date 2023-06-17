@@ -3,21 +3,19 @@ import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
   Button,
-  Container,
   TextField,
   Typography
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { uploadFileToPostAssetCanister } from "../../../canisters/post_assets";
-import { profile } from "../../../canisters/profile";
 import { AppContext } from "../../../context";
 import { getErrorMessage } from "../../../util/ErrorMessages";
-import { getUniqueId, setSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../Login";
 import { IdentitySetup, Image, ImageContainer,ParentContainer } from "./style";
+import {createUserProfile} from "./util";
+import {updateSessionStorage} from "../util";
 
 export default function CreateProfile() {
 
@@ -34,13 +32,6 @@ export default function CreateProfile() {
 
   const {  setIsUserLoggedIn } = useContext(AppContext);
 
-  /**
-   *  When the user submits the form, the users profile is sent to the post asset canister, the users information
-   *  is saved in session storage and the users information is sent to the database. 
-   *
-   * @param {*} e e is the onsubmit event
-   */
-
   async function handleSubmit(e) {
     e.preventDefault();
     if (principal.length == 0) {
@@ -48,30 +39,11 @@ export default function CreateProfile() {
       return;
     }
     setIsLoading(true);
-    const createdProfile = { ...userProfile };
-    const profileImagePath = principal + "/profile/" + getUniqueId();
-    const key = await uploadFileToPostAssetCanister(
-      userProfile.profilePicture,
-      profileImagePath
-    );
-    createdProfile.profilePicture = key;
-
-    const authenticatedProfileUser = await profile();
-    let result = await authenticatedProfileUser.createUserProfile(
-      createdProfile
-    );
+    const result = await createUserProfile({...userProfile, principal});
     if (result?.err) {
-      //handle the error
       alert(getErrorMessage(result.err));
     } else {
-      // encrypt the users email and principalId and profilePicture only as they are confidential.
-      setSessionStorage("firstName", userProfile.firstName, false);
-      setSessionStorage("lastName", userProfile.lastName, false);
-      setSessionStorage("isLoggedIn", "true", false);
-      setSessionStorage("location", userProfile.location, false);
-      setSessionStorage("email", userProfile.email, true);
-      setSessionStorage("principalId", principal, true);
-      setSessionStorage("profilePicture", key, true);
+      updateSessionStorage({...result.ok, principal})
       setIsUserLoggedIn(true);
       navigate("/home");
     }
@@ -140,7 +112,7 @@ export default function CreateProfile() {
           }
         />
         <TextField
-          label="Country"
+          label="Enter your location (Country)"
           fullWidth
           placeholder = "Nigeria"
           style={{ margin: "30px 0" }}
@@ -165,7 +137,7 @@ export default function CreateProfile() {
           </Button>
         </Box>
       </ParentContainer>
-      {isLoading && LoadingCmp(isLoading)}
+      {LoadingCmp(isLoading)}
     </>
   );
 }

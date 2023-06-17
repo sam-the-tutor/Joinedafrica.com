@@ -19,11 +19,11 @@ actor Profile {
     // update calls
     //---------------------------------------------------------------------------------------
 
-    public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<(), Error> {
+    public shared ({ caller }) func createUserProfile(profile : Profile) : async Result<Profile, Error> {
         //users that already have a profile shouldn't be able to create another profile with thesame identity
         if (not (userHasCreatedProfile(caller))) {
             userProfiles := Trie.put<UserId, Profile>(userProfiles, key(caller), Principal.equal, profile).0;
-            #ok();
+            #ok(profile);
         } else {
             #err(#UserAlreadyExists);
         };

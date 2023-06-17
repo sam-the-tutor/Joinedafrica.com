@@ -1,12 +1,12 @@
-import { getFileFromPostAssetCanister, uploadFileToPostAssetCanister, removeFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import { getFileFromPostAssetCanister, removeFileFromPostAssetCanister, uploadFileToPostAssetCanister } from "../../../canisters/post_assets";
 import { profile as profileCanister } from "../../../canisters/profile";
-import { getFromSessionStorage, getUniqueId, setSessionStorage } from "../../../util/functions";
+import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
+
 
   export async function updateUserProfile(profile){
     //removing the old profile picture
-    // removeFileFromPostAssetCanister(profile.profilePicture);
-
+    removeFileFromPostAssetCanister(profile.profilePicture);
     const profileImagePath = profile.principal + "/profile/" + getUniqueId();
     const key = await uploadFileToPostAssetCanister(
       profile.profilePicture,
@@ -19,12 +19,10 @@ import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
       email : profile.email,
       location : profile.location
     };
-    console.log(updatedProfile);
     const authenticatedProfileCanister = await profileCanister();
     const result = await authenticatedProfileCanister.updateUserProfile(
       updatedProfile
     );
-    console.log(result);
     return result;
   }
 
@@ -43,14 +41,6 @@ import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
     const userProfile = getFromSessionStorage("profilePicture", true);
     const file = await getFileFromPostAssetCanister(userProfile);
     return file._content;
-  }
-
-  export function updateSessionStorage(profile){
-    setSessionStorage("firstName", profile.firstName, false);
-    setSessionStorage("lastName", profile.lastName, false);
-    setSessionStorage("location", profile.location, false);
-    setSessionStorage("email", profile.email, true);
-    setSessionStorage("profilePicture", profile.profllePicture, true);
   }
 
 export function updateSnackBarCmp(setShowSnackbarCmp) {

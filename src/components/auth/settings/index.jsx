@@ -1,17 +1,17 @@
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   createObjectURLFromArrayOfBytes
 } from "../../../util/functions";
-import {getUserProfileFromSessionStorage, updateUserProfile, updateSessionStorage, updateSnackBarCmp} from "./util";
 import { Image, ImageContainer } from "./style";
-
-import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import { getUserProfileFromSessionStorage, updateSnackBarCmp, updateUserProfile } from "./util";
 import { AppContext } from "../../../context";
+import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import {updateSessionStorage} from "../util";
 
-export default function Settings({ setRefreshComponent }) {
+export default function Settings() {
   const [profilePicture, setProfilePicture] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,19 +32,18 @@ export default function Settings({ setRefreshComponent }) {
       return;
     }
     setSavingUserProfile(true);
-    const newProfile = await updateUserProfile({profilePicture, principal, firstName, lastName, email, location});
-    console.log(newProfile);
+    const profile = {profilePicture, principal, firstName, lastName, email, location};
+    const newProfile = await updateUserProfile(profile);
+
     if(newProfile?.err){
       alert(getErrorMessage(newProfile.err));
       setSavingUserProfile(false);
     }
     else{
-      console.log(newProfile.ok);
-      updateSessionStorage(newProfile.ok);
+      updateSessionStorage({...profile.ok, principal});
       setSavingUserProfile(false);
       setReloadProfileIcon(!reloadProfileIcon);
       updateSnackBarCmp(setShowSnackbarCmp);
-    
     }
 
   }

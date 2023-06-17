@@ -143,7 +143,7 @@ export default function ViewPost() {
                     {post.productTitle}
                   </Typography>
                   <Typography variant="h6" style={{ color: "#37a864" }}>
-                    {post.amount} ckBTC
+                    {post.amount} BTC
                   </Typography>
                 </Box>
                 <ReactImageGallery items={postImages} />

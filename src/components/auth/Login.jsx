@@ -1,4 +1,5 @@
 import { AuthClient } from "@dfinity/auth-client";
+
 export async function internet_identity(setPrincipal) {
   const authClient = await AuthClient.create({
     idleOptions: {
