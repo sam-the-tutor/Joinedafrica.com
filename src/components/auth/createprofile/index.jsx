@@ -4,27 +4,23 @@ import {
   Box,
   Button,
   Container,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { uploadFileToPostAssetCanister } from "../../../canisters/post_assets";
 import { profile } from "../../../canisters/profile";
+import { AppContext } from "../../../context";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { getUniqueId, setSessionStorage } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import { getCities } from "../../myAccount/createposts/listOfCategories";
-import Header from "../../navigation/header";
 import { internet_identity } from "../Login";
-import { IdentitySetup, Image, ImageContainer } from "./style";
-import { AppContext } from "../../../context";
+import { IdentitySetup, Image, ImageContainer,ParentContainer } from "./style";
 
 export default function CreateProfile() {
+
   const [principal, setPrincipal] = useState("");
   const [userProfile, setProfile] = useState({
     profilePicture: null,
@@ -34,17 +30,17 @@ export default function CreateProfile() {
     location: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  // navigation so we can go back to the home page after saving the users profile
   const navigate = useNavigate();
-  const { isUserLoggedIn, setIsUserLoggedIn } = useContext(AppContext);
+
+  const {  setIsUserLoggedIn } = useContext(AppContext);
 
   /**
    *  When the user submits the form, the users profile is sent to the post asset canister, the users information
-   *  is saved in session storage and the users information is sent to the database. If the user already has an account,
-   *  the sessions storage will be cleared and the users profile picture deleted from post asset canister.
+   *  is saved in session storage and the users information is sent to the database. 
    *
    * @param {*} e e is the onsubmit event
    */
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (principal.length == 0) {
@@ -53,21 +49,17 @@ export default function CreateProfile() {
     }
     setIsLoading(true);
     const createdProfile = { ...userProfile };
-    console.log(createdProfile);
     const profileImagePath = principal + "/profile/" + getUniqueId();
-    console.log(userProfile.profilePicture);
     const key = await uploadFileToPostAssetCanister(
       userProfile.profilePicture,
       profileImagePath
     );
     createdProfile.profilePicture = key;
-    // createdProfile.principalId = principal;
 
     const authenticatedProfileUser = await profile();
     let result = await authenticatedProfileUser.createUserProfile(
       createdProfile
     );
-    console.log(result);
     if (result?.err) {
       //handle the error
       alert(getErrorMessage(result.err));
@@ -75,10 +67,11 @@ export default function CreateProfile() {
       // encrypt the users email and principalId and profilePicture only as they are confidential.
       setSessionStorage("firstName", userProfile.firstName, false);
       setSessionStorage("lastName", userProfile.lastName, false);
+      setSessionStorage("isLoggedIn", "true", false);
+      setSessionStorage("location", userProfile.location, false);
       setSessionStorage("email", userProfile.email, true);
       setSessionStorage("principalId", principal, true);
       setSessionStorage("profilePicture", key, true);
-      setSessionStorage("isLoggedIn", "true", false);
       setIsUserLoggedIn(true);
       navigate("/home");
     }
@@ -87,10 +80,8 @@ export default function CreateProfile() {
 
   return (
     <>
-      <Header />
-      <Container
+      <ParentContainer
         component="form"
-        style={{ marginTop: "130px", marginBottom: "80px" }}
         onSubmit={handleSubmit}
       >
         <Typography variant="h5" gutterBottom style={{ textAlign: "center" }}>
@@ -173,7 +164,7 @@ export default function CreateProfile() {
             Create Profile
           </Button>
         </Box>
-      </Container>
+      </ParentContainer>
       {isLoading && LoadingCmp(isLoading)}
     </>
   );

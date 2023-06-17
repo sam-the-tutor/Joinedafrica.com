@@ -29,6 +29,7 @@ export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(getFromSessionStorage("isLoggedIn", false) == "true");
   const [firebaseDB, setFirebaseDB] = useState(null);
   const [newMessageNotifications, setNewMessageNotifications] = useState([]);
+  const [reloadProfileIcon, setReloadProfileIcon] = useState(false);
   const stateValues = {
     isUserLoggedIn,
     setIsUserLoggedIn,
@@ -36,6 +37,8 @@ export default function App() {
     setFirebaseDB,
     newMessageNotifications,
     setNewMessageNotifications,
+    reloadProfileIcon,
+    setReloadProfileIcon
   };
 
   useEffect(() => {

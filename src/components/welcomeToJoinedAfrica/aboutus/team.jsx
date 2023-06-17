@@ -10,7 +10,7 @@ export const team = [
     style: { width: "150px", height: "150px", objectFit: "cover" },
   },
   {
-    name: "Josephine Osbani",
+    name: "Josephine Obani",
     image: "./team/Josephine_Obani.jpg",
     style: { width: "150px", height: "150px" },
   },

@@ -41,7 +41,6 @@ export default function MyAccount() {
     };
   }
   const [value, setValue] = useState(0);
-  const [refreshComponent, setRefreshComponent] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -49,7 +48,6 @@ export default function MyAccount() {
 
   return (
     <>
-      <Header refreshComponent={refreshComponent} />
       <Toolbar style={{ marginTop: "40px" }} />
       <Container
         style={
@@ -103,9 +101,7 @@ export default function MyAccount() {
           <Postings />
         </TabPanel>
         <TabPanel value={value} index={2} style={{ width: "100%" }}>
-          <Settings
-            setRefreshComponent={() => setRefreshComponent(!refreshComponent)}
-          />
+          <Settings/>
         </TabPanel>
         <TabPanel value={value} index={3} style={{ width: "100%" }}>
           <CreatePost />

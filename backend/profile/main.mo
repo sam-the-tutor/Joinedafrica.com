@@ -30,10 +30,10 @@ actor Profile {
 
     };
 
-    public shared ({ caller }) func updateUserProfile(profile : Profile) : async Result<(), Error> {
+    public shared ({ caller }) func updateUserProfile(profile : Profile) : async Result<Profile, Error> {
         if (userHasCreatedProfile(caller)) {
             userProfiles := Trie.replace<UserId, Profile>(userProfiles, key(caller), Principal.equal, Option.make(profile)).0;
-            #ok();
+            #ok(profile);
         } else {
             #err(#UserNotFound);
         };

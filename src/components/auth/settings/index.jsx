@@ -1,22 +1,15 @@
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import {
-  createObjectURLFromArrayOfBytes,
-  getFromSessionStorage,
-  getUniqueId,
-  setSessionStorage,
+  createObjectURLFromArrayOfBytes
 } from "../../../util/functions";
+import {getUserProfileFromSessionStorage, updateUserProfile, updateSessionStorage, updateSnackBarCmp} from "./util";
 import { Image, ImageContainer } from "./style";
 
-import {
-  getFileFromPostAssetCanister,
-  uploadFileToPostAssetCanister,
-} from "../../../canisters/post_assets";
-import { profile } from "../../../canisters/profile";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
+import { AppContext } from "../../../context";
 
 export default function Settings({ setRefreshComponent }) {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -24,82 +17,52 @@ export default function Settings({ setRefreshComponent }) {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [principal, setPrincipal] = useState("");
+  const [location, setLocation] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [saveProfile, setSaveProfile] = useState(false);
+  const [savingUserProfile, setSavingUserProfile] = useState(false);
   const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
 
-  function updateSnackBarCmp() {
-    setShowSnackbarCmp(
-      <SnackbarCmp
-        message="Your profile has been updated!"
-        handleClose={(event, reason) => {
-          //the user has to click on the alert to close it.
-          if (reason != "clickaway") {
-            setShowSnackbarCmp(null);
-          }
-        }}
-      />
-    );
-  }
-  async function handleSubmit(e) {
+  const {reloadProfileIcon, setReloadProfileIcon} = useContext(AppContext);
+
+  async function handleSubmit(e){
     e.preventDefault();
-    if (firstName.length == 0 || lastName.length == 0 || email.length == 0) {
-      alert("All your credentials needs to be set");
+    if (location.length == 0 || firstName.length == 0 || lastName.length == 0 || email.length == 0) {
+      alert("Fill in all the required fields");
       return;
     }
-    setSaveProfile(true);
-
-    //removing the current profile picture form the post asset canister
-    // const userProfilePath = getFromSessionStorage("profilePicture", true);
-    // await removeFileFromPostAssetCanister(userProfilePath);
-
-    const profileImagePath = principal + "/profile/" + getUniqueId();
-    const key = await uploadFileToPostAssetCanister(
-      profilePicture,
-      profileImagePath
-    );
-    const updatedProfile = {
-      profilePicture: key,
-      firstName,
-      lastName,
-      email,
-    };
-    const authenticatedProfileUser = await profile();
-    let result = await authenticatedProfileUser.updateUserProfile(
-      updatedProfile
-    );
-    if (result?.err) {
-      //handle the error
-      alert(getErrorMessage(result.err));
-      setSaveProfile(false);
-    } else {
-      //encrypt the users email and principalId and profilePicture only as they are confidential.
-      setSessionStorage("firstName", firstName, false);
-      setSessionStorage("lastName", lastName, false);
-      setSessionStorage("email", email, true);
-      setSessionStorage("profilePicture", key, true);
-      setRefreshComponent();
-      setSaveProfile(false);
-      updateSnackBarCmp();
+    setSavingUserProfile(true);
+    const newProfile = await updateUserProfile({profilePicture, principal, firstName, lastName, email, location});
+    console.log(newProfile);
+    if(newProfile?.err){
+      alert(getErrorMessage(newProfile.err));
+      setSavingUserProfile(false);
     }
+    else{
+      console.log(newProfile.ok);
+      updateSessionStorage(newProfile.ok);
+      setSavingUserProfile(false);
+      setReloadProfileIcon(!reloadProfileIcon);
+      updateSnackBarCmp(setShowSnackbarCmp);
+    
+    }
+
   }
 
   useEffect(() => {
-    async function loadUserProfileFromSessionStorage() {
+    async function init(){
       setIsLoading(true);
-      setPrincipal(getFromSessionStorage("principalId", true));
-      setFirstName(getFromSessionStorage("firstName", false));
-      setLastName(getFromSessionStorage("lastName", false));
-      setEmail(getFromSessionStorage("email", true));
-      const userProfile = getFromSessionStorage("profilePicture", true);
-      const file = await getFileFromPostAssetCanister(userProfile);
-      setProfilePicture(file._content);
-      // setProfilePicture(file._content\\);
+      const profile = await getUserProfileFromSessionStorage();
+      setPrincipal(profile.principal);
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
+      setEmail(profile.email);
+      setProfilePicture(profile.profilePicture);
+      setLocation(profile.location);
       setIsLoading(false);
     }
-    loadUserProfileFromSessionStorage();
-  }, []);
+    init();
+  }, [])
 
   return (
     <>
@@ -149,9 +112,18 @@ export default function Settings({ setRefreshComponent }) {
               label="Enter your email address"
               fullWidth
               type="email"
+              style = {{marginBottom:"30px"}}
               variant="outlined"
               defaultValue={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              label="Enter your location (Country)"
+              fullWidth
+              type="text"
+              variant="outlined"
+              defaultValue={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
             <Box style={{ marginTop: "40px" }}>
               <Button variant="outlined" endIcon={<SendIcon />} type="submit">
@@ -160,7 +132,7 @@ export default function Settings({ setRefreshComponent }) {
             </Box>
           </Box>
         )}
-        {LoadingCmp(saveProfile)}
+        {LoadingCmp(savingUserProfile)}
         {showSnackbarCmp}
       </Box>
     </>

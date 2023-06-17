@@ -1,7 +1,7 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import { enc } from "crypto-js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createObjectURLFromArrayOfBytes,
@@ -10,6 +10,7 @@ import {
 
 import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { logout } from "../../auth/Logout";
+import { AppContext } from "../../../context";
 // import { getFileFromPostAssetCanister } from "../../util/postAssetCanisterFunctions";
 
 export default function ProfileIcon() {
@@ -20,16 +21,16 @@ export default function ProfileIcon() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
+  const {reloadProfileIcon}  = useContext(AppContext )
+  
   useEffect(() => {
     async function LoadProfile() {
       const userProfile = getFromSessionStorage("profilePicture", true);
-      const file = await getFileFromPostAssetCanister(
-        userProfile.toString(enc.Utf8)
-      );
+      const file = await getFileFromPostAssetCanister(userProfile);
       setUserProfile(createObjectURLFromArrayOfBytes(file._content));
     }
     LoadProfile();
-  }, []);
+  }, [reloadProfileIcon]);
   function logUserOut() {
     logout();
     navigate("/home");

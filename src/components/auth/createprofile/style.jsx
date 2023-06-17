@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const ImageContainer = styled(Box)({
@@ -19,4 +19,9 @@ export const IdentitySetup = styled(Button)({
   alignItems: "center",
   padding: "0",
   margin: "30px 0",
+});
+
+export const ParentContainer = styled(Container)({
+  marginTop: "130px",
+  marginBottom: "80px"
 });
