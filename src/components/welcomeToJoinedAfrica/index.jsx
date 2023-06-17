@@ -20,7 +20,7 @@ export default function WelcomePage() {
           <Box>
             <Box
               component="img"
-              src="./Logo_without_background.png"
+              src="./logo/Logo_without_background.png"
               alt="Joined Africa logo"
               sx={{ width: { xs: "100px", sm: "150px", md: "200px" } }}
             />
@@ -38,15 +38,14 @@ export default function WelcomePage() {
                   margin: { xs: "20px 0", md: "initial" },
                 }}
               >
-                Is a marketplace where Africans can buy and sell to each other
-                using one currency
+                Joined Africa is marketplace where sellers advertise products in crypto currency, connecting buyers directly with sellers.
               </Typography>
             </Box>
           </Box>
           <Box>
             <Box
               component="img"
-              src="./Connected_Africa.png"
+              src="./welcomepage/Connected_Africa.png"
               alt="Connected Africa"
               sx={{
                 display: { xs: "none", md: "block" },
@@ -85,18 +84,20 @@ export default function WelcomePage() {
           >
             Who we are
           </Typography>
-          <Box>
-            <HowWeStandOut
-              content="Joined Africa brings together people within the same country and across borders for seamless trade using one currency."
-              imagePath="./cross_border_trade_without_background.png"
-            />
-          </Box>
-          <Box>
-            <HowWeStandOut
-              content="Local markets, global reach: Sell your products to customers within your own country while also reaching a global audience, expanding your business like never before."
-              imagePath="./local_market_global_reach_without_background.png"
-            />
-          </Box>
+         
+          <HowWeStandOut
+            content={<p>Joined Africa connects sellers and buyers locally and globally, empowering sellers to advertise products, connect with buyers, and expand their reach</p>}
+            imagePath="./welcomepage/local_market_global_reach_without_background.png"
+          />
+          <HowWeStandOut
+            content={<p>Joined Africa empowers sellers to showcase their products through images. Simply take a photo of the item you want to sell and advertise it on Joined Africa.</p>}
+            imagePath="./welcomepage/take_a_photo.jpg"
+          />
+          <HowWeStandOut
+            content={<p> On Joined Africa, buyers can conveniently connect with sellers for their desired items through a built-in messaging application.</p>}
+            imagePath="./welcomepage/buyer_and_seller_chatting.jpg"
+          />
+      
         </Box>
 
         <Box

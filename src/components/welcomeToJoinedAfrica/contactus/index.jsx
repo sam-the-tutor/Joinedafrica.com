@@ -45,8 +45,8 @@ export default function Contactus() {
     <Box>
       <Toolbar />
       <Typography variant="h4" sx = {{textAlign:"center", margin:{md:"40px 20px 20px 20px", xs : "20px"}}}>Anything you want us to know?</Typography>
-
-      <form  onSubmit={submit} style = {{margin:"20px"}}>
+      <Typography>You can reach us at joinedafrica@gmail.com</Typography>
+      {/* <form  onSubmit={submit} style = {{margin:"20px"}}>
         <TextField name="first_name" required label="first name" variant="outlined" type="text" onChange = {e => setFirstName(e.target.value)} style = {{width:"100%", marginBottom:"20px"}}/>
         <TextField name="last_name" required label="last name" variant="outlined" type="text"  onChange = {e => setLastName(e.target.value)} style = {{width:"100%", marginBottom:"20px"}}/>
         <TextField name="email" required label="Email"  onChange = {e => setEmail(e.target.value)} variant="outlined" style = {{width:"100%", marginBottom:"20px"}} type="email"/>
@@ -61,9 +61,9 @@ export default function Contactus() {
           required
         />
         <Button type="submit" variant="outlined" size="large" color="primary">Submit</Button>
-      </form>
-      {LoadingCmp(isLoading)}
-      {displayThankYou && <Typography style = {{margin:"20px"}}>We have received your message. Thank you.</Typography>}
+      </form> */}
+      {/* {LoadingCmp(isLoading)}
+      {displayThankYou && <Typography style = {{margin:"20px"}}>We have received your message. Thank you.</Typography>} */}
     </Box>
   );
 }

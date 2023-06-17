@@ -33,7 +33,7 @@ export default function LeftBar({ open, close }) {
         Go Back
       </Button>
 
-      <img src="../../Logo_without_background.png" style={{ width: "30%" }} />
+      <img src="../../logo/Logo_without_background.png" style={{ width: "30%" }} />
       <Typography variant="h5">All categories</Typography>
 
       <List>
@@ -47,19 +47,6 @@ export default function LeftBar({ open, close }) {
             </ListItemButton>
           </ListItem>
         ))}
-
-        {/* search functionality isn't part of an MVP */}
-
-        {/* <ListItem style={{ marginTop: "30px" }}>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item>
-              <TextField placeholder="Search..." />
-            </Grid>
-            <Grid item>
-              <Button variant="outlined">Search</Button>
-            </Grid>
-          </Grid>
-        </ListItem> */}
       </List>
     </DrawerContainer>
   );

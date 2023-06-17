@@ -8,7 +8,6 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import * as React from "react";
 
@@ -18,21 +17,18 @@ const steps = [
     description: `In order to create a post or message people, you have to first create a profile. This can be when you are on the home page and 
     at the navigation bar, click on the create profile button, You'll be taken to the create profile page. Fill out all the information.
     Don't forget to set up your identity!`,
-    imgSrc: "./create_profile.png",
   },
   {
     label: "Create a post",
     description: `After creating your profile, click on "My Account" in the dropdown in your profile icon. 
       Click on the "CREATE POSTS" tab and select the category and subcategory of your post. Fill out the other
       details required for the post and then create the post by clicking on the button`,
-    imgSrc: "./create_post.jpeg",
   },
   {
     label: "Publish your post",
     description: `After creating the post, click on the "MY POSTINGS" tab to see all the posts you have created.
     Click on the 3 vertical icons and publish your post to the marketplace! Go to the homepage, click on the 
     category you created and you will see your posts there.`,
-    imgSrc: "./publish_post.jpeg",
   },
 ];
 
@@ -52,11 +48,6 @@ export default function HowToGetStarted() {
     setActiveStep(0);
   };
 
-  const theme = useTheme();
-  const ismediumScreenSizeAndBelow = useMediaQuery(
-    theme.breakpoints.down("md")
-  );
-
   return (
     <Box>
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -67,16 +58,6 @@ export default function HowToGetStarted() {
               <Typography style={{ color: "#d8d8df" }}>
                 {step.description}
               </Typography>
-              {!ismediumScreenSizeAndBelow && (
-                <img
-                  src={step.imgSrc}
-                  style={{
-                    width: "100%",
-                    marginTop: "30px",
-                    marginBottom: "30px",
-                  }}
-                />
-              )}
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button

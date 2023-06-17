@@ -121,7 +121,7 @@ console.log(currentBrowserPathname);
               </Grid>
               <Grid item sx={{ display: { xs: "none", md: "block" } }}>
                 <img
-                  src="/Logo_without_background.png"
+                  src="/logo/Logo_without_background.png"
                   style={{ width: "80px" }}
                 />
               </Grid>
