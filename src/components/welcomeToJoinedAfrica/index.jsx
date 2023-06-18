@@ -8,8 +8,8 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import { Introduction } from "./style";
-import HowToGetStarted from "./HowToGetStarted";
 import HowWeStandOut from "./HowWeStandOut";
+import HowToGetStarted from "./HowToGetStarged";
 
 export default function WelcomePage() {
   const navigate = useNavigate();

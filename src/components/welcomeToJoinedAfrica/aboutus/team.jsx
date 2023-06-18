@@ -2,14 +2,14 @@ export const team = [
   {
     name: "Mena Agina",
     image: "./team/Mena_Agina.jpeg",
-    role:"Software Engineer - Founder",
+    role:"Software Engineer",
     style: { width: "150px", height: "150px" },
   },
   {
     name: "Joseph Anekwe",
     image: "./team/Joseph_Anekwe.jpg",
     style: { width: "150px", height: "150px", objectFit: "cover" },
-    role:"Content creator",
+    role:"Graphic designer",
   },
   {
     name: "Josephine Obani",
