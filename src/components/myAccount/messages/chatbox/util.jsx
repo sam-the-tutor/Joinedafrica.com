@@ -15,17 +15,16 @@ export async function getMyMessages(friendProfilePicture) {
   );
   const authenticatedUser = await conversationCanister();
   const messages = await authenticatedUser.getMyMessages(myFriendPrincipal);
-  return [...sort(messages.ok).reverse()];
+  return sort(messages.ok);
 }
 
-//sorting the messages by date and time
-function sort(newMessages) {
+//sorting the messages by date and time in ascending order
+export function sort(newMessages) {
   return newMessages.sort((child, parent) => {
     if (child.date === parent.date) {
-      return parent.time < child.time;
+      return child.time.localeCompare(parent.time);
     } else {
-      //
-      return parent.date < child.date;
+      return child.date.localeCompare(parent.date);
     }
   });
 }
