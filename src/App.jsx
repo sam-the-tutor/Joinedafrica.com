@@ -26,7 +26,9 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(getFromSessionStorage("isLoggedIn", false) == "true");
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(
+    getFromSessionStorage("isLoggedIn", false) == "true"
+  );
   const [firebaseDB, setFirebaseDB] = useState(null);
   const [newMessageNotifications, setNewMessageNotifications] = useState([]);
   const [reloadProfileIcon, setReloadProfileIcon] = useState(false);
@@ -38,7 +40,7 @@ export default function App() {
     newMessageNotifications,
     setNewMessageNotifications,
     reloadProfileIcon,
-    setReloadProfileIcon
+    setReloadProfileIcon,
   };
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <BrowserRouter>
-        <Header />
+          <Header />
           <Routes>
             <Route exact path="/" element={<WelcomePage />}></Route>
             <Route exact path="home" element={<Body />}></Route>
