@@ -1,6 +1,6 @@
 import { setSessionStorage } from "../../util/functions";
 
-export function updateSessionStorage(userProfile){
+export function updateSessionStorage(userProfile) {
   // encrypt the users email and principalId and profilePicture only as they are confidential.
   setSessionStorage("firstName", userProfile.firstName, false);
   setSessionStorage("lastName", userProfile.lastName, false);

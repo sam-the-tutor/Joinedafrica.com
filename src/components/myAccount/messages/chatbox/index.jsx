@@ -1,30 +1,30 @@
 import { Principal } from "@dfinity/principal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
+  Box,
   Button,
   Divider,
   Grid,
   List,
-  Box,
   ListItem,
   ListItemText,
-  Typography,
   Paper,
   TextField,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
-import { push, ref, set } from "firebase/database";
 import { useTheme } from "@mui/material/styles";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { conversation as conversationCanister } from "../../../../canisters/conversation";
 import { AppContext } from "../../../../context";
 import { getFromSessionStorage } from "../../../../util/functions";
 import {
   getMyMessages,
-  loadNewMessagesFromFirebase,
+  loadNewMessages,
   removeSeenMessageNotifications,
+  sendMessage,
 } from "./util";
+import { BoxCmp, ButtonCmp, GridCmp } from "./style";
 
 export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const [conversation, setConversation] = useState("");
@@ -38,6 +38,7 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const ismediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
+
   useEffect(() => {
     setTimeout(
       () => messageEndRef.current.scrollIntoView({ behavior: "smooth" }),
@@ -62,7 +63,7 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   useEffect(() => {
     function init() {
       if (isFriendSelected) {
-        const newMessages = loadNewMessagesFromFirebase(
+        const newMessages = loadNewMessages(
           isFriendSelected,
           newMessageNotifications,
           firebaseDB
@@ -74,49 +75,29 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
     init();
   }, [newMessageNotifications, isFriendSelected]);
 
-  async function sendMessage() {
-    const myFriendPrincipal = isFriendSelected.profilePicture.substring(0, 63);
-    const chatMessage = {
-      messageContent: conversation,
-      sender: Principal.fromText(myPrincipal.current),
-      receiver: Principal.fromText(myFriendPrincipal),
-      time: new Date().toLocaleTimeString(),
-      date: new Date().toLocaleDateString(),
-    };
-    setMyMessages([...myMessages, chatMessage]);
-    setConversation("");
-    //send and save the chat message in the backend and firebase
-    const authenticatedUser = await conversationCanister();
-    const result = await authenticatedUser.sendMessage(chatMessage);
-    //send message notification to the receiver
-    const messageRef = ref(firebaseDB, myFriendPrincipal);
-    set(push(messageRef), chatMessage);
+  async function handleSendMessage() {
+    await sendMessage({
+      myMessages,
+      setMyMessages,
+      conversation,
+      setConversation,
+      firebaseDB,
+      isFriendSelected,
+    });
   }
 
   return (
     <>
       {/* only display the back button when the viewport is medium size and below */}
       {ismediumScreenSizeAndBelow && (
-        <Button
-          style={{ marginBottom: "10px", marginTop: "10px" }}
-          onClick={() => setIsFriendSelected(null)}
-        >
+        <ButtonCmp onClick={() => setIsFriendSelected(null)}>
           <ArrowBackIosIcon />
           Go Back
-        </Button>
+        </ButtonCmp>
       )}
 
-      <Grid
-        item
-        xs={12}
-        md={9}
-        component={Paper}
-        style={{
-          height: "500px",
-          position: "relative",
-        }}
-      >
-        <Box style={{ height: "400px", overflowY: "auto" }}>
+      <GridCmp item xs={12} md={9} component={Paper}>
+        <BoxCmp>
           {loading ? (
             <Typography style={{ margin: "20px" }}>Loading...</Typography>
           ) : (
@@ -158,7 +139,7 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
               <div ref={messageEndRef} />
             </List>
           )}
-        </Box>
+        </BoxCmp>
 
         <Divider />
         <Grid
@@ -180,12 +161,12 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
             />
           </Grid>
           <Grid item xs={3} align="right">
-            <Button variant="outlined" onClick={sendMessage}>
+            <Button variant="outlined" onClick={handleSendMessage}>
               SEND
             </Button>
           </Grid>
         </Grid>
-      </Grid>
+      </GridCmp>
     </>
   );
 }

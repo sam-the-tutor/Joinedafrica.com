@@ -55,6 +55,12 @@ shared ({ caller = initializer }) actor class () {
 
   };
 
+  public shared func resetAll() : async () {
+    myPostings := Trie.empty();
+    postsLedger := Trie.empty();
+    publishedPosts := Util.createDatabase(DatabaseStructure.Database);
+  };
+
   /*
     Only posts that are not published to the marketplace can be deleted. A post that is published to the marketplace
     has to first be removed from the marketplace before they can be deleted.

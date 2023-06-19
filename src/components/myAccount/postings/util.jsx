@@ -11,13 +11,7 @@ import {
 export async function getAllMyPostings() {
   const postCanister = await post();
   const allPostings = await postCanister.getAllMyPostings();
-  console.log(allPostings);
-  if (allPostings?.err) {
-    // alert(getErrorMessage(post.err));
-    // setIsLoading(false);
-    // return;
-  }
-  return allPostings.ok;
+  return allPostings;
 }
 
 export async function getUserProfile() {

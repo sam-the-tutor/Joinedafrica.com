@@ -2,14 +2,16 @@ import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
-import {
-  createObjectURLFromArrayOfBytes
-} from "../../../util/functions";
-import { Image, ImageContainer } from "./style";
-import { getUserProfileFromSessionStorage, updateSnackBarCmp, updateUserProfile } from "./util";
 import { AppContext } from "../../../context";
+import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import {updateSessionStorage} from "../util";
+import { updateSessionStorage } from "../util";
+import { Image, ImageContainer } from "./style";
+import {
+  getUserProfileFromSessionStorage,
+  updateSnackBarCmp,
+  updateUserProfile,
+} from "./util";
 
 export default function Settings() {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -23,33 +25,43 @@ export default function Settings() {
   const [savingUserProfile, setSavingUserProfile] = useState(false);
   const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
 
-  const {reloadProfileIcon, setReloadProfileIcon} = useContext(AppContext);
+  const { reloadProfileIcon, setReloadProfileIcon } = useContext(AppContext);
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (location.length == 0 || firstName.length == 0 || lastName.length == 0 || email.length == 0) {
+    if (
+      location.length == 0 ||
+      firstName.length == 0 ||
+      lastName.length == 0 ||
+      email.length == 0
+    ) {
       alert("Fill in all the required fields");
       return;
     }
     setSavingUserProfile(true);
-    const profile = {profilePicture, principal, firstName, lastName, email, location};
+    const profile = {
+      profilePicture,
+      principal,
+      firstName,
+      lastName,
+      email,
+      location,
+    };
     const newProfile = await updateUserProfile(profile);
 
-    if(newProfile?.err){
+    if (newProfile?.err) {
       alert(getErrorMessage(newProfile.err));
       setSavingUserProfile(false);
-    }
-    else{
-      updateSessionStorage({...profile.ok, principal});
+    } else {
+      updateSessionStorage({ ...profile.ok, principal });
       setSavingUserProfile(false);
       setReloadProfileIcon(!reloadProfileIcon);
       updateSnackBarCmp(setShowSnackbarCmp);
     }
-
   }
 
   useEffect(() => {
-    async function init(){
+    async function init() {
       setIsLoading(true);
       const profile = await getUserProfileFromSessionStorage();
       setPrincipal(profile.principal);
@@ -61,7 +73,7 @@ export default function Settings() {
       setIsLoading(false);
     }
     init();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -111,7 +123,7 @@ export default function Settings() {
               label="Enter your email address"
               fullWidth
               type="email"
-              style = {{marginBottom:"30px"}}
+              style={{ marginBottom: "30px" }}
               variant="outlined"
               defaultValue={email}
               onChange={(e) => setEmail(e.target.value)}

@@ -1,14 +1,20 @@
 import { Principal } from "@dfinity/principal";
-import { ref, remove } from "firebase/database";
+import { ref, remove, set, push } from "firebase/database";
 
-import { conversation } from "../../../../canisters/conversation";
+import { conversation as conversationCanister } from "../../../../canisters/conversation";
 import { getFromSessionStorage } from "../../../../util/functions";
+
+const startPrincipalIndex = 0;
+const endPrincipalIndex = 63;
 
 //load my messages from the conversation canister
 export async function getMyMessages(friendProfilePicture) {
-  const friendsPrincipal = friendProfilePicture.substring(0, 63);
-  const authenticatedUser = await conversation();
-  const messages = await authenticatedUser.getMyMessages(friendsPrincipal);
+  const myFriendPrincipal = friendProfilePicture.substring(
+    startPrincipalIndex,
+    endPrincipalIndex
+  );
+  const authenticatedUser = await conversationCanister();
+  const messages = await authenticatedUser.getMyMessages(myFriendPrincipal);
   return [...sort(messages.ok).reverse()];
 }
 
@@ -23,14 +29,13 @@ function sort(newMessages) {
     }
   });
 }
-// loads new messages from firebase and removes messages that are already seen from firebase
+
 //returns an array contains [newMessagesFromSelectedFriend, newMessagesFromOtherFriends]
-export function loadNewMessagesFromFirebase(
-  isFriendSelected,
-  newMessageNotifications,
-  firebaseDB
-) {
-  const myFriendPrincipal = isFriendSelected.profilePicture.substring(0, 63);
+export function loadNewMessages(isFriendSelected, newMessageNotifications) {
+  const myFriendPrincipal = isFriendSelected.profilePicture.substring(
+    startPrincipalIndex,
+    endPrincipalIndex
+  );
   const newMessagesFromSelectedFriend = [];
   const newMessagesFromOtherFriends = [];
 
@@ -54,4 +59,45 @@ export function removeSeenMessageNotifications(
   newMessagesFromSelectedFriend.forEach((message) => {
     remove(ref(firebaseDB, `${myPrincipal}/${message.id}`));
   });
+}
+
+export async function sendMessage({
+  myMessages,
+  setMyMessages,
+  conversation,
+  setConversation,
+  isFriendSelected,
+  firebaseDB,
+}) {
+  const myFriendPrincipal = isFriendSelected.profilePicture.substring(
+    startPrincipalIndex,
+    endPrincipalIndex
+  );
+  const chatMessage = createChatMessage(myFriendPrincipal, conversation);
+  setMyMessages([...myMessages, chatMessage]);
+  setConversation("");
+
+  await sendChatMessageToBackend(chatMessage);
+  sendChatMessageToFirebase(chatMessage, firebaseDB);
+}
+
+function createChatMessage(myFriendPrincipal, conversation) {
+  return {
+    messageContent: conversation,
+    sender: Principal.fromText(getFromSessionStorage("principalId", true)),
+    receiver: Principal.fromText(myFriendPrincipal),
+    time: new Date().toLocaleTimeString(),
+    date: new Date().toLocaleDateString(),
+  };
+}
+
+async function sendChatMessageToBackend(chatMessage) {
+  const authenticatedUser = await conversationCanister();
+  await authenticatedUser.sendMessage(chatMessage);
+}
+
+function sendChatMessageToFirebase(chatMessage, firebaseDB) {
+  const myFriendPrincipal = chatMessage.receiver.toText();
+  const messageRef = ref(firebaseDB, myFriendPrincipal);
+  set(push(messageRef), chatMessage);
 }

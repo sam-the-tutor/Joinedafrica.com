@@ -51,6 +51,11 @@ shared ({ caller = initializer }) actor class () {
         #ok();
     };
 
+    public shared func resetAll() : async () {
+        conversations := Trie.empty();
+        friendList := Trie.empty();
+    };
+
     private func addUserToFriendList(user1 : UserId, user2 : UserId) : () {
         switch (Trie.get(friendList, hashKey(user1), Principal.equal)) {
             case null {

@@ -23,5 +23,5 @@ export const IdentitySetup = styled(Button)({
 
 export const ParentContainer = styled(Container)({
   marginTop: "130px",
-  marginBottom: "80px"
+  marginBottom: "80px",
 });

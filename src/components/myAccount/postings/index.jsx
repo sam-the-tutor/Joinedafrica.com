@@ -1,5 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import DeletePostPopup from "../../../util/reuseableComponents/DeletePostPopup";
 import PostingCard from "../../../util/reuseableComponents/PostingCard";
 import { filterMyPostings, getAllMyPostings, getUserProfile } from "./util";
@@ -21,7 +23,11 @@ export default function Postings() {
         getAllMyPostings(),
         getUserProfile(),
       ]);
-      setMyPostings(postings);
+      if (postings?.err) {
+        alert(getErrorMessage(postings.err));
+        return;
+      }
+      setMyPostings(postings.ok);
       setUserProfile(profile);
       setIsLoading(false);
     }

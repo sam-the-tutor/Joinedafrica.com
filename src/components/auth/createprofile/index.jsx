@@ -1,11 +1,6 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SendIcon from "@mui/icons-material/Send";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,12 +8,11 @@ import { AppContext } from "../../../context";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { internet_identity } from "../Login";
-import { IdentitySetup, Image, ImageContainer,ParentContainer } from "./style";
-import {createUserProfile} from "./util";
-import {updateSessionStorage} from "../util";
+import { updateSessionStorage } from "../util";
+import { IdentitySetup, Image, ImageContainer, ParentContainer } from "./style";
+import { createUserProfile } from "./util";
 
 export default function CreateProfile() {
-
   const [principal, setPrincipal] = useState("");
   const [userProfile, setProfile] = useState({
     profilePicture: null,
@@ -30,7 +24,7 @@ export default function CreateProfile() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const {  setIsUserLoggedIn } = useContext(AppContext);
+  const { setIsUserLoggedIn } = useContext(AppContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -39,11 +33,11 @@ export default function CreateProfile() {
       return;
     }
     setIsLoading(true);
-    const result = await createUserProfile({...userProfile, principal});
+    const result = await createUserProfile({ ...userProfile, principal });
     if (result?.err) {
       alert(getErrorMessage(result.err));
     } else {
-      updateSessionStorage({...result.ok, principal})
+      updateSessionStorage({ ...result.ok, principal });
       setIsUserLoggedIn(true);
       navigate("/home");
     }
@@ -52,10 +46,7 @@ export default function CreateProfile() {
 
   return (
     <>
-      <ParentContainer
-        component="form"
-        onSubmit={handleSubmit}
-      >
+      <ParentContainer component="form" onSubmit={handleSubmit}>
         <Typography variant="h5" gutterBottom style={{ textAlign: "center" }}>
           Create profile
         </Typography>
@@ -114,7 +105,7 @@ export default function CreateProfile() {
         <TextField
           label="Enter your location (Country)"
           fullWidth
-          placeholder = "Nigeria"
+          placeholder="Nigeria"
           style={{ margin: "30px 0" }}
           variant="outlined"
           required
