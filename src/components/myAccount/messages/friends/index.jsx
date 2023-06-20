@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Grid,
@@ -6,33 +7,68 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-  TextField,
-  useMediaQuery,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
-
 import { getAllMyFriends } from "./util";
+
+const LoadingMessage = () => (
+  <Typography style={{ margin: "15px" }}>Loading...</Typography>
+);
+
+const EmptyFriendsListMessage = () => (
+  <Typography style={{ margin: "15px" }}>
+    You have no friends at the moment
+  </Typography>
+);
+
+const FriendListItem = ({ profile, onClick }) => (
+  <ListItem style={{ cursor: "pointer" }} onClick={() => onClick(profile)}>
+    <ListItemIcon>
+      <Avatar src={profile.profileImageFile} />
+    </ListItemIcon>
+    <ListItemText primary={`${profile.firstName} ${profile.lastName}`} />
+  </ListItem>
+);
 
 export default function Friends({ setIsFriendSelected }) {
   const [allMyFriends, setAllMyFriends] = useState([]);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
-
-  const ismediumScreenSizeAndBelow = useMediaQuery(
+  const isMediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
 
   useEffect(() => {
-    async function init() {
+    async function fetchFriendsData() {
       setLoading(true);
       const friends = await getAllMyFriends();
       setAllMyFriends(friends);
       setLoading(false);
     }
-    init();
+    fetchFriendsData();
   }, []);
+
+  const renderFriendsList = () => {
+    if (loading) {
+      return <LoadingMessage />;
+    }
+    if (allMyFriends.length === 0) {
+      return <EmptyFriendsListMessage />;
+    }
+    return (
+      <List>
+        {allMyFriends.map((profile, index) => (
+          <FriendListItem
+            key={index}
+            profile={profile}
+            onClick={setIsFriendSelected}
+          />
+        ))}
+      </List>
+    );
+  };
 
   return (
     <Grid
@@ -41,33 +77,11 @@ export default function Friends({ setIsFriendSelected }) {
       xs={12}
       md={3}
       style={{
-        borderRight: ismediumScreenSizeAndBelow ? "unset" : "1px solid white",
+        borderRight: isMediumScreenSizeAndBelow ? "unset" : "1px solid white",
         height: "500px",
       }}
     >
-
-      {loading ? (
-        <Typography style={{ margin: "15px" }}>Loading...</Typography>
-      ) : 
-        allMyFriends.length == 0 ?  <Typography style={{ margin: "15px" }}>You have no friends at the moment</Typography> : 
-      (
-        <List>
-          {allMyFriends.map((profile, index) => (
-            <ListItem
-              key={index}
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsFriendSelected(profile)}
-            >
-              <ListItemIcon>
-                <Avatar src={profile.profileImageFile} />
-              </ListItemIcon>
-              <ListItemText
-                primary={profile.firstName + " " + profile.lastName}
-              />
-            </ListItem>
-          ))}
-        </List>
-      )}
+      {renderFriendsList()}
     </Grid>
   );
 }

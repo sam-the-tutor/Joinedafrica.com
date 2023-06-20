@@ -1,7 +1,6 @@
 import { Principal } from "@dfinity/principal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
-  Box,
   Button,
   Divider,
   Grid,
@@ -18,24 +17,23 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { AppContext } from "../../../../context";
 import { getFromSessionStorage } from "../../../../util/functions";
+import { BoxCmp, ButtonCmp, GridCmp } from "./style";
 import {
   getMyMessages,
   loadNewMessages,
   removeSeenMessageNotifications,
   sendMessage,
 } from "./util";
-import { BoxCmp, ButtonCmp, GridCmp } from "./style";
 
 export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
   const [conversation, setConversation] = useState("");
   const [myMessages, setMyMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const messageEndRef = useRef(null);
-  const myPrincipal = useRef(getFromSessionStorage("principalId", true));
   const { firebaseDB, newMessageNotifications } = useContext(AppContext);
 
   const theme = useTheme();
-  const ismediumScreenSizeAndBelow = useMediaQuery(
+  const isMediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
 
@@ -88,8 +86,8 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
 
   return (
     <>
-      {/* only display the back button when the viewport is medium size and below */}
-      {ismediumScreenSizeAndBelow && (
+      {/* Only display the back button when the viewport is medium size and below */}
+      {isMediumScreenSizeAndBelow && (
         <ButtonCmp onClick={() => setIsFriendSelected(null)}>
           <ArrowBackIosIcon />
           Go Back
@@ -102,40 +100,10 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
             <Typography style={{ margin: "20px" }}>Loading...</Typography>
           ) : (
             <List>
-              {isFriendSelected ? (
-                myMessages.map((message, index) => (
-                  <ListItem key={index}>
-                    <Grid item xs={12}>
-                      <ListItemText
-                        sx={
-                          myPrincipal.current ===
-                          Principal.from(message.sender).toText()
-                            ? {
-                                bgcolor: "success.main",
-                                color: "success.contrastText",
-                                p: 2,
-                              }
-                            : {
-                                bgcolor: "primary.main",
-                                color: "primary.contrastText",
-                                p: 2,
-                              }
-                        }
-                        primary={message.messageContent}
-                        secondary={message.time + ", " + message.date}
-                        secondaryTypographyProps={{
-                          color: "black",
-                          textAlign: "right",
-                        }}
-                      />
-                    </Grid>
-                  </ListItem>
-                ))
-              ) : (
-                <ListItem style={{ textAlign: "center" }}>
-                  You have to select a friend to view your message(s)
-                </ListItem>
-              )}
+              <ChatMessages
+                myMessages={myMessages}
+                isFriendSelected={isFriendSelected}
+              />
               <div ref={messageEndRef} />
             </List>
           )}
@@ -167,6 +135,61 @@ export default function Chatbox({ isFriendSelected, setIsFriendSelected }) {
           </Grid>
         </Grid>
       </GridCmp>
+    </>
+  );
+}
+
+function ChatMessage({ message, isCurrentUser }) {
+  const messageBackgroundColor = isCurrentUser
+    ? "success.main"
+    : "primary.main";
+  const messageColor = isCurrentUser
+    ? "success.contrastText"
+    : "primary.contrastText";
+
+  return (
+    <ListItem>
+      <Grid item xs={12}>
+        <ListItemText
+          sx={{
+            bgcolor: messageBackgroundColor,
+            color: messageColor,
+            p: 2,
+          }}
+          primary={message.messageContent}
+          secondary={`${message.time}, ${message.date}`}
+          secondaryTypographyProps={{
+            color: "black",
+            textAlign: "right",
+          }}
+        />
+      </Grid>
+    </ListItem>
+  );
+}
+
+function ChatMessages({ myMessages, isFriendSelected }) {
+  const myPrincipal = useRef(getFromSessionStorage("principalId", true));
+
+  if (!isFriendSelected) {
+    return (
+      <ListItem style={{ textAlign: "center" }}>
+        You have to select a friend to view your message(s)
+      </ListItem>
+    );
+  }
+
+  return (
+    <>
+      {myMessages.map((message, index) => (
+        <ChatMessage
+          key={index}
+          message={message}
+          isCurrentUser={
+            myPrincipal.current === Principal.from(message.sender).toText()
+          }
+        />
+      ))}
     </>
   );
 }

@@ -1,15 +1,15 @@
 import { conversation } from "../../../../canisters/conversation";
-import { profile } from "../../../../declarations/profile";
 import { getFileFromPostAssetCanister } from "../../../../canisters/post_assets";
-import { createObjectURLFromArrayOfBytes } from "../../../../util/functions";
+import { profile } from "../../../../declarations/profile";
 import { getErrorMessage } from "../../../../util/ErrorMessages";
+import { createObjectURLFromArrayOfBytes } from "../../../../util/functions";
 
 export async function getAllMyFriends() {
   const authenticatedUser = await conversation();
   const myFriends = await authenticatedUser.getAllMyFriends();
   if (myFriends?.err) {
     alert(getErrorMessage(myFriends.err));
-    return;
+    return [];
   }
   const friendsList = [];
   await Promise.all(
