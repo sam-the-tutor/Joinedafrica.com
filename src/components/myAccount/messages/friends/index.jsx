@@ -10,6 +10,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import { PropTypes } from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import { getAllMyFriends } from "./util";
 
@@ -85,3 +86,12 @@ export default function Friends({ setIsFriendSelected }) {
     </Grid>
   );
 }
+
+FriendListItem.prototype = {
+  profile: PropTypes.object,
+  onClick: PropTypes.func,
+};
+
+Friends.propTypes = {
+  setIsFriendSelected: PropTypes.func,
+};

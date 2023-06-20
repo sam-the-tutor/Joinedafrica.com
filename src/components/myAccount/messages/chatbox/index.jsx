@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { PropTypes } from "prop-types";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { AppContext } from "../../../../context";
@@ -193,3 +194,18 @@ function ChatMessages({ myMessages, isFriendSelected }) {
     </>
   );
 }
+
+ChatMessages.propTypes = {
+  myMessages: PropTypes.array,
+  isFriendSelected: PropTypes.object,
+};
+
+ChatMessage.propTypes = {
+  message: PropTypes.object,
+  isCurrentUser: PropTypes.bool,
+};
+
+Chatbox.propTypes = {
+  isFriendSelected: PropTypes.object,
+  setIsFriendSelected: PropTypes.func,
+};

@@ -1,7 +1,8 @@
 import { Grid, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import React, { useState } from "react";
+import { PropTypes } from "prop-types";
 
+import React, { useState } from "react";
 import Chatbox from "./chatbox";
 import Friends from "./friends";
 
@@ -52,3 +53,13 @@ export default function Messages() {
     </Grid>
   );
 }
+
+MobileView.propTypes = {
+  isFriendSelected: PropTypes.object,
+  setIsFriendSelected: PropTypes.func,
+};
+
+DesktopView.propTypes = {
+  isFriendSelected: PropTypes.object,
+  setIsFriendSelected: PropTypes.func,
+};
