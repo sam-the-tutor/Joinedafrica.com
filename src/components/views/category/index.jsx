@@ -1,41 +1,33 @@
 import {
   Box,
+  Button,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Toolbar,
   Typography,
-  Button,
 } from "@mui/material";
+import { PropTypes } from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
-import { post } from "../../../declarations/post";
-import { profile } from "../../../declarations/profile";
-import { TypographyCmp, DrawerContainer } from "./style";
-import { getSubcategory } from "../../myAccount/createposts/listOfCategories";
-import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
-import { Top10Posts } from "../../../util/reuseableComponents/Top10Posts";
-import LeftBar from "./filter";
-import { getErrorMessage } from "../../../util/ErrorMessages";
 
-/**
- * When the user clicks on a specific category in the home page, this component is responsible for displaying all postings
- * in that category
- * @returns returns all postings in a selected category.
- */
+import { post } from "../../../declarations/post";
+import { getErrorMessage } from "../../../util/ErrorMessages";
+import { Top10Posts } from "../../../util/reuseableComponents/Top10Posts";
+import { getSubcategory } from "../../myAccount/createposts/listOfCategories";
+import MobileLeftBar from "./filter";
+import { BoxContainer, DrawerContainer, Feed, TypographyCmp } from "./style";
+
 export default function ViewCategory() {
   const { categoryName } = useParams();
   const [loading, setLoading] = useState(false);
   const [top10Posts, setTop10Posts] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
+
   useEffect(() => {
     async function getPostings() {
       setLoading(true);
-      //joinedafrica is making the call because the method it calls is public and doesn't
-      //need authorization
       const postings = await post.getTop10PostingsInCategory(categoryName);
       console.log(postings);
       if (postings?.err) {
@@ -50,61 +42,93 @@ export default function ViewCategory() {
 
   return (
     <Box>
-      <Box style={{ display: "flex", marginTop: "20px" }}>
-        <Box sx={{ display: { xs: "none", md: "block" } }}>
-          <DrawerContainer variant="permanent" anchor="left">
-            <Toolbar />
-            <TypographyCmp variant="h6">All subcategories</TypographyCmp>
-            <List>
-              {getSubcategory(categoryName).map((subcategory, index) => (
-                <ListItem key={index}>
-                  <ListItemButton
-                    onClick={() =>
-                      navigate("../view/" + categoryName + "/" + subcategory)
-                    }
-                  >
-                    <ListItemText primary={subcategory} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </DrawerContainer>
-        </Box>
-
-        <Box style={{ padding: "24px", width: "100%" }}>
-          <Toolbar />
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <>
-              <Button
-                sx={{
-                  marginBottom: "24px",
-                  padding: "0",
-                  display: { xs: "block", md: "none" },
-                }}
-                onClick={() => setMobileOpen(true)}
-              >
-                Choose subcategory
-              </Button>
-              <Typography
-                style={{ color: "var(--joy-palette-neutral-200, #D8D8DF)" }}
-              >
-                Showing top 10 postings from {categoryName}
-              </Typography>
-
-              {top10Posts.map((post, index) => (
-                <Top10Posts key={index} name={post.name} posts={post.post} />
-              ))}
-            </>
-          )}
-        </Box>
-        <LeftBar
+      <BoxContainer>
+        <LargeScreenLeftBar
+          getSubcategory={getSubcategory}
+          categoryName={categoryName}
+        />
+        <ViewFeed
+          loading={loading}
+          top10Posts={top10Posts}
+          categoryName={categoryName}
+          setMobileOpen={setMobileOpen}
+        />
+        <MobileLeftBar
           open={mobileOpen}
           close={() => setMobileOpen(false)}
           categoryName={categoryName}
         />
-      </Box>
+      </BoxContainer>
     </Box>
   );
 }
+
+function LargeScreenLeftBar({ getSubcategory, categoryName }) {
+  const navigate = useNavigate();
+  return (
+    <Box sx={{ display: { xs: "none", md: "block" } }}>
+      <DrawerContainer variant="permanent" anchor="left">
+        <Toolbar />
+        <TypographyCmp variant="h6">All subcategories</TypographyCmp>
+        <List>
+          {getSubcategory(categoryName).map((subcategory, index) => (
+            <ListItem key={index}>
+              <ListItemButton
+                onClick={() =>
+                  navigate("../view/" + categoryName + "/" + subcategory)
+                }
+              >
+                <ListItemText primary={subcategory} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </DrawerContainer>
+    </Box>
+  );
+}
+
+function ViewFeed({ loading, top10Posts, categoryName, setMobileOpen }) {
+  return (
+    <Feed>
+      <Toolbar />
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <Button
+            sx={{
+              marginBottom: "24px",
+              padding: "0",
+              display: { xs: "block", md: "none" },
+            }}
+            onClick={() => setMobileOpen(true)}
+          >
+            Choose subcategory
+          </Button>
+          <Typography
+            style={{ color: "var(--joy-palette-neutral-200, #D8D8DF)" }}
+          >
+            Showing top 10 postings from {categoryName}
+          </Typography>
+
+          {top10Posts.map((post, index) => (
+            <Top10Posts key={index} name={post.name} posts={post.post} />
+          ))}
+        </>
+      )}
+    </Feed>
+  );
+}
+
+LargeScreenLeftBar.propTypes = {
+  getSubcategory: PropTypes.func,
+  categoryName: PropTypes.string,
+};
+
+ViewFeed.propTypes = {
+  loading: PropTypes.bool,
+  top10Posts: PropTypes.array,
+  categoryName: PropTypes.string,
+  setMobileOpen: PropTypes.func,
+};

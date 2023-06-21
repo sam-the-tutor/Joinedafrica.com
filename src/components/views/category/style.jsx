@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Drawer, Typography } from "@mui/material";
+import { Drawer, Typography, Box } from "@mui/material";
 
 const drawerWidth = 300;
 export const DrawerContainer = styled(Drawer)({
@@ -14,4 +14,14 @@ export const TypographyCmp = styled(Typography)({
   marginTop: "50px",
   marginBottom: "20px",
   textAlign: "center",
+});
+
+export const BoxContainer = styled(Box)({
+  display: "flex",
+  marginTop: "20px",
+});
+
+export const Feed = styled(Box)({
+  padding: "24px",
+  width: "100%",
 });
