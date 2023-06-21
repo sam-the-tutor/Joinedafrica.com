@@ -1,123 +1,88 @@
+import { Principal } from "@dfinity/principal";
+import { push, ref, set } from "firebase/database";
+
+import { conversation } from "../../../canisters/conversation";
+import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import {
+  createObjectURLFromArrayOfBytes,
+  getFromSessionStorage,
+} from "../../../util/functions";
+
 /**
  * Exact produduct specification extacts the product specification details provided by the user
  * @param {*} response Response is the post we get from the backend
  * @returns Returns an extracted product specification.
  */
 export function extractProductSpecification(response) {
-  if (response.subcategory === "Cars") {
-    return {
-      ...response.productSpecification.Vehicles.Cars,
-    };
+  const categories = [
+    { category: "Vehicles", subcategory: "Cars" },
+    { category: "Vehicles", subcategory: "Buses" },
+    { category: "Vehicles", subcategory: "Trucks_and_trailers" },
+    { category: "Vehicles", subcategory: "Vehicle_parts_and_assessories" },
+    { category: "Vehicles", subcategory: "Motocycles_and_bicycles" },
+    { category: "Electronics", subcategory: "Computers_and_laptops" },
+    { category: "Electronics", subcategory: "Audio_and_music_equipments" },
+    { category: "Electronics", subcategory: "Computer_accessories" },
+    { category: "Electronics", subcategory: "Tv_and_dvd_equipment" },
+    { category: "Health_and_beauty", subcategory: "Skincare" },
+    { category: "Health_and_beauty", subcategory: "Hair_products" },
+    { category: "Health_and_beauty", subcategory: "Fragrances" },
+    { category: "Health_and_beauty", subcategory: "Vitamins_and_supplements" },
+    {
+      category: "Mobile_phones_and_tablets",
+      subcategory: "Phones_and_tablets",
+    },
+    {
+      category: "Mobile_phones_and_tablets",
+      subcategory: "Accessories_for_mobile_phones_and_tablets",
+    },
+    { category: "Properties", subcategory: "Houses_and_apartments_for_rent" },
+    { category: "Properties", subcategory: "Houses_and_apartments_for_sale" },
+    { category: "Properties", subcategory: "Land_and_plots_for_sale" },
+    { category: "Fashion", subcategory: "Bags" },
+    { category: "Fashion", subcategory: "Clothing_and_clothing_accessories" },
+    { category: "Fashion", subcategory: "Watches" },
+    { category: "Fashion", subcategory: "Shoes" },
+  ];
+  for (const { category, subcategory } of categories) {
+    if (response.productSpecification?.[category]?.[subcategory]) {
+      return { ...response.productSpecification[category][subcategory] };
+    }
   }
-  if (response.subcategory === "Buses") {
-    return {
-      ...response.productSpecification.Vehicles.Buses,
-    };
-  }
-  if (response.subcategory === "Trucks and trailers") {
-    return {
-      ...response.productSpecification.Vehicles.Trucks_and_trailers,
-    };
-  }
-  if (response.subcategory === "Vehicle parts and assessories") {
-    return {
-      ...response.productSpecification.Vehicles.Vehicle_parts_and_assessories,
-    };
-  }
-  if (response.subcategory === "Motocycles and bicycles") {
-    return {
-      ...response.productSpecification.Vehicles.Motocycles_and_bicycles,
-    };
-  }
-  if (response.subcategory === "Computers and laptops") {
-    return {
-      ...response.productSpecification.Electronics.Computers_and_laptops,
-    };
-  }
-  if (response.subcategory === "Audio and music equipments") {
-    return {
-      ...response.productSpecification.Electronics.Audio_and_music_equipments,
-    };
-  }
-  if (response.subcategory === "Computer accessories") {
-    return {
-      ...response.productSpecification.Electronics.Computer_accessories,
-    };
-  }
-  if (response.subcategory === "Tv and dvd equipment") {
-    return {
-      ...response.productSpecification.Electronics.Tv_and_dvd_equipment,
-    };
-  }
-  if (response.subcategory === "Skincare") {
-    return {
-      ...response.productSpecification.Health_and_beauty.Skincare,
-    };
-  }
-  if (response.subcategory === "Hair products") {
-    return {
-      ...response.productSpecification.Health_and_beauty.Hair_products,
-    };
-  }
-  if (response.subcategory === "Fragrances") {
-    return {
-      ...response.productSpecification.Health_and_beauty.Fragrances,
-    };
-  }
-  if (response.subcategory === "Vitamins and supplements") {
-    return {
-      ...response.productSpecification.Health_and_beauty
-        .Vitamins_and_supplements,
-    };
-  }
-  if (response.subcategory === "Phones and tablets") {
-    return {
-      ...response.productSpecification.Mobile_phones_and_tablets
-        .Phones_and_tablets,
-    };
-  }
-  if (response.subcategory === "Accessories for mobile phones and tablets") {
-    return {
-      ...response.productSpecification.Mobile_phones_and_tablets
-        .Accessories_for_mobile_phones_and_tablets,
-    };
-  }
-  if (response.subcategory === "Houses and apartments for rent") {
-    return {
-      ...response.productSpecification.Properties
-        .Houses_and_apartments_for_rent,
-    };
-  }
-  if (response.subcategory === "Houses and apartments for sale") {
-    return {
-      ...response.productSpecification.Properties
-        .Houses_and_apartments_for_sale,
-    };
-  }
-  if (response.subcategory === "Land and plots for sale") {
-    return {
-      ...response.productSpecification.Properties.Land_and_plots_for_sale,
-    };
-  }
-  if (response.subcategory === "Bags") {
-    return {
-      ...response.productSpecification.Fashion.Bags,
-    };
-  }
-  if (response.subcategory === "Clothing and clothing accessories") {
-    return {
-      ...response.productSpecification.Fashion
-        .Clothing_and_clothing_accessories,
-    };
-  }
-  if (response.subcategory === "Watches") {
-    return {
-      ...response.productSpecification.Fashion.Watches,
-    };
-  }
-  if (response.subcategory === "Shoes") {
-    return {
-      ...response.productSpecification.Fashion.Shoes,
-    };
-  }
+  return null;
+}
+
+export async function getPostImages(response) {
+  const images = [];
+  await Promise.all(
+    response.images.map(async (image) => {
+      const file = await getFileFromPostAssetCanister(image);
+      const url = createObjectURLFromArrayOfBytes(file._content);
+      images.push({
+        original: url,
+        thumbnail: url,
+      });
+    })
+  );
+  return images;
+}
+
+export async function sendMessage(message, firebaseDB, post) {
+  const chatMessage = createChatMessage(message, post);
+  const authenticatedUser = await conversation();
+  const result = await authenticatedUser.sendMessage(chatMessage);
+  //send message notification to the receiver
+  const messageRef = ref(firebaseDB, post.creatorOfPostId.toText());
+  set(push(messageRef), chatMessage);
+  return result;
+}
+
+function createChatMessage(userMessage, post) {
+  return {
+    messageContent: userMessage,
+    sender: Principal.fromText(getFromSessionStorage("principalId", true)),
+    receiver: post.creatorOfPostId,
+    time: new Date().toLocaleTimeString(),
+    date: new Date().toLocaleDateString(),
+  };
 }
