@@ -1,22 +1,19 @@
-import React from "react";
 import {
-  Drawer,
-  Typography,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  List,
-  Button,
-  Grid,
-  ListItemButton,
-  TextField,
   Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
 } from "@mui/material";
+import { PropTypes } from "prop-types";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { DrawerContainer } from "./style";
-import { getSubcategory } from "../../../myAccount/createposts/listOfCategories";
 
-export default function LeftBar({ open, close, categoryName }) {
+import { getSubcategory } from "../../../myAccount/createposts/listOfCategories";
+import { DrawerContainer } from "./style";
+
+export default function MobileLeftBar({ open, close, categoryName }) {
   const navigate = useNavigate();
   return (
     <DrawerContainer
@@ -46,3 +43,9 @@ export default function LeftBar({ open, close, categoryName }) {
     </DrawerContainer>
   );
 }
+
+MobileLeftBar.propTypes = {
+  open: PropTypes.bool,
+  close: PropTypes.func,
+  categoryName: PropTypes.string,
+};
