@@ -1,13 +1,15 @@
+import { PropTypes } from "prop-types";
 import React from "react";
-import { DrawerContainer, TypographyCmp } from "./style";
+
 import { getFilterForSubcategory } from "../../../myAccount/createposts/util/postFiltering";
+import { BoxCmp, DrawerContainer, TypographyCmp } from "./style";
 
 export default function FilterPost({
   subcategoryName,
-  categoryName,
-  posts,
-  setPosts,
-  setLoading,
+  // categoryName,
+  // posts,
+  // setPosts,
+  // setLoading,
   open,
   close,
 }) {
@@ -22,20 +24,25 @@ export default function FilterPost({
       }}
     >
       <TypographyCmp variant="h6">Filter posts</TypographyCmp>
-      <div
-        style={{
-          paddingBottom: "30px",
-          paddingLeft: "15px",
-        }}
-      >
+      <BoxCmp>
         {getFilterForSubcategory(
-          subcategoryName,
-          categoryName,
-          posts,
-          setPosts,
-          setLoading
+          subcategoryName
+          // categoryName,
+          // posts,
+          // setPosts,
+          // setLoading
         )}
-      </div>
+      </BoxCmp>
     </DrawerContainer>
   );
 }
+
+FilterPost.propTypes = {
+  subcategoryName: PropTypes.string,
+  // categoryName: PropTypes.string,
+  // posts: PropTypes.array,
+  // setPosts: PropTypes.func,
+  // setLoading: PropTypes.func,
+  open: PropTypes.bool,
+  close: PropTypes.func,
+};
