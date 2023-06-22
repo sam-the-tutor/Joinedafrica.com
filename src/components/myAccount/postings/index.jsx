@@ -47,7 +47,7 @@ export default function Postings() {
           {myPostings.length == 0
             ? "You have no postings"
             : myPostings.map((posting, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
+                <Grid item xs={12} sm={4} key={index}>
                   <PostingCard
                     post={posting[0]}
                     userProfile={userProfile}

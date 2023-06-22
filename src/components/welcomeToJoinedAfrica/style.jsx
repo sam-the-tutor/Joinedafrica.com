@@ -31,3 +31,15 @@ export const MessageFromFounder = styled(Box)({
   justifyContent: "space-around",
   alignItems: "center",
 });
+
+export const LinkCmp = styled("a")({
+  color: "black",
+  marginRight: "10px",
+});
+export const FooterCmp = styled("footer")({
+  backgroundColor: "white",
+  height: "200px",
+  padding: "50px",
+  display: "flex",
+  justifyContent: "space-between",
+});

@@ -1,7 +1,7 @@
 import { Typography, Grid, Box } from "@mui/material";
 import React from "react";
 
-export default function HowWeStandOut({ content, imagePath }) {
+export default function WhoWeAre({ content, imagePath }) {
   return (
     <Grid
       justifyContent="space-between"

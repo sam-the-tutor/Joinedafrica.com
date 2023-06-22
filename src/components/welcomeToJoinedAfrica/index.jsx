@@ -1,15 +1,14 @@
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import { Box, Button, Typography, Container } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Introduction } from "./style";
-import HowWeStandOut from "./HowWeStandOut";
 import HowToGetStarted from "./HowToGetStarged";
+import WhoWeAre from "./WhoWeAre";
+import { FooterCmp, Introduction, LinkCmp } from "./style";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -38,7 +37,8 @@ export default function WelcomePage() {
                   margin: { xs: "20px 0", md: "initial" },
                 }}
               >
-                Joined Africa is marketplace where sellers advertise products in crypto currency, connecting buyers directly with sellers.
+                Joined Africa is marketplace where sellers advertise products in
+                crypto currency, connecting buyers directly with sellers.
               </Typography>
             </Box>
           </Box>
@@ -84,20 +84,37 @@ export default function WelcomePage() {
           >
             Who we are
           </Typography>
-         
-          <HowWeStandOut
-            content={<p>Joined Africa connects sellers and buyers locally and globally, empowering sellers to advertise products, connect with buyers, and expand their reach</p>}
+
+          <WhoWeAre
+            content={
+              <p>
+                Joined Africa connects sellers and buyers locally and globally,
+                empowering sellers to advertise products, connect with buyers,
+                and expand their reach
+              </p>
+            }
             imagePath="./welcomepage/local_market_global_reach_without_background.png"
           />
-          <HowWeStandOut
-            content={<p>Joined Africa empowers sellers to showcase their products through images. Simply take a photo of the item you want to sell and advertise it on Joined Africa.</p>}
+          <WhoWeAre
+            content={
+              <p>
+                Joined Africa empowers sellers to showcase their products
+                through images. Simply take a photo of the item you want to sell
+                and advertise it on Joined Africa.
+              </p>
+            }
             imagePath="./welcomepage/take_a_photo.jpg"
           />
-          <HowWeStandOut
-            content={<p> On Joined Africa, buyers can conveniently connect with sellers for their desired items through a built-in messaging application.</p>}
+          <WhoWeAre
+            content={
+              <p>
+                On Joined Africa, buyers can conveniently connect with sellers
+                for their desired items through a built-in messaging
+                application.
+              </p>
+            }
             imagePath="./welcomepage/buyer_and_seller_chatting.jpg"
           />
-      
         </Box>
 
         <Box
@@ -122,15 +139,7 @@ export default function WelcomePage() {
           <HowToGetStarted />
         </Box>
       </Box>
-      <Box
-        style={{
-          backgroundColor: "white",
-          height: "200px",
-          padding: "50px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <FooterCmp>
         <Box>
           <Button sx={{ color: "black" }} onClick={() => navigate("./aboutus")}>
             About us
@@ -143,34 +152,20 @@ export default function WelcomePage() {
           </Button>
         </Box>
         <Box>
-          <a
-            href="https://www.linkedin.com/company/joinedafrica/"
-            style={{ color: "black", marginRight: "10px" }}
-          >
+          <LinkCmp href="https://www.linkedin.com/company/joinedafrica/">
             <LinkedInIcon />
-          </a>
-          <a
-            href="https://www.instagram.com/joinedafrica/"
-            style={{ color: "black", marginRight: "10px" }}
-          >
+          </LinkCmp>
+          <LinkCmp href="https://www.instagram.com/joinedafrica/">
             <InstagramIcon />
-          </a>
-
-          <a
-            href="https://www.facebook.com/JoinedAfrica"
-            style={{ color: "black", marginRight: "10px" }}
-          >
+          </LinkCmp>
+          <LinkCmp href="https://www.facebook.com/JoinedAfrica">
             <FacebookIcon />
-          </a>
-
-          <a
-            href="https://www.youtube.com/@JoinedAfrica/"
-            style={{ color: "black", marginRight: "10px" }}
-          >
+          </LinkCmp>
+          <LinkCmp href="https://www.youtube.com/@JoinedAfrica/">
             <YouTubeIcon />
-          </a>
+          </LinkCmp>
         </Box>
-      </Box>
+      </FooterCmp>
     </Box>
   );
 }

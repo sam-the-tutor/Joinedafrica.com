@@ -1,27 +1,16 @@
+import { Box, Toolbar, Typography } from "@mui/material";
 import React from "react";
-import { Typography, Box, Toolbar } from "@mui/material";
+
+import { BoxCmp, TypographyCmp } from "./style";
 import { team } from "./team";
 
 export default function Aboutus() {
   return (
     <Box>
       <Toolbar />
-      <Box
-        style={{margin:"40px 20px"}}
-      >
-        <Typography
-          style={{ textAlign: "center", marginBottom: "20px" }}
-          variant="h4"
-        >
-          Creators
-        </Typography>
-        <Box
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-evenly",
-          }}
-        >
+      <Box style={{ margin: "40px 20px" }}>
+        <TypographyCmp variant="h4">Creators</TypographyCmp>
+        <BoxCmp>
           {team.map((member, index) => (
             <Box key={index}>
               <img src={member.image} style={member.style} />
@@ -29,7 +18,7 @@ export default function Aboutus() {
               <Typography>{member.role}</Typography>
             </Box>
           ))}
-        </Box>
+        </BoxCmp>
       </Box>
     </Box>
   );
