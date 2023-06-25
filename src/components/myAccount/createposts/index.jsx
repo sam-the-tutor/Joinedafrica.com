@@ -1,6 +1,5 @@
-import { Principal } from "@dfinity/principal";
-import SendIcon from "@mui/icons-material/Send";
 import ClearIcon from "@mui/icons-material/Clear";
+import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
   Button,
@@ -10,54 +9,73 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState, useReducer } from "react";
 import { useTheme } from "@mui/material/styles";
+import React, { useState } from "react";
+import { getCategoryNames, getSubcategory } from "./listOfCategories";
 import { PostImage } from "./style";
-import { post } from "../../../canisters/post";
-import {
-  getCategoryNames,
-  getSubcategory,
-  getCities,
-} from "./listOfCategories";
 
-import { state as initialState } from "./state";
 import { MultiSelect } from "../../../util/reuseableComponents/MultiSelect";
-import reducer from "./reducer";
 
-import { CreatePostSpecificationForm } from "./util/createPostSpecification";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import { submitForm } from "./util";
+import { getSuccessSnackbarCmp, handleSubmit } from "./util";
+import { CreatePostSpecificationForm } from "./util/createPostSpecification";
 
 export default function CreatePost() {
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [formValues, setFormValues] = useState({});
-  const [productTitle, setProductTitle] = useState("");
-  const [country, setCountry] = useState("");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-  const [images, setImage] = useState([]);
+  const [productSpecification, setProductSpecification] = useState({});
+  const [generalProductInformation, setGeneralProductInformation] = useState({
+    Images: [],
+  });
+  const [loading, setLoading] = useState(false);
+  const [snackbarCmp, setSnackbarCmp] = useState(null);
+
   const theme = useTheme();
 
   const ismediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
-  const [state, dispatch] = useReducer(reducer, initialState);
 
-  //maximum length of characters and number of images
-  function setState(type, value) {
-    dispatch({ type, value });
+  function addImages(newImage) {
+    const Max_Number_of_Images = 3;
+    if (generalProductInformation.Images.length < Max_Number_of_Images) {
+      setGeneralProductInformation({
+        ...generalProductInformation,
+        Images: [...generalProductInformation.Images, newImage],
+      });
+    } else {
+      alert("Maximum number of images reached");
+    }
+  }
+  function removeImages(index) {
+    setGeneralProductInformation({
+      ...generalProductInformation,
+      Images: generalProductInformation.Images.filter((_, i) => i !== index),
+    });
   }
 
-  function submitPost(event) {
+  async function submitPost(event) {
     event.preventDefault();
-    // console.log("My state : ", state);
-    console.log("My formValues : ", formValues);
-    console.log("My category : ", category);
-    console.log("My subcategory : ", subcategory);
-    // submitForm(state, setState);
+    const MAX_LENGTH_OF_DESCRIPTION = 150;
+    if (
+      generalProductInformation.Description.length < MAX_LENGTH_OF_DESCRIPTION
+    ) {
+      alert("Product description should be more than 149 characters");
+      return;
+    }
+    setLoading(true);
+    const result = await handleSubmit(
+      generalProductInformation,
+      productSpecification
+    );
+
+    if (result?.err) {
+      alert(getErrorMessage(result.err));
+    } else {
+      setSnackbarCmp(getSuccessSnackbarCmp());
+    }
+    setLoading(false);
   }
-  // onSubmit={handleSubmit(submitPost)}
+
   return (
     <Box component="form" onSubmit={submitPost}>
       <Box>
@@ -68,13 +86,22 @@ export default function CreatePost() {
           <MultiSelect
             name="Product category"
             listOfElements={getCategoryNames()}
-            clickedValue={(selectedCategory) => setCategory(selectedCategory)}
+            clickedValue={(Category) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Category,
+                Subcategory: "",
+              })
+            }
           />
           <MultiSelect
             name="sub-category"
-            listOfElements={getSubcategory(category)}
-            clickedValue={(selectedSubcategory) =>
-              setSubcategory(selectedSubcategory)
+            listOfElements={getSubcategory(generalProductInformation.Category)}
+            clickedValue={(Subcategory) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Subcategory,
+              })
             }
           />
           <TextField
@@ -83,7 +110,12 @@ export default function CreatePost() {
             placeholder="Nigeria"
             style={{ margin: "30px 0" }}
             variant="outlined"
-            onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Location: e.target.value,
+              })
+            }
           />
         </Stack>
       </Box>
@@ -94,7 +126,7 @@ export default function CreatePost() {
             <input
               type="file"
               accept="image/jpeg, image/png"
-              onChange={(e) => setState("selectedImages", e.target.files[0])}
+              onChange={(e) => addImages(e.target.files[0])}
               required
             />
 
@@ -109,7 +141,7 @@ export default function CreatePost() {
           spacing={2}
           style={{ marginTop: "20px" }}
         >
-          {state.selectedImages.map((file, index) => (
+          {generalProductInformation.Images.map((image, index) => (
             <Box
               key={index}
               style={{
@@ -120,7 +152,7 @@ export default function CreatePost() {
               }}
             >
               <img
-                src={URL.createObjectURL(file)}
+                src={URL.createObjectURL(image)}
                 alt="Posting preview"
                 style={{
                   width: "100%",
@@ -136,7 +168,7 @@ export default function CreatePost() {
                   cursor: "pointer",
                 }}
                 fontSize="large"
-                onClick={() => setState("removeImage", index)}
+                onClick={() => removeImages(index)}
               />
             </Box>
           ))}
@@ -152,20 +184,30 @@ export default function CreatePost() {
             label="Product title"
             variant="outlined"
             name="setProductTitle"
-            onChange={(e) => setProductTitle(e.target.value)}
+            onChange={(e) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Title: e.target.value,
+              })
+            }
           />
           <TextField
             required
             type="number"
             name="setAmount"
             inputProps={{ min: "0", step: "any" }}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Amount: e.target.value,
+              })
+            }
             label="Price (BTC)"
           />
-          {subcategory.length > 0 && (
+          {generalProductInformation.Subcategory?.length > 0 && (
             <CreatePostSpecificationForm
-              subcategory={subcategory}
-              setFormValues={setFormValues}
+              subcategory={generalProductInformation.Subcategory}
+              setProductSpecification={setProductSpecification}
             />
           )}
           <TextField
@@ -175,7 +217,12 @@ export default function CreatePost() {
             multiline
             rows={7}
             placeholder="What other details do you want buyers to know about?"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) =>
+              setGeneralProductInformation({
+                ...generalProductInformation,
+                Description: e.target.value,
+              })
+            }
           />
         </Stack>
       </Box>
@@ -184,8 +231,8 @@ export default function CreatePost() {
           Create post
         </Button>
       </Box>
-      {LoadingCmp(state.isLoading)}
-      {state.showSnackbarCmp}
+      {LoadingCmp(loading)}
+      {snackbarCmp}
     </Box>
   );
 }

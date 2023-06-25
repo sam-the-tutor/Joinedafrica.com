@@ -14,7 +14,7 @@ export const categories = [
       "Cars",
       "Buses",
       "Trucks and trailers",
-      "Vehicle parts and assessories",
+      "Vehicle parts and accessories",
       "Motocycles and bicycles",
     ],
   },
@@ -26,7 +26,7 @@ export const categories = [
       "Electronic supplies",
       "Audio and music equipments",
       "Computer accessories",
-      "Tv and dvd equipment",
+      "Tv and dvd equipments",
     ],
   },
   {

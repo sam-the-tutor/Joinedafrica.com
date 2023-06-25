@@ -60,7 +60,7 @@ export default function PostingCard({
   }
   async function markPostAsPublished() {
     setLoading(true);
-    updatedPost.isPublished = true;
+    updatedPost.IsPublished = true;
     await markPostAsPublishedInPostCanister(updatedPost);
     setLoading(false);
     const message = "Your post has been to the marketplace";
@@ -88,7 +88,7 @@ export default function PostingCard({
   }
   async function removePostFromMarketplace() {
     setLoading(true);
-    updatedPost.isPublished = false;
+    updatedPost.IsPublished = false;
     await updatePostDetailsInPostCanister(updatedPost);
     setLoading(false);
     const message = "Your post has been removed from the marketplace";
@@ -102,7 +102,7 @@ export default function PostingCard({
 
   useEffect(() => {
     async function loadPost() {
-      const file = await getFileFromPostAssetCanister(post.images[0]);
+      const file = await getFileFromPostAssetCanister(post.Images[0]);
       setPostCardDisplayImage(createObjectURLFromArrayOfBytes(file._content));
     }
     loadPost();
@@ -115,7 +115,7 @@ export default function PostingCard({
           <Card
             onClick={() =>
               !canOnlyMeSeeThisPost &&
-              navigate("../view/post/" + updatedPost.postId)
+              navigate("../view/post/" + updatedPost.PostId)
             }
           >
             <CardHeader
@@ -129,15 +129,12 @@ export default function PostingCard({
                 )
               }
               title={
-                updatedPost.productTitle.length > MAX_lENGTH_OF_TITLE
-                  ? updatedPost.productTitle.substring(0, MAX_lENGTH_OF_TITLE) +
-                    "..."
-                  : updatedPost.productTitle
+                updatedPost.Title.length > MAX_lENGTH_OF_TITLE
+                  ? updatedPost.Title.substring(0, MAX_lENGTH_OF_TITLE) + "..."
+                  : updatedPost.Title
               }
               subheader={
-                canOnlyMeSeeThisPost
-                  ? "Posted at " + updatedPost.creationDateOfPost
-                  : ""
+                canOnlyMeSeeThisPost ? "Posted at " + updatedPost.Date : ""
               }
             />
 
@@ -162,7 +159,7 @@ export default function PostingCard({
                   alignItems: "center",
                 }}
               >
-                {updatedPost.amount} BTC
+                {updatedPost.Amount} BTC
               </Typography>
               {loading && <CircularProgress size={35} />}
             </Box>
@@ -171,8 +168,8 @@ export default function PostingCard({
           <PopoverCmp
             setPopupPosition={setPopupPosition}
             popupPosition={popupPosition}
-            isPublished={updatedPost.isPublished}
-            postId={updatedPost.postId}
+            isPublished={updatedPost.IsPublished}
+            postId={updatedPost.PostId}
             markPostAsPublished={markPostAsPublished}
             canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
             setShowDeletePostPopup={setShowDeletePostPopup}

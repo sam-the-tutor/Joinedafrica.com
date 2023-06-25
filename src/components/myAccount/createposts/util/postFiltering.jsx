@@ -105,7 +105,7 @@ export const filtering = [
     ],
   },
   {
-    Name: "Vehicle parts and assessories",
+    Name: "Vehicle parts and accessories",
     Type: [
       "Audio Parts",
       "Breaks, Suspension and Sterring",
@@ -198,7 +198,7 @@ export const filtering = [
     Condition: ["New", "Used"],
   },
   {
-    Name: "Tv and dvd equipment",
+    Name: "Tv and dvd equipments",
     Type: ["TVs", "DVDs", "Projector", "Others"],
     Condition: ["New", "Used"],
     Brand: [

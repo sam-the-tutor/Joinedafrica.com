@@ -49,8 +49,8 @@ shared ({ caller = initializer }) actor class () {
       case null List.nil();
       case (?postids) postids;
     };
-    myPostings := Trie.put(myPostings, hashKey(caller), Principal.equal, List.push(post.postId, userPostings)).0;
-    postsLedger := Trie.put(postsLedger, textHash(post.postId), Text.equal, post).0;
+    myPostings := Trie.put(myPostings, hashKey(caller), Principal.equal, List.push(post.PostId, userPostings)).0;
+    postsLedger := Trie.put(postsLedger, textHash(post.PostId), Text.equal, post).0;
     #ok();
 
   };
@@ -86,7 +86,7 @@ shared ({ caller = initializer }) actor class () {
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
     let authorized = await ProfileCanister.isUserAuthorized(caller);
     if (not authorized) return #err(#UnAuthorizedUser);
-    postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(updatedPost.postId), Text.equal, Option.make(updatedPost)).0;
+    postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(updatedPost.PostId), Text.equal, Option.make(updatedPost)).0;
     return switch (_publishPost(updatedPost)) {
       case (#err(error)) #err(error);
       case (#ok()) #ok();
@@ -95,16 +95,16 @@ shared ({ caller = initializer }) actor class () {
   //based on the category and sub category, add this post id in the list
   private func _publishPost(post : Post) : Result.Result<(), Error> {
     //getting the correct category the post is associated to
-    switch (Trie.get(publishedPosts, categoryKey(post.category), Text.equal)) {
+    switch (Trie.get(publishedPosts, categoryKey(post.Category), Text.equal)) {
       case null return #err(#CategoryNotFound);
       case (?subTrie) {
         //get the right subcategory the post is associated to
-        switch (Trie.get(subTrie, categoryKey(post.subcategory), Text.equal)) {
+        switch (Trie.get(subTrie, categoryKey(post.Subcategory), Text.equal)) {
           case null return #err(#SubcategoryNotFound);
           case (?list) {
             var subcategoryTrie = subTrie;
-            subcategoryTrie := Trie.put(subcategoryTrie, categoryKey(post.subcategory), Text.equal, List.push(post.postId, list)).0;
-            publishedPosts := Trie.put(publishedPosts, categoryKey(post.category), Text.equal, subcategoryTrie).0;
+            subcategoryTrie := Trie.put(subcategoryTrie, categoryKey(post.Subcategory), Text.equal, List.push(post.PostId, list)).0;
+            publishedPosts := Trie.put(publishedPosts, categoryKey(post.Category), Text.equal, subcategoryTrie).0;
 
           };
         };
@@ -120,14 +120,14 @@ shared ({ caller = initializer }) actor class () {
       Updating the post in the ledger. The post passed as an argument will not be published. This was done from
       the front end. We updated the post in the ledger as not published.
     */
-    postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(post.postId), Text.equal, Option.make(post)).0;
+    postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(post.PostId), Text.equal, Option.make(post)).0;
     //The switch statement below removes the post from the marketplace
-    switch (Trie.get(publishedPosts, categoryKey(post.category), Text.equal)) {
+    switch (Trie.get(publishedPosts, categoryKey(post.Category), Text.equal)) {
       case null {
         return #err(#CategoryNotFound);
       };
       case (?subcategoryList) {
-        switch (Trie.get(subcategoryList, categoryKey(post.subcategory), Text.equal)) {
+        switch (Trie.get(subcategoryList, categoryKey(post.Subcategory), Text.equal)) {
           case null {
             return #err(#SubcategoryNotFound);
           };
@@ -136,11 +136,11 @@ shared ({ caller = initializer }) actor class () {
             let newList = List.filter(
               listOfPostIds,
               func(publishedPostIds : PostId) : Bool {
-                return publishedPostIds != post.postId;
+                return publishedPostIds != post.PostId;
               },
             );
-            let updatedSubcategory = Trie.put(subcategoryList, categoryKey(post.subcategory), Text.equal, newList).0;
-            publishedPosts := Trie.put(publishedPosts, categoryKey(post.category), Text.equal, updatedSubcategory).0;
+            let updatedSubcategory = Trie.put(subcategoryList, categoryKey(post.Subcategory), Text.equal, newList).0;
+            publishedPosts := Trie.put(publishedPosts, categoryKey(post.Category), Text.equal, updatedSubcategory).0;
             #ok();
           };
         };
