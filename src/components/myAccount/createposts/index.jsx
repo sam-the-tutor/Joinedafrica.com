@@ -29,6 +29,11 @@ import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { submitForm } from "./util";
 
 export default function CreatePost() {
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [formValues, setFormValues] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [images, setImage] = useState([]);
   const theme = useTheme();
   const ismediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
@@ -42,12 +47,15 @@ export default function CreatePost() {
 
   function submitPost(event) {
     event.preventDefault();
-    console.log("My state : ", state)
-    submitForm(state, setState);
+    // console.log("My state : ", state);
+    console.log("My formValues : ", formValues);
+    console.log("My category : ", category);
+    console.log("My subcategory : ", subcategory);
+    // submitForm(state, setState);
   }
-
+  // onSubmit={handleSubmit(submitPost)}
   return (
-    <Box component="form" autoComplete="off" onSubmit={(e) => submitPost(e)}>
+    <Box component="form" onSubmit={submitPost}>
       <Box>
         <Typography style={{ marginBottom: "10px" }}>
           Product category
@@ -56,34 +64,35 @@ export default function CreatePost() {
           <MultiSelect
             name="Product category"
             listOfElements={getCategoryNames()}
-            clickedValue={(selectedCategory) =>
-              setState("setCategoryName", {
-                selectedCategory,
-                subCategories: getSubcategory(selectedCategory),
-              })
+            clickedValue={
+              (selectedCategory) => setCategory(selectedCategory)
+              // setState("setCategoryName", {
+              //   selectedCategory,
+              //   subCategories: getSubcategory(selectedCategory),
+              // })
             }
           />
           <MultiSelect
             name="sub-category"
-            listOfElements={state.subCategories}
-            clickedValue={(selectedSubcategory) =>
-              setState("setSelectedSubcategory", { selectedSubcategory })
+            listOfElements={getSubcategory(category)}
+            clickedValue={
+              (selectedSubcategory) => setSubcategory(selectedSubcategory)
+              // setState("setSelectedSubcategory", { selectedSubcategory })
             }
           />
-          <TextField
+          {/* <TextField
             label="Country"
             fullWidth
-            placeholder = "Nigeria"
+            placeholder="Nigeria"
             style={{ margin: "30px 0" }}
             variant="outlined"
-            required
-            onChange={(e) =>
-              setState("location",{location : e.target.value})
-            }
-        />
+            // required
+            {...register("Country")}
+            onChange={(e) => setState("location", { location: e.target.value })}
+          /> */}
         </Stack>
       </Box>
-      <Box style={{ marginBottom: "35px", marginTop: "35px" }}>
+      {/* <Box style={{ marginBottom: "35px", marginTop: "35px" }}>
         <Typography style={{ marginBottom: "10px" }}>Add image(s)</Typography>
         <PostImage>
           <Box>
@@ -137,33 +146,42 @@ export default function CreatePost() {
             </Box>
           ))}
         </Stack>
-      </Box>
+      </Box> */}
       <Box>
         <Typography style={{ marginBottom: "10px" }}>
           Product details
         </Typography>
         <Stack spacing={2}>
-          <TextField
-            required
+          {/* <TextField
+            // required
             label="Product title"
             variant="outlined"
             name="setProductTitle"
             onChange={(e) =>
               setState("setProductTitle", { productTitle: e.target.value })
             }
+
           />
           <TextField
-            required
+            // required
             type="number"
             name="setAmount"
             inputProps={{ min: "0", step: "any" }}
             onChange={(e) => setState("setAmount", { amount: e.target.value })}
             label="Price (BTC)"
-          />
-          {CreatePostSpecificationForm(state, setState)}
-          <TextField
-            required
-            label="Product description"
+
+          /> */}
+          {/* {CreatePostSpecificationForm(state, setState)} */}
+          {/* {subcategory.length > 0 && CreatePostSpecificationForm(subcategory)} */}
+          {subcategory.length > 0 && (
+            <CreatePostSpecificationForm
+              subcategory={subcategory}
+              setFormValues={setFormValues}
+            />
+          )}
+          {/* <TextField
+            // required
+            name="Product description"
             variant="outlined"
             multiline
             rows={7}
@@ -173,10 +191,10 @@ export default function CreatePost() {
                 productDescription: e.target.value,
               })
             }
-          />
+          /> */}
         </Stack>
       </Box>
-      <Box style={{ marginTop: "40px", marginBottom:"30px" }}>
+      <Box style={{ marginTop: "40px", marginBottom: "30px" }}>
         <Button variant="outlined" endIcon={<SendIcon />} type="submit">
           Create post
         </Button>

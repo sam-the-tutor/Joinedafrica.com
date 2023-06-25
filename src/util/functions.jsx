@@ -1,4 +1,3 @@
-import React from "react";
 import { AES, enc } from "crypto-js";
 
 export function setSessionStorage(key, value, isConfidential) {

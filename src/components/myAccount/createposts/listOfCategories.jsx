@@ -78,6 +78,7 @@ export function getSubcategory(categoryName) {
   for (let i = 0; i < categories.length; i++) {
     if (categories[i].name === categoryName) return categories[i].subcategory;
   }
+  return [];
 }
 
 export function getCities() {

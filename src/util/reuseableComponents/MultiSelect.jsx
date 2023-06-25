@@ -1,5 +1,6 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
+import { useForm } from "react-hook-form";
 
 /**
  * MultiSelect is used to select from a list of elements
@@ -11,9 +12,8 @@ export function MultiSelect({ name, listOfElements, clickedValue }) {
   return (
     <Box>
       <FormControl fullWidth>
-        <InputLabel id="select-label">{name}</InputLabel>
+        <InputLabel>{name}</InputLabel>
         <Select
-          id="select-label"
           defaultValue=""
           label={name}
           required

@@ -18,7 +18,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -48,7 +48,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -89,7 +89,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -163,9 +163,9 @@ export const filtering = [
       "Others",
     ],
     Condition: ["New", "Used"],
-    Operating_System: ["Windows", "Linux", "MacOS", "Others"],
+    Operating_system: ["Windows", "Linux", "MacOS", "Others"],
     Processor: ["Intel", "AMD", "Others"],
-    Storage_Capacity: [
+    Storage_capacity: [
       "128GB",
       "250GB",
       "256GB",
@@ -175,8 +175,8 @@ export const filtering = [
       "1TB",
       "Others",
     ],
-    Storage_Type: ["HDD", "SSD", "Others"],
-    RAM: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
+    Storage_type: ["HDD", "SSD", "Others"],
+    Ram: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
   },
   {
     Name: "Audio and music equipments",
@@ -266,7 +266,7 @@ export const filtering = [
     Name: "Phones and tablets",
     Type: ["Phone", "Tablet"],
     Condition: ["New", "Used"],
-    Storage_Capacity: [
+    Storage_capacity: [
       "128GB",
       "250GB",
       "256GB",
@@ -290,8 +290,8 @@ export const filtering = [
       "Purple",
       "Others",
     ],
-    Display_Type: ["LCD", "IPS-LCD", "OLED", "AMOLED"],
-    RAM: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
+    Display_type: ["LCD", "IPS-LCD", "OLED", "AMOLED"],
+    Ram: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
     Brand: [
       "Apple",
       "Samsung",
@@ -318,8 +318,8 @@ export const filtering = [
   {
     Name: "Houses and apartments for rent",
     Condition: ["New", "Used"],
-    Is_Furnished: ["Yes", "Partially furnished", "No"],
-    Has_Parking_Space: ["Yes", "No"],
+    Is_furnished: ["Yes", "Partially furnished", "No"],
+    Has_parking_space: ["Yes", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Type: [
@@ -334,8 +334,8 @@ export const filtering = [
   {
     Name: "Houses and apartments for sale",
     Condition: ["New", "Used"],
-    Has_Parking_Space: ["Yes", "No"],
-    Is_Furnished: ["Yes", "Partially furnished", "No"],
+    Has_parking_space: ["Yes", "No"],
+    Is_furnished: ["Yes", "Partially furnished", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Type: [
@@ -350,7 +350,7 @@ export const filtering = [
   {
     Name: "Land and plots for sale",
     Type: ["Commercial Land", "Farmland", "Residential Land", "Mixed-Use Land"],
-    Number_of_Plots: [
+    Number_of_plots: [
       "1",
       "2",
       "3",
