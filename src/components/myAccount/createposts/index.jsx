@@ -32,9 +32,13 @@ export default function CreatePost() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [formValues, setFormValues] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [productTitle, setProductTitle] = useState("");
+  const [country, setCountry] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [images, setImage] = useState([]);
   const theme = useTheme();
+
   const ismediumScreenSizeAndBelow = useMediaQuery(
     theme.breakpoints.down("md")
   );
@@ -64,35 +68,26 @@ export default function CreatePost() {
           <MultiSelect
             name="Product category"
             listOfElements={getCategoryNames()}
-            clickedValue={
-              (selectedCategory) => setCategory(selectedCategory)
-              // setState("setCategoryName", {
-              //   selectedCategory,
-              //   subCategories: getSubcategory(selectedCategory),
-              // })
-            }
+            clickedValue={(selectedCategory) => setCategory(selectedCategory)}
           />
           <MultiSelect
             name="sub-category"
             listOfElements={getSubcategory(category)}
-            clickedValue={
-              (selectedSubcategory) => setSubcategory(selectedSubcategory)
-              // setState("setSelectedSubcategory", { selectedSubcategory })
+            clickedValue={(selectedSubcategory) =>
+              setSubcategory(selectedSubcategory)
             }
           />
-          {/* <TextField
+          <TextField
             label="Country"
             fullWidth
             placeholder="Nigeria"
             style={{ margin: "30px 0" }}
             variant="outlined"
-            // required
-            {...register("Country")}
-            onChange={(e) => setState("location", { location: e.target.value })}
-          /> */}
+            onChange={(e) => setCountry(e.target.value)}
+          />
         </Stack>
       </Box>
-      {/* <Box style={{ marginBottom: "35px", marginTop: "35px" }}>
+      <Box style={{ marginBottom: "35px", marginTop: "35px" }}>
         <Typography style={{ marginBottom: "10px" }}>Add image(s)</Typography>
         <PostImage>
           <Box>
@@ -146,52 +141,42 @@ export default function CreatePost() {
             </Box>
           ))}
         </Stack>
-      </Box> */}
+      </Box>
       <Box>
         <Typography style={{ marginBottom: "10px" }}>
           Product details
         </Typography>
         <Stack spacing={2}>
-          {/* <TextField
-            // required
+          <TextField
+            required
             label="Product title"
             variant="outlined"
             name="setProductTitle"
-            onChange={(e) =>
-              setState("setProductTitle", { productTitle: e.target.value })
-            }
-
+            onChange={(e) => setProductTitle(e.target.value)}
           />
           <TextField
-            // required
+            required
             type="number"
             name="setAmount"
             inputProps={{ min: "0", step: "any" }}
-            onChange={(e) => setState("setAmount", { amount: e.target.value })}
+            onChange={(e) => setAmount(e.target.value)}
             label="Price (BTC)"
-
-          /> */}
-          {/* {CreatePostSpecificationForm(state, setState)} */}
-          {/* {subcategory.length > 0 && CreatePostSpecificationForm(subcategory)} */}
+          />
           {subcategory.length > 0 && (
             <CreatePostSpecificationForm
               subcategory={subcategory}
               setFormValues={setFormValues}
             />
           )}
-          {/* <TextField
-            // required
+          <TextField
+            required
             name="Product description"
             variant="outlined"
             multiline
             rows={7}
             placeholder="What other details do you want buyers to know about?"
-            onChange={(e) =>
-              setState("setProductDescription", {
-                productDescription: e.target.value,
-              })
-            }
-          /> */}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Stack>
       </Box>
       <Box style={{ marginTop: "40px", marginBottom: "30px" }}>
