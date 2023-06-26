@@ -20,11 +20,12 @@ export function CreatePostSpecificationForm({
           key={index}
           required
           variant="outlined"
-          onChange={(e) => (e) =>
+          onChange={(e) =>
             setProductSpecification((previousFormValues) => ({
               ...previousFormValues,
               [field.name]: e.target.value,
-            }))}
+            }))
+          }
         />
       );
     }

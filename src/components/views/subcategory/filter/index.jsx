@@ -1,15 +1,13 @@
 import { PropTypes } from "prop-types";
 import React from "react";
-
+import { Button } from "@mui/material";
 import { getFilterForSubcategory } from "../../../myAccount/createposts/util/postFiltering";
 import { BoxCmp, DrawerContainer, TypographyCmp } from "./style";
 
 export default function FilterPost({
   subcategoryName,
-  // categoryName,
-  // posts,
-  // setPosts,
-  // setLoading,
+  filterPosts,
+  setFilterOptions,
   open,
   close,
 }) {
@@ -25,13 +23,10 @@ export default function FilterPost({
     >
       <TypographyCmp variant="h6">Filter posts</TypographyCmp>
       <BoxCmp>
-        {getFilterForSubcategory(
-          subcategoryName
-          // categoryName,
-          // posts,
-          // setPosts,
-          // setLoading
-        )}
+        {getFilterForSubcategory(subcategoryName, setFilterOptions)}
+        <Button variant="outlined" onClick={() => filterPosts()}>
+          Filter Posts
+        </Button>
       </BoxCmp>
     </DrawerContainer>
   );
@@ -39,10 +34,8 @@ export default function FilterPost({
 
 FilterPost.propTypes = {
   subcategoryName: PropTypes.string,
-  // categoryName: PropTypes.string,
-  // posts: PropTypes.array,
-  // setPosts: PropTypes.func,
-  // setLoading: PropTypes.func,
+  setFilterOptions: PropTypes.func,
+  filterPosts: PropTypes.func,
   open: PropTypes.bool,
   close: PropTypes.func,
 };

@@ -70,7 +70,7 @@ export default function ViewPost() {
               <LeftComponent
                 post={post}
                 postImages={postImages}
-                productSpecification={productSpecification}
+                ProductSpecification={productSpecification}
               />
               <RightComponent post={post} />
             </Grid>
@@ -139,15 +139,15 @@ function RightComponent({ post }) {
     </Grid>
   );
 }
-function LeftComponent({ post, postImages, productSpecification }) {
+function LeftComponent({ post, postImages, ProductSpecification }) {
   return (
     <Grid item md={9} xs={12}>
       <Box style={{ marginBottom: "20px" }}>
         <Typography variant="h5" gutterBottom>
-          {post.productTitle}
+          {post.Title}
         </Typography>
         <Typography variant="h6" style={{ color: "#37a864" }}>
-          {post.amount} BTC
+          {post.Amount} BTC
         </Typography>
       </Box>
       <ReactImageGallery items={postImages} />
@@ -161,7 +161,7 @@ function LeftComponent({ post, postImages, productSpecification }) {
         >
           Specification
         </Typography>
-        {Object.entries(productSpecification).map(
+        {Object.entries(ProductSpecification).map(
           ([specification, value], index) => (
             <Box
               style={{
@@ -186,7 +186,7 @@ function LeftComponent({ post, postImages, productSpecification }) {
           >
             Description
           </Typography>
-          <Typography>{post.productDescription}</Typography>
+          <Typography>{post.Description}</Typography>
         </Box>
       </Box>
     </Grid>

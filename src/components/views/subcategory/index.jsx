@@ -4,16 +4,17 @@ import { useParams } from "react-router-dom";
 
 import { post } from "../../../declarations/post";
 import { getErrorMessage } from "../../../util/ErrorMessages";
-import { getFilterForSubcategory } from "../../myAccount/createposts/util/postFiltering";
 import ViewFeed from "./feed";
 import FilterPost from "./filter";
 import LargeScreenLeftBar from "./largescreenleftbar";
 import { BoxCmp } from "./style";
+import { FilterPostsHandler } from "./util";
 
 export default function ViewSubcategory() {
   const [loading, setLoading] = useState(false);
   const { categoryName, subcategoryName } = useParams();
   const [posts, setPosts] = useState([]);
+  const [filterOptions, setFilterOptions] = useState({});
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -32,12 +33,20 @@ export default function ViewSubcategory() {
     }
     init();
   }, []);
+
+  function filterPosts() {
+    setLoading(true);
+    setPosts(FilterPostsHandler(filterOptions, posts));
+    setLoading(false);
+  }
+
   return (
     <Box>
       <BoxCmp>
         <LargeScreenLeftBar
-          getFilterForSubcategory={getFilterForSubcategory}
           subcategoryName={subcategoryName}
+          setFilterOptions={setFilterOptions}
+          filterPosts={filterPosts}
         />
         <ViewFeed
           posts={posts}
@@ -50,11 +59,9 @@ export default function ViewSubcategory() {
       <FilterPost
         open={mobileOpen}
         close={() => setMobileOpen(false)}
-        categoryName={categoryName}
         subcategoryName={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
+        setFilterOptions={setFilterOptions}
+        filterPosts={filterPosts}
       />
     </Box>
   );

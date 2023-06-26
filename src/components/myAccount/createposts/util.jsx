@@ -26,6 +26,7 @@ export async function handleSubmit(
     post(),
     createPost(generalProductInformation, productSpecification),
   ]);
+  console.log(createdPost);
   const result = await authenticatedUser.createPost(createdPost);
   return result;
 }

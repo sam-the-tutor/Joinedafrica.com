@@ -45,8 +45,8 @@ export function extractProductSpecification(response) {
     { category: "Fashion", subcategory: "Shoes" },
   ];
   for (const { category, subcategory } of categories) {
-    if (response.productSpecification?.[category]?.[subcategory]) {
-      return { ...response.productSpecification[category][subcategory] };
+    if (response.ProductSpecification?.[category]?.[subcategory]) {
+      return { ...response.ProductSpecification[category][subcategory] };
     }
   }
   return null;
@@ -55,7 +55,7 @@ export function extractProductSpecification(response) {
 export async function getPostImages(response) {
   const images = [];
   await Promise.all(
-    response.images.map(async (image) => {
+    response.Images.map(async (image) => {
       const file = await getFileFromPostAssetCanister(image);
       const url = createObjectURLFromArrayOfBytes(file._content);
       images.push({
