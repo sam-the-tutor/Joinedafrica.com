@@ -1,6 +1,5 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
 
 /**
  * MultiSelect is used to select from a list of elements
