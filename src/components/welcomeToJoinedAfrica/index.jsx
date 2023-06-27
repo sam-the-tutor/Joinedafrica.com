@@ -38,7 +38,8 @@ export default function WelcomePage() {
                 }}
               >
                 Joined Africa is marketplace where sellers advertise products in
-                crypto currency, connecting buyers directly with sellers.
+                crypto currency, connecting buyers directly with sellers within
+                Africa.
               </Typography>
             </Box>
           </Box>
@@ -88,9 +89,9 @@ export default function WelcomePage() {
           <WhoWeAre
             content={
               <p>
-                Joined Africa connects sellers and buyers locally and globally,
-                empowering sellers to advertise products, connect with buyers,
-                and expand their reach
+                We <b style={{ textDecoration: "underline" }}>connect</b>{" "}
+                sellers and buyers locally and globally, empowering sellers to
+                advertise products, connect with buyers, and expand their reach.
               </p>
             }
             imagePath="./welcomepage/local_market_global_reach_without_background.png"
@@ -98,9 +99,10 @@ export default function WelcomePage() {
           <WhoWeAre
             content={
               <p>
-                Joined Africa empowers sellers to showcase their products
-                through images. Simply take a photo of the item you want to sell
-                and advertise it on Joined Africa.
+                We <b style={{ textDecoration: "underline" }}>empower</b>{" "}
+                sellers to showcase their products through images. Simply take a
+                photo of the item you want to sell and advertise it on Joined
+                Africa.
               </p>
             }
             imagePath="./welcomepage/take_a_photo.jpg"
@@ -108,9 +110,9 @@ export default function WelcomePage() {
           <WhoWeAre
             content={
               <p>
-                On Joined Africa, buyers can conveniently connect with sellers
-                for their desired items through a built-in messaging
-                application.
+                We <b style={{ textDecoration: "underline" }}>create</b> more
+                opportunities by bringing together buyers and sellers on Joined
+                Africa. With our built-in messaging application.
               </p>
             }
             imagePath="./welcomepage/buyer_and_seller_chatting.jpg"
