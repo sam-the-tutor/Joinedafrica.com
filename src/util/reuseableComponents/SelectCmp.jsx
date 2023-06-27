@@ -1,14 +1,11 @@
 import {
-  Checkbox,
   FormControlLabel,
-  FormGroup,
   FormLabel,
   List,
   Radio,
   RadioGroup,
 } from "@mui/material/";
 import React from "react";
-import filterSubcategory from "../../components/myAccount/createposts/util/subCategoryFiltering";
 
 /**
  *  ControlledRadioButtonsGroup lists options to filter postings and also keeps track of the users selected filter

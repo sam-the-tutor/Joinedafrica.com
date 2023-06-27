@@ -75,12 +75,10 @@ export function getCategoryNames() {
 }
 
 export function getSubcategory(categoryName) {
-  for (let i = 0; i < categories.length; i++) {
-    if (categories[i].name === categoryName) return categories[i].subcategory;
-  }
+  categories.forEach((category) => {
+    if (category.name === categoryName) {
+      return category.subcategory;
+    }
+  });
   return [];
-}
-
-export function getCities() {
-  return ["Abuja", "Lagos", "Port Harcourt"];
 }
