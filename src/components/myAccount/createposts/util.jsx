@@ -4,14 +4,14 @@ import { uploadMultipleFiles } from "../../../canisters/post_assets";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 
-export function getSuccessSnackbarCmp() {
+export function getSuccessSnackbarCmp(setSnackbarCmp) {
   return (
     <SnackbarCmp
       message="Your post has been created! Go to My postings to see your post"
       handleClose={(event, reason) => {
         //the user has to click on the alert to close it.
         if (reason != "clickaway") {
-          setState("setSnackBarCmp", { showSnackbarCmp: null });
+          setSnackbarCmp(null);
         }
       }}
     />
@@ -26,7 +26,6 @@ export async function handleSubmit(
     post(),
     createPost(generalProductInformation, productSpecification),
   ]);
-  console.log(createdPost);
   const result = await authenticatedUser.createPost(createdPost);
   return result;
 }

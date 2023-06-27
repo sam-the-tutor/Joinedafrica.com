@@ -58,7 +58,7 @@ export default function Header() {
             <Grid item>
               {isUserLoggedIn ? (
                 <Grid item>
-                  <ProfileIcon />
+                  <ProfileIcon setPrincipal={setPrincipal} />
                 </Grid>
               ) : (
                 <Authenticate

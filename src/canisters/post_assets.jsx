@@ -11,7 +11,6 @@ const agent = new HttpAgent(); // Agent with an authorized identity
  * http://localhost:4943/?canisterId=<Candid_UI_CanisterId>&id=<post_asset_canisterId>
  */
 const canisterId = process.env.POST_ASSETS_CANISTER_ID; // Canister id of the post asset canister
-console.log(canisterId);
 
 if (process.env.DFX_NETWORK !== "ic") {
   agent.fetchRootKey().catch((err) => {
@@ -69,7 +68,6 @@ export async function uploadMultipleFiles(images, userPrincipal) {
   const pathsToImages = [];
   await Promise.all(
     images.map(async (image) => {
-      console.log(image);
       //generating unique id each time for each image
       const key = await uploadFileToPostAssetCanister(
         image,

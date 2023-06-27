@@ -71,7 +71,7 @@ export default function CreatePost() {
     if (result?.err) {
       alert(getErrorMessage(result.err));
     } else {
-      setSnackbarCmp(getSuccessSnackbarCmp());
+      setSnackbarCmp(getSuccessSnackbarCmp(setSnackbarCmp));
     }
     setLoading(false);
   }

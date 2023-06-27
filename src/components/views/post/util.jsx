@@ -24,6 +24,7 @@ export function extractProductSpecification(response) {
     { category: "Electronics", subcategory: "Audio_and_music_equipments" },
     { category: "Electronics", subcategory: "Computer_accessories" },
     { category: "Electronics", subcategory: "Tv_and_dvd_equipment" },
+    { category: "Electronics", subcategory: "Electronic_supplies" },
     { category: "Health_and_beauty", subcategory: "Skincare" },
     { category: "Health_and_beauty", subcategory: "Hair_products" },
     { category: "Health_and_beauty", subcategory: "Fragrances" },
@@ -72,7 +73,7 @@ export async function sendMessage(message, firebaseDB, post) {
   const authenticatedUser = await conversation();
   const result = await authenticatedUser.sendMessage(chatMessage);
   //send message notification to the receiver
-  const messageRef = ref(firebaseDB, post.creatorOfPostId.toText());
+  const messageRef = ref(firebaseDB, post.CreatorOfPostId.toText());
   set(push(messageRef), chatMessage);
   return result;
 }
@@ -81,7 +82,7 @@ function createChatMessage(userMessage, post) {
   return {
     messageContent: userMessage,
     sender: Principal.fromText(getFromSessionStorage("principalId", true)),
-    receiver: post.creatorOfPostId,
+    receiver: post.CreatorOfPostId,
     time: new Date().toLocaleTimeString(),
     date: new Date().toLocaleDateString(),
   };

@@ -5,12 +5,16 @@ import { join } from "path";
 import { defineConfig } from "vite";
 
 const localNetwork = "local";
+const APPLICATION_NAME = "Joined Africa";
+const AUTH_PATH =
+  "/authenticate/?applicationName=" + APPLICATION_NAME + "#authorize";
+const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
 const network = process.env["DFX_NETWORK"] || localNetwork;
 
 const internetIdentityUrl =
   network === "local"
     ? `http://localhost:4943?canisterId=be2us-64aaa-aaaaa-qaabq-cai`
-    : "https://identity.ic0.app/#authorize";
+    : NFID_AUTH_URL;
 
 let canisterIdPath: string;
 if (network === localNetwork) {

@@ -29,7 +29,6 @@ export default function ViewCategory() {
     async function getPostings() {
       setLoading(true);
       const postings = await post.getTop10PostingsInCategory(categoryName);
-      console.log(postings);
       if (postings?.err) {
         alert(getErrorMessage(postings.err));
       } else {

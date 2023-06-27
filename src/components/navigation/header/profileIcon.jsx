@@ -12,14 +12,14 @@ import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
 import { AppContext } from "../../../context";
 import { logout } from "../../auth/Logout";
 
-export default function ProfileIcon() {
+export default function ProfileIcon({ setPrincipal }) {
   const navigate = useNavigate();
   const [profile, setUserProfile] = useState(null);
   //anchor is used to display more information when the user clicks on thier profile
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const { reloadProfileIcon } = useContext(AppContext);
+  const { reloadProfileIcon, setIsUserLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
     async function LoadProfile() {
@@ -31,6 +31,8 @@ export default function ProfileIcon() {
   }, [reloadProfileIcon]);
   function logUserOut() {
     logout();
+    setIsUserLoggedIn(false);
+    setPrincipal("");
     navigate("/home");
   }
   return (

@@ -75,10 +75,8 @@ export function getCategoryNames() {
 }
 
 export function getSubcategory(categoryName) {
-  categories.forEach((category) => {
-    if (category.name === categoryName) {
-      return category.subcategory;
-    }
-  });
-  return [];
+  const category = categories.find(
+    (category) => category.name === categoryName
+  );
+  return category ? category.subcategory : [];
 }

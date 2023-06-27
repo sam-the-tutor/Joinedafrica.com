@@ -509,10 +509,11 @@ export function getFilterForSubcategory(subcategoryName, setFilterOptions) {
   const result = [];
   const postDetails = getFilteringInformation(subcategoryName);
 
-  Object.entries(postDetails).forEach(([filterName, filterValues]) => {
+  Object.entries(postDetails).forEach(([filterName, filterValues], index) => {
     if (Array.isArray(filterValues)) {
       result.push(
         <ControlledRadioButtonsGroup
+          key={index}
           list={filterValues}
           title={filterName.replaceAll("_", " ")}
           setFilterOptions={setFilterOptions}

@@ -128,11 +128,7 @@ function RightComponent({ post }) {
           style={{ marginBottom: "15px" }}
           onChange={(event) => setUserMessage(event.target.value)}
         />
-        <Button
-          variant="outlined"
-          style={{ height: "50px" }}
-          onClick={handleMessage}
-        >
+        <Button variant="outlined" onClick={handleMessage}>
           {sendMessageProgress || "Send message"}
         </Button>
       </Box>
