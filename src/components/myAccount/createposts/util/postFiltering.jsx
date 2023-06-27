@@ -18,7 +18,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -48,7 +48,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -89,7 +89,7 @@ export const filtering = [
     Condition: ["New", "Used"],
     Year_of_manufacture: generateArrayOfYears(),
     Transmission: ["Automatic", "Manual"],
-    Is_Registered: ["Yes", "No"],
+    Is_registered: ["Yes", "No"],
     Colour: [
       "Black",
       "Blue",
@@ -105,7 +105,7 @@ export const filtering = [
     ],
   },
   {
-    Name: "Vehicle parts and assessories",
+    Name: "Vehicle parts and accessories",
     Type: [
       "Audio Parts",
       "Breaks, Suspension and Sterring",
@@ -163,9 +163,9 @@ export const filtering = [
       "Others",
     ],
     Condition: ["New", "Used"],
-    Operating_System: ["Windows", "Linux", "MacOS", "Others"],
+    Operating_system: ["Windows", "Linux", "MacOS", "Others"],
     Processor: ["Intel", "AMD", "Others"],
-    Storage_Capacity: [
+    Storage_capacity: [
       "128GB",
       "250GB",
       "256GB",
@@ -175,8 +175,8 @@ export const filtering = [
       "1TB",
       "Others",
     ],
-    Storage_Type: ["HDD", "SSD", "Others"],
-    RAM: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
+    Storage_type: ["HDD", "SSD", "Others"],
+    Ram: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
   },
   {
     Name: "Audio and music equipments",
@@ -198,7 +198,7 @@ export const filtering = [
     Condition: ["New", "Used"],
   },
   {
-    Name: "Tv and dvd equipment",
+    Name: "Tv and dvd equipments",
     Type: ["TVs", "DVDs", "Projector", "Others"],
     Condition: ["New", "Used"],
     Brand: [
@@ -266,7 +266,7 @@ export const filtering = [
     Name: "Phones and tablets",
     Type: ["Phone", "Tablet"],
     Condition: ["New", "Used"],
-    Storage_Capacity: [
+    Storage_capacity: [
       "128GB",
       "250GB",
       "256GB",
@@ -290,8 +290,8 @@ export const filtering = [
       "Purple",
       "Others",
     ],
-    Display_Type: ["LCD", "IPS-LCD", "OLED", "AMOLED"],
-    RAM: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
+    Display_type: ["LCD", "IPS-LCD", "OLED", "AMOLED"],
+    Ram: ["2GB", "4GB", "8GB", "16GB", "32GB", "64GB", "Others"],
     Brand: [
       "Apple",
       "Samsung",
@@ -318,8 +318,8 @@ export const filtering = [
   {
     Name: "Houses and apartments for rent",
     Condition: ["New", "Used"],
-    Is_Furnished: ["Yes", "Partially furnished", "No"],
-    Has_Parking_Space: ["Yes", "No"],
+    Is_furnished: ["Yes", "Partially furnished", "No"],
+    Has_parking_space: ["Yes", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Type: [
@@ -334,8 +334,8 @@ export const filtering = [
   {
     Name: "Houses and apartments for sale",
     Condition: ["New", "Used"],
-    Has_Parking_Space: ["Yes", "No"],
-    Is_Furnished: ["Yes", "Partially furnished", "No"],
+    Has_parking_space: ["Yes", "No"],
+    Is_furnished: ["Yes", "Partially furnished", "No"],
     Bathrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Bedrooms: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     Type: [
@@ -350,7 +350,7 @@ export const filtering = [
   {
     Name: "Land and plots for sale",
     Type: ["Commercial Land", "Farmland", "Residential Land", "Mixed-Use Land"],
-    Number_of_Plots: [
+    Number_of_plots: [
       "1",
       "2",
       "3",
@@ -499,321 +499,27 @@ function generateArrayOfYears() {
   return years;
 }
 export function getFilteringInformation(subcategoryName) {
-  for (let i = 0; i < filtering.length; i++) {
-    if (filtering[i].Name == subcategoryName) return filtering[i];
-  }
-  return null;
+  return (
+    filtering.find((subcategory) => subcategory.Name === subcategoryName) ||
+    null
+  );
 }
 
-export function getFilterForSubcategory(
-  subcategoryName,
-  categoryName,
-  posts,
-  setPosts,
-  setLoading
-) {
+export function getFilterForSubcategory(subcategoryName, setFilterOptions) {
   const result = [];
   const postDetails = getFilteringInformation(subcategoryName);
-  if (postDetails.Brand) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Brand}
-        title="Brand"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Type) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Type}
-        title="Type"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Condition) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Condition}
-        title="Condition"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Is_Registered) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Is_Registered}
-        title="Registered"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Has_Parking_Space) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Has_Parking_Space}
-        title="Parking Space"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Style) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Style}
-        title="Style"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Display) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Display}
-        title="Display"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Is_Furnished) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Is_Furnished}
-        title="Furnished"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Transmission) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Transmission}
-        title="Transmission"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Processor) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Processor}
-        title="Processor"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Display_Type) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Display_Type}
-        title="Display Type"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Bedrooms) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Bedrooms}
-        title="Bedrooms"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Number_of_Plots) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Number_of_Plots}
-        title="Number of Plots"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Bathrooms) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Bathrooms}
-        title="Bathrooms"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Gender) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Gender}
-        title="Gender"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Formation) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Formation}
-        title="Formation"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Formulation) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Formulation}
-        title="Formulation"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Operating_System) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Operating_System}
-        title="Operating System"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Storage_Type) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Storage_Type}
-        title="Storage Type"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Storage_Capacity) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Storage_Capacity}
-        title="Storage Capacity"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.RAM) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.RAM}
-        title="RAM"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
-  if (postDetails.Colour) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Colour}
-        title="Colour"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
 
-  if (postDetails.Year_of_manufacture) {
-    result.push(
-      <ControlledRadioButtonsGroup
-        list={postDetails.Year_of_manufacture}
-        title="Year of manufacture"
-        category={categoryName}
-        subcategory={subcategoryName}
-        posts={posts}
-        setPosts={setPosts}
-        setLoading={setLoading}
-      />
-    );
-  }
+  Object.entries(postDetails).forEach(([filterName, filterValues]) => {
+    if (Array.isArray(filterValues)) {
+      result.push(
+        <ControlledRadioButtonsGroup
+          list={filterValues}
+          title={filterName.replaceAll("_", " ")}
+          setFilterOptions={setFilterOptions}
+        />
+      );
+    }
+  });
 
   return result;
 }

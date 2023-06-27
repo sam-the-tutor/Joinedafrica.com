@@ -3,62 +3,56 @@ import { post } from "../../../canisters/post";
 import { uploadMultipleFiles } from "../../../canisters/post_assets";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
-import getPostSpecificationFromForm from "./util/getPostSpecificationFromForm";
 
-function updateSnackBarCmp(setState) {
-  setState("setSnackBarCmp", {
-    showSnackbarCmp: (
-      <SnackbarCmp
-        message="Your post has been created! Go to My postings to see your post"
-        handleClose={(event, reason) => {
-          //the user has to click on the alert to close it.
-          if (reason != "clickaway") {
-            setState("setSnackBarCmp", { showSnackbarCmp: null });
-          }
-        }}
-      />
-    ),
-  });
+export function getSuccessSnackbarCmp() {
+  return (
+    <SnackbarCmp
+      message="Your post has been created! Go to My postings to see your post"
+      handleClose={(event, reason) => {
+        //the user has to click on the alert to close it.
+        if (reason != "clickaway") {
+          setState("setSnackBarCmp", { showSnackbarCmp: null });
+        }
+      }}
+    />
+  );
 }
 
-export async function submitForm(state, setState) {
-  const MAX_LENGTH_OF_DESCRIPTION = 150;
+export async function handleSubmit(
+  generalProductInformation,
+  productSpecification
+) {
+  const [authenticatedUser, createdPost] = await Promise.all([
+    post(),
+    createPost(generalProductInformation, productSpecification),
+  ]);
+  console.log(createdPost);
+  const result = await authenticatedUser.createPost(createdPost);
+  return result;
+}
 
-  if (state.productDescription.length < MAX_LENGTH_OF_DESCRIPTION) {
-    alert("Product description should be more than 149 characters");
-    return;
-  }
-  setState("setIsLoading", { isLoading: true });
+async function createPost(generalProductInformation, productSpecification) {
   const userPrincipal = getFromSessionStorage("principalId", true);
-  console.log(userPrincipal);
-  const createdPost = {
-    creationDateOfPost: new Date().toLocaleDateString(),
-    category: state.selectedCategory,
-    postId: getUniqueId(),
-    subcategory: state.selectedSubcategory,
-    productTitle: state.productTitle,
-    creatorOfPostId: Principal.fromText(userPrincipal),
-    isPublished: false,
-    amount: state.amount,
-    location: state.location,
-    productDescription: state.productDescription,
-    condition: state.condition,
-    productSpecification: {
-      ...getPostSpecificationFromForm(state),
+  const Category = generalProductInformation.Category.replaceAll(" ", "_");
+  const Subcategory = generalProductInformation.Subcategory.replaceAll(
+    " ",
+    "_"
+  );
+  const result = {
+    ...generalProductInformation,
+    Date: new Date().toLocaleDateString(),
+    PostId: getUniqueId(),
+    CreatorOfPostId: Principal.fromText(userPrincipal),
+    IsPublished: false,
+    Images: await uploadMultipleFiles(
+      generalProductInformation.Images,
+      userPrincipal
+    ),
+    ProductSpecification: {
+      [Category]: {
+        [Subcategory]: productSpecification,
+      },
     },
   };
-
-  createdPost.images = await uploadMultipleFiles(
-    state.selectedImages,
-    userPrincipal
-  );
-  const authenticatedUser = await post();
-  const result = await authenticatedUser.createPost(createdPost);
-  if (result?.err) {
-    // alert(getErrorMessage(result.err));
-    setState("setIsLoading", { isLoading: false });
-    return;
-  }
-  setState("setIsLoading", { isLoading: false });
-  updateSnackBarCmp(setState);
+  return result;
 }

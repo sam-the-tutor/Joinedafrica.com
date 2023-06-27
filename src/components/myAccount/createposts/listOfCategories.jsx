@@ -14,7 +14,7 @@ export const categories = [
       "Cars",
       "Buses",
       "Trucks and trailers",
-      "Vehicle parts and assessories",
+      "Vehicle parts and accessories",
       "Motocycles and bicycles",
     ],
   },
@@ -26,7 +26,7 @@ export const categories = [
       "Electronic supplies",
       "Audio and music equipments",
       "Computer accessories",
-      "Tv and dvd equipment",
+      "Tv and dvd equipments",
     ],
   },
   {
@@ -75,11 +75,10 @@ export function getCategoryNames() {
 }
 
 export function getSubcategory(categoryName) {
-  for (let i = 0; i < categories.length; i++) {
-    if (categories[i].name === categoryName) return categories[i].subcategory;
-  }
-}
-
-export function getCities() {
-  return ["Abuja", "Lagos", "Port Harcourt"];
+  categories.forEach((category) => {
+    if (category.name === categoryName) {
+      return category.subcategory;
+    }
+  });
+  return [];
 }
