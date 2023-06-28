@@ -5,21 +5,23 @@ export function getErrorMessage(error) {
     case "UnAuthorizedUser": {
       return "User is unAuthorized";
     }
-    case "UserNotFound":{
+    case "UserNotFound": {
       return "User not found";
     }
-    case "UserAlreadyExists":{
+    case "UserAlreadyExists": {
       return "User already exists";
     }
-    case "PostNotFound":{
+    case "PostNotFound": {
       return "Post not found";
     }
-    case "CategoryNotFound":{
+    case "CategoryNotFound": {
       return "Category not found";
-
     }
-    case "SubcategoryNotFound":{
+    case "SubcategoryNotFound": {
       return "Subcategory not found";
+    }
+    case "DuplicateAssetId": {
+      return "Error occured while uploading your image. Please try again";
     }
   }
 }

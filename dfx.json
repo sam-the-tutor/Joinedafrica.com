@@ -9,6 +9,11 @@
       "type": "assets",
       "source": []
     },
+    "assets" : {
+      "type" : "motoko",
+      "main" : "backend/assets/main.mo",
+      "dependencies": ["profile"]
+    },
     "profile": {
       "main": "backend/profile/main.mo",
       "type": "motoko"
