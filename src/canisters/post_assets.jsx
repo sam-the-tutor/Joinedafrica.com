@@ -62,19 +62,3 @@ export function deletePostImagesFromPostAssetCanister(images) {
     await removeFileFromPostAssetCanister(image);
   });
 }
-
-export async function uploadMultipleFiles(images, userPrincipal) {
-  //paths to images stores the path to the images in the post asset canister
-  const pathsToImages = [];
-  await Promise.all(
-    images.map(async (image) => {
-      //generating unique id each time for each image
-      const key = await uploadFileToPostAssetCanister(
-        image,
-        userPrincipal + "/post/" + getUniqueId()
-      );
-      pathsToImages.push(key);
-    })
-  );
-  return pathsToImages;
-}

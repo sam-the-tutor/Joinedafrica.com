@@ -20,6 +20,8 @@ import { createObjectURLFromArrayOfBytes } from "../functions";
 import PopoverCmp from "./PopoverCmp";
 import { useNavigate } from "react-router-dom";
 import SnackbarCmp from "./SnackbarCmp";
+import { createAuthenticatedActor } from "../../canisters/createActor";
+import { canisterId, createActor } from "../../declarations/assets";
 
 /**
  * Postingcard is a container that shows the relevant details about a post
@@ -102,8 +104,9 @@ export default function PostingCard({
 
   useEffect(() => {
     async function loadPost() {
-      const file = await getFileFromPostAssetCanister(post.Images[0]);
-      setPostCardDisplayImage(createObjectURLFromArrayOfBytes(file._content));
+      const actor = await createAuthenticatedActor(canisterId, createActor);
+      const imageFile = await actor.getAsset(post.Images[0]);
+      setPostCardDisplayImage(createObjectURLFromArrayOfBytes(imageFile.ok));
     }
     loadPost();
   }, []);

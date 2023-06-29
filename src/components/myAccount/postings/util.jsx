@@ -1,8 +1,10 @@
+import { createAuthenticatedActor } from "../../../canisters/createActor";
 import { post } from "../../../canisters/post";
 import {
   deletePostImagesFromPostAssetCanister,
   getFileFromPostAssetCanister,
 } from "../../../canisters/post_assets";
+import { canisterId, createActor } from "../../../declarations/assets";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
@@ -12,13 +14,6 @@ export async function getAllMyPostings() {
   const postCanister = await post();
   const allPostings = await postCanister.getAllMyPostings();
   return allPostings;
-}
-
-export async function getUserProfile() {
-  const file = await getFileFromPostAssetCanister(
-    getFromSessionStorage("profilePicture", true)
-  );
-  return createObjectURLFromArrayOfBytes(file._content);
 }
 
 export function filterMyPostings(myPostings, selectedPostId) {

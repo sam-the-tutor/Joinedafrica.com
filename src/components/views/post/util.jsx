@@ -7,6 +7,8 @@ import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../../util/functions";
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import { canisterId, createActor } from "../../../declarations/assets";
 
 /**
  * Exact produduct specification extacts the product specification details provided by the user
@@ -54,18 +56,17 @@ export function extractProductSpecification(response) {
 }
 
 export async function getPostImages(response) {
-  const images = [];
-  await Promise.all(
+  return await Promise.all(
     response.Images.map(async (image) => {
-      const file = await getFileFromPostAssetCanister(image);
-      const url = createObjectURLFromArrayOfBytes(file._content);
-      images.push({
+      const actor = await createAuthenticatedActor(canisterId, createActor);
+      const imageFile = await actor.getAsset(image);
+      const url = createObjectURLFromArrayOfBytes(imageFile.ok);
+      return {
         original: url,
         thumbnail: url,
-      });
+      };
     })
   );
-  return images;
 }
 
 export async function sendMessage(message, firebaseDB, post) {
