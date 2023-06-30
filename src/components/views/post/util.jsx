@@ -1,14 +1,16 @@
 import { Principal } from "@dfinity/principal";
 import { push, ref, set } from "firebase/database";
 
-import { conversation } from "../../../canisters/conversation";
-import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import { canisterId, createActor } from "../../../declarations/assets";
+import {
+  canisterId as conversationCanisterId,
+  createActor as conversationCreateActor,
+} from "../../../declarations/conversation";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../../util/functions";
-import { createAuthenticatedActor } from "../../../canisters/createActor";
-import { canisterId, createActor } from "../../../declarations/assets";
 
 /**
  * Exact produduct specification extacts the product specification details provided by the user
@@ -56,9 +58,9 @@ export function extractProductSpecification(response) {
 }
 
 export async function getPostImages(response) {
+  const actor = await createAuthenticatedActor(canisterId, createActor);
   return await Promise.all(
     response.Images.map(async (image) => {
-      const actor = await createAuthenticatedActor(canisterId, createActor);
       const imageFile = await actor.getAsset(image);
       const url = createObjectURLFromArrayOfBytes(imageFile.ok);
       return {
@@ -71,8 +73,11 @@ export async function getPostImages(response) {
 
 export async function sendMessage(message, firebaseDB, post) {
   const chatMessage = createChatMessage(message, post);
-  const authenticatedUser = await conversation();
-  const result = await authenticatedUser.sendMessage(chatMessage);
+  const actor = await createAuthenticatedActor(
+    conversationCanisterId,
+    conversationCreateActor
+  );
+  const result = await actor.sendMessage(chatMessage);
   //send message notification to the receiver
   const messageRef = ref(firebaseDB, post.CreatorOfPostId.toText());
   set(push(messageRef), chatMessage);

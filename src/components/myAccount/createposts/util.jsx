@@ -1,6 +1,9 @@
 import { Principal } from "@dfinity/principal";
 import { createAuthenticatedActor } from "../../../canisters/createActor";
-import { post } from "../../../canisters/post";
+import {
+  canisterId as postCanisterId,
+  createActor as postCreateActor,
+} from "../../../declarations/post";
 import { canisterId, createActor } from "../../../declarations/assets";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
@@ -24,7 +27,7 @@ export async function handleSubmit(
   productSpecification
 ) {
   const [authenticatedUser, createdPost] = await Promise.all([
-    post(),
+    createAuthenticatedActor(postCanisterId, postCreateActor),
     createPost(generalProductInformation, productSpecification),
   ]);
   const result = await authenticatedUser.createPost(createdPost);

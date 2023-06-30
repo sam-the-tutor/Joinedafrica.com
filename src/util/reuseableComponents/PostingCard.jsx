@@ -1,9 +1,7 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
-  Avatar,
   Box,
   Card,
-  CardContent,
   CardHeader,
   CardMedia,
   CircularProgress,
@@ -13,15 +11,17 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import { post as postCanister } from "../../canisters/post";
-import { getFileFromPostAssetCanister } from "../../canisters/post_assets";
+import { useNavigate } from "react-router-dom";
+import { createAuthenticatedActor } from "../../canisters/createActor";
+import { canisterId, createActor } from "../../declarations/assets";
+import {
+  canisterId as postCanisterId,
+  createActor as postCreateActor,
+} from "../../declarations/post";
 import { getErrorMessage } from "../ErrorMessages";
 import { createObjectURLFromArrayOfBytes } from "../functions";
 import PopoverCmp from "./PopoverCmp";
-import { useNavigate } from "react-router-dom";
 import SnackbarCmp from "./SnackbarCmp";
-import { createAuthenticatedActor } from "../../canisters/createActor";
-import { canisterId, createActor } from "../../declarations/assets";
 
 /**
  * Postingcard is a container that shows the relevant details about a post
@@ -69,8 +69,11 @@ export default function PostingCard({
     updateSnackBarCmp(message);
   }
   async function markPostAsPublishedInPostCanister(updatedPost) {
-    const authenticatedUser = await postCanister();
-    const post = await authenticatedUser.markPostAsPublished(updatedPost);
+    const actor = await createAuthenticatedActor(
+      postCanisterId,
+      postCreateActor
+    );
+    const post = await actor.markPostAsPublished(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));
       setLoading(false);
@@ -79,8 +82,11 @@ export default function PostingCard({
     setUpdatedPost(updatedPost);
   }
   async function updatePostDetailsInPostCanister(updatedPost) {
-    const authenticatedUser = await postCanister();
-    await authenticatedUser.removePostFromMarketplace(updatedPost);
+    const actor = await createAuthenticatedActor(
+      postCanisterId,
+      postCreateActor
+    );
+    await actor.removePostFromMarketplace(updatedPost);
     if (post?.err) {
       alert(getErrorMessage(post.err));
       setLoading(false);
@@ -106,6 +112,10 @@ export default function PostingCard({
     async function loadPost() {
       const actor = await createAuthenticatedActor(canisterId, createActor);
       const imageFile = await actor.getAsset(post.Images[0]);
+      if (imageFile?.err) {
+        alert(getErrorMessage(imageFile.err));
+        return;
+      }
       setPostCardDisplayImage(createObjectURLFromArrayOfBytes(imageFile.ok));
     }
     loadPost();

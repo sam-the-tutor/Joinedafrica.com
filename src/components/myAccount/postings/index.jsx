@@ -26,8 +26,9 @@ export default function Postings() {
     init();
   }, []);
 
-  function filterFromFrontend(selectedPostId) {
-    const filteredPosts = filterMyPostings(myPostings, selectedPostId);
+  async function filterFromFrontend(selectedPostId) {
+    const filteredPosts = await filterMyPostings(myPostings, selectedPostId);
+    console.log(filteredPosts);
     setMyPostings(filteredPosts);
   }
   return (

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { createAuthenticatedActor } from "../../../canisters/createActor";
 import { AppContext } from "../../../context";
 import { canisterId, createActor } from "../../../declarations/assets";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
@@ -26,7 +27,11 @@ export default function ProfileIcon({ setPrincipal }) {
       const assetId = getFromSessionStorage("profilePicture", true);
       const actor = await createAuthenticatedActor(canisterId, createActor);
       const imageFile = await actor.getAsset(assetId);
-      setUserProfile(createObjectURLFromArrayOfBytes(imageFile.ok));
+      if (imageFile?.err) {
+        alert(getErrorMessage(imageFile.err));
+      } else {
+        setUserProfile(createObjectURLFromArrayOfBytes(imageFile.ok));
+      }
     }
     LoadProfile();
   }, [reloadProfileIcon]);

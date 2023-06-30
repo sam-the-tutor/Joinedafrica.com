@@ -1,8 +1,6 @@
 import { AppBar, Grid, Toolbar } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { profile } from "../../../canisters/profile";
 import { AppContext } from "../../../context";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
@@ -13,6 +11,8 @@ import Authenticate from "./authenticate";
 import Logo from "./logo";
 import MobileMenu from "./mobileMenu";
 import ProfileIcon from "./profileIcon";
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import { canisterId, createActor } from "../../../declarations/profile";
 
 export default function Header() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -26,8 +26,8 @@ export default function Header() {
 
   async function getUserProfile() {
     setIsLoading(true);
-    const authenticatedProfileUser = await profile();
-    let result = await authenticatedProfileUser.getUserProfile();
+    const actor = await createAuthenticatedActor(canisterId, createActor);
+    let result = await actor.getUserProfile();
     if (result?.err) {
       alert(getErrorMessage(result.err));
     } else {
