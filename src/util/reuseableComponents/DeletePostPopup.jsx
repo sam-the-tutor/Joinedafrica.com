@@ -28,8 +28,7 @@ export default function DeletePostPopup({
   async function deletePostFromBackAndFrontend() {
     setIsLoading(true);
     filterFromFrontend(selectedPostId);
-    // await deletePost(selectedPostId);
-
+    await deletePost(selectedPostId);
     setIsLoading(false);
     setShowDeletePostPopup(false);
   }

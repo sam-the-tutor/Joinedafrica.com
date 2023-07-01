@@ -28,7 +28,6 @@ export default function Postings() {
 
   async function filterFromFrontend(selectedPostId) {
     const filteredPosts = await filterMyPostings(myPostings, selectedPostId);
-    console.log(filteredPosts);
     setMyPostings(filteredPosts);
   }
   return (
