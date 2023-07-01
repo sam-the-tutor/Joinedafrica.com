@@ -14,7 +14,7 @@ const liveInternetIdentity = "https://identity.ic0.app/#authorize"
 const internetIdentityUrl =
   network === "local"
     ? `http://localhost:4943?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai`
-    : liveInternetIdentity;
+    : NFID_AUTH_URL;
 
 let canisterIdPath: string;
 if (network === localNetwork) {
