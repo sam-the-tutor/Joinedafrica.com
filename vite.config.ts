@@ -10,11 +10,11 @@ const AUTH_PATH =
   "/authenticate/?applicationName=" + APPLICATION_NAME + "#authorize";
 const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
 const network = process.env["DFX_NETWORK"] || localNetwork;
-
+const liveInternetIdentity = "https://identity.ic0.app/#authorize"
 const internetIdentityUrl =
   network === "local"
     ? `http://localhost:4943?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai`
-    : NFID_AUTH_URL;
+    : liveInternetIdentity;
 
 let canisterIdPath: string;
 if (network === localNetwork) {
