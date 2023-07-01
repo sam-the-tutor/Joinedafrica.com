@@ -153,9 +153,9 @@ shared ({ caller = initializer }) actor class () {
   // query calls
   //---------------------------------------------------------------------------------------
 
-  public shared ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
-    let authorized = await ProfileCanister.isUserAuthorized(caller);
-    if (not authorized) return #err(#UnAuthorizedUser);
+  public shared query ({ caller }) func getAllMyPostings() : async Result<[?Post], Error> {
+    // let authorized = await ProfileCanister.isUserAuthorized(caller);
+    // if (not authorized) return #err(#UnAuthorizedUser);
     let result = switch (Trie.get(myPostings, hashKey(caller), Principal.equal)) {
       case null [];
       case (?myPosts) {

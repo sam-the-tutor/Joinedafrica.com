@@ -75,9 +75,9 @@ shared ({ caller = initializer }) actor class () {
   // query calls
   //---------------------------------------------------------------------------------------
 
-  public shared ({ caller }) func getAllMyFriends() : async Result.Result<[UserId], Error> {
-    let authorized = await ProfileCanister.isUserAuthorized(caller);
-    if (not authorized) return #err(#UnAuthorizedUser);
+  public shared query ({ caller }) func getAllMyFriends() : async Result.Result<[UserId], Error> {
+    // let authorized = await ProfileCanister.isUserAuthorized(caller);
+    // if (not authorized) return #err(#UnAuthorizedUser);
     let result = switch (Trie.get(friendList, hashKey(caller), Principal.equal)) {
       case null [];
       case (?list) List.toArray(list);
@@ -85,9 +85,9 @@ shared ({ caller = initializer }) actor class () {
     #ok(result);
   };
 
-  public shared ({ caller }) func getMyMessages(friend : Friend) : async Result.Result<[Message], Error> {
-    let authorized = await ProfileCanister.isUserAuthorized(caller);
-    if (not authorized) return #err(#UnAuthorizedUser);
+  public shared query ({ caller }) func getMyMessages(friend : Friend) : async Result.Result<[Message], Error> {
+    // let authorized = await ProfileCanister.isUserAuthorized(caller);
+    // if (not authorized) return #err(#UnAuthorizedUser);
     var sortedPrincipals = utils.sortPrincipals(caller, Principal.fromText(friend));
     let result = switch (Trie.get(conversations, key(sortedPrincipals), Text.equal)) {
       case null [];
