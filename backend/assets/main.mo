@@ -36,6 +36,10 @@ shared ({ caller = initializer }) actor class () {
     };
   };
 
+  public shared ({ caller }) func resetAll() : async () {
+    assets := Trie.empty<AssetId, Asset>();
+  };
+
   //----------------------------------------------------------------------------------------
   // query calls
   //---------------------------------------------------------------------------------------
