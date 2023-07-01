@@ -105,6 +105,7 @@ export default function CreatePost() {
             }
           />
           <TextField
+            required
             label="Country"
             fullWidth
             placeholder="Nigeria"
