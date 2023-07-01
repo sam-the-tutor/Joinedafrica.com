@@ -1,38 +1,51 @@
-import { post } from "../../../canisters/post";
+import { createAuthenticatedActor } from "../../../canisters/createActor";
 import {
-  deletePostImagesFromPostAssetCanister,
-  getFileFromPostAssetCanister,
-} from "../../../canisters/post_assets";
+  canisterId as postCanisterId,
+  createActor as postCreateActor,
+} from "../../../declarations/post";
 import {
-  createObjectURLFromArrayOfBytes,
-  getFromSessionStorage,
-} from "../../../util/functions";
+  canisterId as assetCanisterId,
+  createActor as assetCreateActor,
+} from "../../../declarations/assets";
 
 export async function getAllMyPostings() {
-  const postCanister = await post();
-  const allPostings = await postCanister.getAllMyPostings();
+  const actor = await createAuthenticatedActor(postCanisterId, postCreateActor);
+  const allPostings = await actor.getAllMyPostings();
   return allPostings;
 }
 
-export async function getUserProfile() {
-  const file = await getFileFromPostAssetCanister(
-    getFromSessionStorage("profilePicture", true)
+export async function filterMyPostings(myPostings, selectedPostId) {
+  const actor = await createAuthenticatedActor(
+    assetCanisterId,
+    assetCreateActor
   );
-  return createObjectURLFromArrayOfBytes(file._content);
-}
-
-export function filterMyPostings(myPostings, selectedPostId) {
   const result = [];
-  for (var i = 0; i < myPostings.length; i++) {
-    const post = myPostings[i][0];
-    if (post.postId == selectedPostId) {
-      deletePostImagesFromPostAssetCanister(post.images);
-    } else result.push(myPostings[i]);
-  }
+  await Promise.all(
+    myPostings.map(async (posting) => {
+      const post = posting[0];
+      if (post.PostId === selectedPostId) {
+        // await deleteAssets(actor, post.Images);
+        console.log(selectedPostId);
+      } else {
+        result.push(posting);
+      }
+    })
+  );
+  // console.log(filteredPostings);
+  // const result = myPostings.filter((_, index) => filteredPostings[index]);
+
   return result;
+  // console.log(result);
+}
+export async function deleteAssets(actor, images) {
+  await Promise.all(
+    images.map(async (image) => {
+      await actor.deleteAsset(image);
+    })
+  );
 }
 
 export async function deletePost(selectedPostId) {
-  const postCanister = await post();
-  await postCanister.deletePost(selectedPostId);
+  const actor = await createAuthenticatedActor(postCanisterId, postCreateActor);
+  await actor.deletePost(selectedPostId);
 }

@@ -5,13 +5,9 @@
     }
   },
   "canisters": {
-    "post_assets": {
-      "type": "assets",
-      "source": []
-    },
-    "assets" : {
-      "type" : "motoko",
-      "main" : "backend/assets/main.mo",
+    "assets": {
+      "type": "motoko",
+      "main": "backend/assets/main.mo",
       "dependencies": ["profile"]
     },
     "profile": {
@@ -21,16 +17,12 @@
     "post": {
       "main": "backend/post/main.mo",
       "type": "motoko",
-      "dependencies": [
-        "profile"
-      ]
+      "dependencies": ["profile"]
     },
     "conversation": {
       "main": "backend/conversation/main.mo",
       "type": "motoko",
-      "dependencies": [
-        "profile"
-      ]
+      "dependencies": ["profile"]
     },
     "frontend": {
       "dependencies": [
@@ -38,15 +30,13 @@
         "profile",
         "conversation",
         "post",
-        "post_assets"
+        "assets"
       ],
       "type": "assets",
       "frontend": {
         "entrypoint": "dist/index.html"
       },
-      "source": [
-        "dist/"
-      ]
+      "source": ["dist/"]
     },
     "internet_identity": {
       "type": "custom",

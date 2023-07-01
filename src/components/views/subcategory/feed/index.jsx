@@ -36,11 +36,7 @@ export default function ViewFeed({
             <Grid container spacing={{ xs: 2 }}>
               {posts.map((posting, index) => (
                 <Grid item xs={12} sm={4} key={index}>
-                  <PostingCard
-                    post={posting}
-                    userProfile={posting.creatorProfilePicture}
-                    canOnlyMeSeeThisPost={false}
-                  />
+                  <PostingCard post={posting} canOnlyMeSeeThisPost={false} />
                 </Grid>
               ))}
             </Grid>

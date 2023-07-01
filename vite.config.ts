@@ -13,7 +13,7 @@ const network = process.env["DFX_NETWORK"] || localNetwork;
 
 const internetIdentityUrl =
   network === "local"
-    ? `http://localhost:4943?canisterId=be2us-64aaa-aaaaa-qaabq-cai`
+    ? `http://localhost:4943?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai`
     : NFID_AUTH_URL;
 
 let canisterIdPath: string;

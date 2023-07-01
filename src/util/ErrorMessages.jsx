@@ -23,5 +23,8 @@ export function getErrorMessage(error) {
     case "DuplicateAssetId": {
       return "Error occured while uploading your image. Please try again";
     }
+    case "AssetNotFound": {
+      return "Asset not found";
+    }
   }
 }

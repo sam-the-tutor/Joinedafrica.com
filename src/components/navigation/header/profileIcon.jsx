@@ -3,13 +3,14 @@ import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import { AppContext } from "../../../context";
+import { canisterId, createActor } from "../../../declarations/assets";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import {
   createObjectURLFromArrayOfBytes,
   getFromSessionStorage,
 } from "../../../util/functions";
-
-import { getFileFromPostAssetCanister } from "../../../canisters/post_assets";
-import { AppContext } from "../../../context";
 import { logout } from "../../auth/Logout";
 
 export default function ProfileIcon({ setPrincipal }) {
@@ -23,9 +24,14 @@ export default function ProfileIcon({ setPrincipal }) {
 
   useEffect(() => {
     async function LoadProfile() {
-      const userProfile = getFromSessionStorage("profilePicture", true);
-      const file = await getFileFromPostAssetCanister(userProfile);
-      setUserProfile(createObjectURLFromArrayOfBytes(file._content));
+      const assetId = getFromSessionStorage("profilePicture", true);
+      const actor = await createAuthenticatedActor(canisterId, createActor);
+      const imageFile = await actor.getAsset(assetId);
+      if (imageFile?.err) {
+        alert(getErrorMessage(imageFile.err));
+      } else {
+        setUserProfile(createObjectURLFromArrayOfBytes(imageFile.ok));
+      }
     }
     LoadProfile();
   }, [reloadProfileIcon]);

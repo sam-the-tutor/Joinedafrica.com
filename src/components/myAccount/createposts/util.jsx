@@ -1,6 +1,10 @@
 import { Principal } from "@dfinity/principal";
-import { post } from "../../../canisters/post";
-import { uploadMultipleFiles } from "../../../canisters/post_assets";
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import {
+  canisterId as postCanisterId,
+  createActor as postCreateActor,
+} from "../../../declarations/post";
+import { canisterId, createActor } from "../../../declarations/assets";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 
@@ -23,7 +27,7 @@ export async function handleSubmit(
   productSpecification
 ) {
   const [authenticatedUser, createdPost] = await Promise.all([
-    post(),
+    createAuthenticatedActor(postCanisterId, postCreateActor),
     createPost(generalProductInformation, productSpecification),
   ]);
   const result = await authenticatedUser.createPost(createdPost);
@@ -43,7 +47,7 @@ async function createPost(generalProductInformation, productSpecification) {
     PostId: getUniqueId(),
     CreatorOfPostId: Principal.fromText(userPrincipal),
     IsPublished: false,
-    Images: await uploadMultipleFiles(
+    Images: await uploadFilesToAssetCanister(
       generalProductInformation.Images,
       userPrincipal
     ),
@@ -54,4 +58,21 @@ async function createPost(generalProductInformation, productSpecification) {
     },
   };
   return result;
+}
+
+async function uploadFilesToAssetCanister(images, userPrincipal) {
+  const actor = await createAuthenticatedActor(canisterId, createActor);
+  return await Promise.all(
+    images.map(async (image) => {
+      const assetId = userPrincipal + "/post/" + getUniqueId();
+      const asset = await convertImageFileToNat8(image);
+      await actor.uploadAsset(asset, assetId);
+      return assetId;
+    })
+  );
+}
+
+async function convertImageFileToNat8(file) {
+  const imageArray = await file.arrayBuffer();
+  return [...new Uint8Array(imageArray)];
 }

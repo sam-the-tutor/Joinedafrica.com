@@ -27,8 +27,8 @@ export default function DeletePostPopup({
   //has to first be removed from the marketplace before they can be deleted.
   async function deletePostFromBackAndFrontend() {
     setIsLoading(true);
-    await deletePost(selectedPostId);
     filterFromFrontend(selectedPostId);
+    await deletePost(selectedPostId);
     setIsLoading(false);
     setShowDeletePostPopup(false);
   }

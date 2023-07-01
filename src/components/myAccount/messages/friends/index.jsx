@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Grid,
@@ -10,8 +9,9 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { PropTypes } from "prop-types";
 import { useTheme } from "@mui/material/styles";
+import { PropTypes } from "prop-types";
+import React, { useEffect, useState } from "react";
 import { getAllMyFriends } from "./util";
 
 const LoadingMessage = () => (

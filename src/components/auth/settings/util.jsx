@@ -1,37 +1,51 @@
+import { createAuthenticatedActor } from "../../../canisters/createActor";
+import { canisterId, createActor } from "../../../declarations/assets";
 import {
-  getFileFromPostAssetCanister,
-  removeFileFromPostAssetCanister,
-  uploadFileToPostAssetCanister,
-} from "../../../canisters/post_assets";
-import { profile as profileCanister } from "../../../canisters/profile";
+  canisterId as profileCanisterId,
+  createActor as profileCreateActor,
+} from "../../../declarations/profile";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
 import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 
+async function updateProfilePicture(profile, profileImagePath) {
+  const assetId = getFromSessionStorage("profilePicture", true);
+  const actor = await createAuthenticatedActor(canisterId, createActor);
+  const [assetResult, uploadedAssetResult] = await Promise.all([
+    actor.deleteAsset(assetId),
+    actor.uploadAsset(profile.profilePicture, profileImagePath),
+  ]);
+  if (assetResult?.err) return assetResult;
+  return uploadedAssetResult;
+}
+
 export async function updateUserProfile(profile) {
-  //removing the old profile picture
-  removeFileFromPostAssetCanister(profile.profilePicture);
   const profileImagePath = profile.principal + "/profile/" + getUniqueId();
-  const key = await uploadFileToPostAssetCanister(
-    profile.profilePicture,
+  const updatedProfilePictureResult = await updateProfilePicture(
+    profile,
     profileImagePath
   );
+  if (updatedProfilePictureResult?.err) return updatedProfilePictureResult;
+
   const updatedProfile = {
-    profilePicture: key,
+    profilePicture: profileImagePath,
     firstName: profile.firstName,
     lastName: profile.lastName,
     email: profile.email,
     location: profile.location,
   };
-  const authenticatedProfileCanister = await profileCanister();
-  const result = await authenticatedProfileCanister.updateUserProfile(
-    updatedProfile
+  const profileActor = await createAuthenticatedActor(
+    profileCanisterId,
+    profileCreateActor
   );
-  return result;
+  const profileResult = await profileActor.updateUserProfile(updatedProfile);
+  return profileResult;
 }
 
 export async function getUserProfileFromSessionStorage() {
+  const profilePicture = await getUserProfilePicture();
+  if (profilePicture?.err) return profilePicture;
   return {
-    profilePicture: await getUserProfilePicture(),
+    profilePicture: profilePicture.ok,
     firstName: getFromSessionStorage("firstName", false),
     lastName: getFromSessionStorage("lastName", false),
     email: getFromSessionStorage("email", true),
@@ -39,11 +53,15 @@ export async function getUserProfileFromSessionStorage() {
     location: getFromSessionStorage("location", false),
   };
 }
-
+export async function convertImageFileToNat8(file) {
+  const imageArray = await file.arrayBuffer();
+  return [...new Uint8Array(imageArray)];
+}
 async function getUserProfilePicture() {
-  const userProfile = getFromSessionStorage("profilePicture", true);
-  const file = await getFileFromPostAssetCanister(userProfile);
-  return file._content;
+  const assetId = getFromSessionStorage("profilePicture", true);
+  const actor = await createAuthenticatedActor(canisterId, createActor);
+  const imageFile = await actor.getAsset(assetId);
+  return imageFile;
 }
 
 export function updateSnackBarCmp(setShowSnackbarCmp) {

@@ -3,11 +3,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
 import { AppContext } from "../../../context";
+import { getErrorMessage } from "../../../util/ErrorMessages";
 import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { updateSessionStorage } from "../util";
 import { Image, ImageContainer } from "./style";
 import {
+  convertImageFileToNat8,
   getUserProfileFromSessionStorage,
   updateSnackBarCmp,
   updateUserProfile,
@@ -39,8 +41,12 @@ export default function Settings() {
       return;
     }
     setSavingUserProfile(true);
+    //the profilePicture could be a File type or Uint8Array type. We need to convert it to Unit8Array.
     const profile = {
-      profilePicture,
+      profilePicture:
+        profilePicture instanceof Uint8Array
+          ? profilePicture
+          : await convertImageFileToNat8(profilePicture),
       principal,
       firstName,
       lastName,
@@ -53,7 +59,7 @@ export default function Settings() {
       alert(getErrorMessage(newProfile.err));
       setSavingUserProfile(false);
     } else {
-      updateSessionStorage({ ...profile.ok, principal });
+      updateSessionStorage({ ...newProfile.ok, principal });
       setSavingUserProfile(false);
       setReloadProfileIcon(!reloadProfileIcon);
       updateSnackBarCmp(setShowSnackbarCmp);
@@ -64,13 +70,17 @@ export default function Settings() {
     async function init() {
       setIsLoading(true);
       const profile = await getUserProfileFromSessionStorage();
-      setPrincipal(profile.principal);
-      setFirstName(profile.firstName);
-      setLastName(profile.lastName);
-      setEmail(profile.email);
-      setProfilePicture(profile.profilePicture);
-      setLocation(profile.location);
-      setIsLoading(false);
+      if (profile?.err) {
+        alert(getErrorMessage(profile.err));
+      } else {
+        setPrincipal(profile.principal);
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setEmail(profile.email);
+        setProfilePicture(profile.profilePicture);
+        setLocation(profile.location);
+        setIsLoading(false);
+      }
     }
     init();
   }, []);

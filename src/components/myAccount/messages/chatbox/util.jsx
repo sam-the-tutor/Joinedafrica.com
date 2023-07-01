@@ -1,7 +1,7 @@
 import { Principal } from "@dfinity/principal";
-import { ref, remove, set, push } from "firebase/database";
-
-import { conversation as conversationCanister } from "../../../../canisters/conversation";
+import { push, ref, remove, set } from "firebase/database";
+import { createAuthenticatedActor } from "../../../../canisters/createActor";
+import { canisterId, createActor } from "../../../../declarations/conversation";
 import { getFromSessionStorage } from "../../../../util/functions";
 
 const startPrincipalIndex = 0;
@@ -13,8 +13,8 @@ export async function getMyMessages(friendProfilePicture) {
     startPrincipalIndex,
     endPrincipalIndex
   );
-  const authenticatedUser = await conversationCanister();
-  const messages = await authenticatedUser.getMyMessages(myFriendPrincipal);
+  const actor = await createAuthenticatedActor(canisterId, createActor);
+  const messages = await actor.getMyMessages(myFriendPrincipal);
   return sort(messages.ok);
 }
 
@@ -91,8 +91,8 @@ function createChatMessage(myFriendPrincipal, conversation) {
 }
 
 async function sendChatMessageToBackend(chatMessage) {
-  const authenticatedUser = await conversationCanister();
-  await authenticatedUser.sendMessage(chatMessage);
+  const actor = await createAuthenticatedActor(canisterId, createActor);
+  await actor.sendMessage(chatMessage);
 }
 
 function sendChatMessageToFirebase(chatMessage, firebaseDB) {
