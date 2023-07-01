@@ -14,7 +14,7 @@ module {
         "Cars",
         "Buses",
         "Trucks and trailers",
-        "Vehicle parts and assessories",
+        "Vehicle parts and accessories",
         "Motocycles and bicycles",
       ];
     },

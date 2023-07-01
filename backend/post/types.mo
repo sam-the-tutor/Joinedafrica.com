@@ -48,7 +48,7 @@ module {
           Is_registered : Text;
           Colour : Text;
         };
-        #Vehicle_parts_and_assessories : {
+        #Vehicle_parts_and_accessories : {
           Type : Text;
           Brand : Text;
           Condition : Text;
