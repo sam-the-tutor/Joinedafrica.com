@@ -37,9 +37,9 @@ export default function WelcomePage() {
                   margin: { xs: "20px 0", md: "initial" },
                 }}
               >
-                Joined Africa is marketplace where sellers advertise products in
-                crypto currency, connecting buyers directly with sellers within
-                Africa.
+                Joined Africa is a marketplace where sellers advertise products
+                in crypto currency, connecting buyers directly with sellers
+                within Africa.
               </Typography>
             </Box>
           </Box>
