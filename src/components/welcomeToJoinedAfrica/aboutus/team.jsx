@@ -1,8 +1,8 @@
 export const team = [
   {
-    name: "Mena Agina",
+    name: "Agina Oghenemena Benaiah",
     image: "./team/Mena_Agina.jpeg",
-    role: "Software Engineer",
+    role: "Founder and CEO",
     style: { width: "150px", height: "150px" },
   },
   {

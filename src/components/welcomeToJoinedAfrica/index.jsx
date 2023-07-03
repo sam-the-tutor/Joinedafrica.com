@@ -146,6 +146,9 @@ export default function WelcomePage() {
           <Button sx={{ color: "black" }} onClick={() => navigate("./aboutus")}>
             About us
           </Button>
+          <Button sx={{ color: "black" }} onClick={() => navigate("./faq")}>
+            FAQs
+          </Button>
           <Button
             sx={{ color: "black" }}
             onClick={() => navigate("./contactus")}

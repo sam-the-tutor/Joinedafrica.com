@@ -18,6 +18,7 @@ import { ref, onValue } from "firebase/database";
 import { getFromSessionStorage } from "./util/functions.jsx";
 import startFirebase from "./config/firebase.jsx";
 import Header from "./components/navigation/header/index.jsx";
+import FAQs from "./components/welcomeToJoinedAfrica/FAQ/index.jsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -92,6 +93,7 @@ export default function App() {
             />
 
             <Route exact path="create-profile" element={<CreateProfile />} />
+            <Route exact path="faq" element={<FAQs />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
