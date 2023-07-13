@@ -47,10 +47,11 @@ export default function PostingCard({
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
   const navigate = useNavigate();
 
-  function updateSnackBarCmp(message) {
+  function updateSnackBarCmp(message, severity) {
     setShowSnackbarCmp(
       <SnackbarCmp
         message={message}
+        severity={severity}
         handleClose={(event, reason) => {
           //the user has to click on the alert to close it.
           if (reason != "clickaway") {
@@ -62,24 +63,22 @@ export default function PostingCard({
   }
   async function markPostAsPublished() {
     setLoading(true);
-    updatedPost.IsPublished = true;
-    await markPostAsPublishedInPostCanister(updatedPost);
+    const result = await markPostAsPublishedInPostCanister(updatedPost);
     setLoading(false);
-    const message = "Your post has been to the marketplace";
-    updateSnackBarCmp(message);
+    if (result?.ok) {
+      const message = "We are currently reviewing this post";
+      updateSnackBarCmp(message, "info");
+    } else {
+      alert(getErrorMessage(result.err));
+    }
   }
   async function markPostAsPublishedInPostCanister(updatedPost) {
     const actor = await createAuthenticatedActor(
       postCanisterId,
       postCreateActor
     );
-    const post = await actor.markPostAsPublished(updatedPost);
-    if (post?.err) {
-      alert(getErrorMessage(post.err));
-      setLoading(false);
-      return;
-    }
-    setUpdatedPost(updatedPost);
+    const result = await actor.markPostAsPublished(updatedPost);
+    return result;
   }
   async function updatePostDetailsInPostCanister(updatedPost) {
     const actor = await createAuthenticatedActor(

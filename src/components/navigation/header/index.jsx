@@ -24,6 +24,16 @@ export default function Header() {
 
   const currentBrowserPathname = window.location.pathname;
 
+  function isAdmin() {
+    if (
+      (process.env.NETWORK === "local" &&
+        import.meta.env.VITE_APP_LOCALHOSTADMINID === principal) ||
+      (process.env.NETWORK === "production" &&
+        import.meta.env.VITE_APP_LIVENETWORKADMINID === principal)
+    ) {
+      navigate("/admin");
+    }
+  }
   async function getUserProfile() {
     setIsLoading(true);
     const actor = await createAuthenticatedActor(canisterId, createActor);
@@ -34,6 +44,7 @@ export default function Header() {
       updateSessionStorage({ ...result.ok, principal });
       setMobileMoreAnchorEl(null);
       setIsUserLoggedIn(true);
+      isAdmin();
     }
     setIsLoading(false);
   }

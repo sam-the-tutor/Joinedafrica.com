@@ -26,5 +26,8 @@ export function getErrorMessage(error) {
     case "AssetNotFound": {
       return "Asset not found";
     }
+    case "PostIsAlreadyInReview": {
+      return "Post is Already In Review";
+    }
   }
 }
