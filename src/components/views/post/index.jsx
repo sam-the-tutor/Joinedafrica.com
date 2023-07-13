@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Toolbar } from "@mui/material";
+import { Box, Container, Grid, Toolbar, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useParams } from "react-router";
@@ -10,6 +10,8 @@ import LeftComponent from "./leftcomponent";
 import RightComponent from "./rightcomponent";
 import { getPostImages } from "./leftcomponent/util";
 import { extractProductSpecification } from "./util";
+import { getFromSessionStorage, isAdmin } from "../../../util/functions";
+import { publishPost, rejectPost } from "../../admin/util";
 
 export default function ViewPost() {
   const [post, setPost] = useState({});
@@ -18,6 +20,19 @@ export default function ViewPost() {
   const [postImages, setPostImages] = useState([]);
   const [productSpecification, setProductSpecification] = useState({});
 
+  const isUserAdmin = isAdmin(getFromSessionStorage("principalId", true));
+  const [adminAction, setAdminAction] = useState(false);
+
+  async function publishPostToMarketplace() {
+    setAdminAction(true);
+    await publishPost(post);
+    setAdminAction(false);
+  }
+  async function removePostFromReview() {
+    setAdminAction(true);
+    await rejectPost(post);
+    setAdminAction(false);
+  }
   useEffect(() => {
     async function getPost() {
       setLoading(true);
@@ -53,11 +68,30 @@ export default function ViewPost() {
             <Grid container spacing={3}>
               <LeftComponent
                 post={post}
+                isUserAdmin={isUserAdmin}
                 postImages={postImages}
                 ProductSpecification={productSpecification}
               />
-              <RightComponent post={post} />
+              {!isUserAdmin && <RightComponent post={post} />}
             </Grid>
+            {isUserAdmin && (
+              <>
+                <Button
+                  style={{ color: "#37a864" }}
+                  onClick={() => publishPostToMarketplace()}
+                >
+                  Publish Post
+                </Button>
+                <Button
+                  style={{ color: "red" }}
+                  onClick={() => removePostFromReview()}
+                >
+                  {" "}
+                  Reject Post
+                </Button>
+                {LoadingCmp(adminAction)}
+              </>
+            )}
           </>
         )}
       </Container>

@@ -91,7 +91,7 @@ shared ({ caller = initializer }) actor class () {
     return List.some(
       postsOnReview,
       func(id : PostId) : Bool {
-        postId == id;
+        return postId == id;
       },
     );
   };
@@ -109,7 +109,7 @@ shared ({ caller = initializer }) actor class () {
   /**
     Only posts that have been reviewed by Joined Africa team can be published to the marketplace. 
   */
-  private func _publishPost(post : Post) : Result.Result<(), Error> {
+  public shared func publishPost(post : Post) : async Result.Result<(), Error> {
     //getting the correct category the post is associated to
     switch (Trie.get(publishedPosts, categoryKey(post.Category), Text.equal)) {
       case null return #err(#CategoryNotFound);
@@ -128,6 +128,18 @@ shared ({ caller = initializer }) actor class () {
       };
     };
     #ok();
+  };
+
+  /**
+    Only posts that have been reviewed by Joined Africa team can be published to the marketplace. 
+  */
+  public shared func removePostFromReview(post : Post) : async () {
+    postsOnReview := List.filter(
+      postsOnReview,
+      func(postId : PostId) : Bool {
+        return postId != post.PostId;
+      },
+    );
   };
   public shared ({ caller }) func removePostFromMarketplace(post : Post) : async Result<(), Error> {
     let authorized = await ProfileCanister.isUserAuthorized(caller);

@@ -46,7 +46,7 @@ export default function PostingCard({
   //front page image of a posting card
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
   const navigate = useNavigate();
-
+  console.log(post);
   function updateSnackBarCmp(message, severity) {
     setShowSnackbarCmp(
       <SnackbarCmp
@@ -64,13 +64,13 @@ export default function PostingCard({
   async function markPostAsPublished() {
     setLoading(true);
     const result = await markPostAsPublishedInPostCanister(updatedPost);
-    setLoading(false);
-    if (result?.ok) {
+    if (result?.err) {
+      alert(getErrorMessage(result.err));
+    } else {
       const message = "We are currently reviewing this post";
       updateSnackBarCmp(message, "info");
-    } else {
-      alert(getErrorMessage(result.err));
     }
+    setLoading(false);
   }
   async function markPostAsPublishedInPostCanister(updatedPost) {
     const actor = await createAuthenticatedActor(

@@ -13,6 +13,7 @@ import MobileMenu from "./mobileMenu";
 import ProfileIcon from "./profileIcon";
 import { createAuthenticatedActor } from "../../../canisters/createActor";
 import { canisterId, createActor } from "../../../declarations/profile";
+import { getFromSessionStorage, isAdmin } from "../../../util/functions";
 
 export default function Header() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -24,16 +25,6 @@ export default function Header() {
 
   const currentBrowserPathname = window.location.pathname;
 
-  function isAdmin() {
-    if (
-      (process.env.NETWORK === "local" &&
-        import.meta.env.VITE_APP_LOCALHOSTADMINID === principal) ||
-      (process.env.NETWORK === "production" &&
-        import.meta.env.VITE_APP_LIVENETWORKADMINID === principal)
-    ) {
-      navigate("/admin");
-    }
-  }
   async function getUserProfile() {
     setIsLoading(true);
     const actor = await createAuthenticatedActor(canisterId, createActor);
@@ -44,7 +35,8 @@ export default function Header() {
       updateSessionStorage({ ...result.ok, principal });
       setMobileMoreAnchorEl(null);
       setIsUserLoggedIn(true);
-      isAdmin();
+      //if the logged in user is the admin, go to the admin page
+      isAdmin(getFromSessionStorage("principalId", true)) && navigate("/admin");
     }
     setIsLoading(false);
   }

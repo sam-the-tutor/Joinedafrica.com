@@ -35,3 +35,12 @@ export function getUniqueId() {
 export function createObjectURLFromArrayOfBytes(file) {
   return URL.createObjectURL(new Blob([file], { type: "image/png" }));
 }
+
+export function isAdmin(principal) {
+  return (
+    (process.env.NETWORK === "local" &&
+      import.meta.env.VITE_APP_LOCALHOSTADMINID === principal) ||
+    (process.env.NETWORK === "production" &&
+      import.meta.env.VITE_APP_LIVENETWORKADMINID === principal)
+  );
+}
