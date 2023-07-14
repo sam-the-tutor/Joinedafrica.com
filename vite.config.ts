@@ -5,9 +5,9 @@ import { defineConfig } from "vite";
 
 const localNetwork = "local";
 const network = process.env["DFX_NETWORK"] || localNetwork;
-const liveInternetIdentity = "https://identity.ic0.app/#authorize"
+const liveInternetIdentity = "https://identity.ic0.app/#authorize";
 const internetIdentityUrl =
-  network === "local"
+  network === localNetwork
     ? `http://localhost:4943?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai`
     : liveInternetIdentity;
 
@@ -33,6 +33,7 @@ export default defineConfig({
   define: {
     "process.env": {
       DFX_NETWORK: process.env["DFX_NETWORK"],
+      NETWORK: network,
       INTERNET_IDENTITY_URL: internetIdentityUrl,
       // Expose canister IDs provided by `dfx deploy`
       ...Object.fromEntries(

@@ -2,11 +2,13 @@ import { Box, Grid, Typography, Paper } from "@mui/material";
 import { PropTypes } from "prop-types";
 import React from "react";
 import ReactImageGallery from "react-image-gallery";
+import CreateSpecification from "./createSpecification";
 
 export default function LeftComponent({
   post,
   postImages,
   ProductSpecification,
+  isUserAdmin,
 }) {
   return (
     <Grid item md={9} xs={12}>
@@ -29,21 +31,18 @@ export default function LeftComponent({
         >
           Specification
         </Typography>
-        {Object.entries(ProductSpecification).map(
-          ([specification, value], index) => (
-            <Box
-              style={{
-                display: "flex",
-              }}
-              key={index}
-            >
-              <Typography style={{ marginRight: "10px" }}>
-                {specification.replaceAll("_", " ")} :
-              </Typography>
-              <Typography>{value}</Typography>
-            </Box>
-          )
-        )}
+
+        {isUserAdmin &&
+          CreateSpecification(
+            Object.entries(post).filter(
+              ([attribute]) =>
+                attribute == "Date" ||
+                attribute == "Location" ||
+                attribute == "Category" ||
+                attribute == "Subcategory"
+            )
+          )}
+        {CreateSpecification(Object.entries(ProductSpecification))}
         <Box>
           <Typography
             variant="h6"
@@ -65,4 +64,5 @@ LeftComponent.propTypes = {
   post: PropTypes.object,
   postImages: PropTypes.array,
   productSpecification: PropTypes.object,
+  isUserAdmin: PropTypes.bool,
 };

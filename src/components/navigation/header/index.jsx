@@ -13,6 +13,7 @@ import MobileMenu from "./mobileMenu";
 import ProfileIcon from "./profileIcon";
 import { createAuthenticatedActor } from "../../../canisters/createActor";
 import { canisterId, createActor } from "../../../declarations/profile";
+import { getFromSessionStorage, isAdmin } from "../../../util/functions";
 
 export default function Header() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -23,7 +24,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const currentBrowserPathname = window.location.pathname;
-
+  // console.log(getFromSessionStorage("principalId", true));
   async function getUserProfile() {
     setIsLoading(true);
     const actor = await createAuthenticatedActor(canisterId, createActor);
@@ -34,6 +35,8 @@ export default function Header() {
       updateSessionStorage({ ...result.ok, principal });
       setMobileMoreAnchorEl(null);
       setIsUserLoggedIn(true);
+      //if the logged in user is the admin, go to the admin page
+      isAdmin(getFromSessionStorage("principalId", true)) && navigate("/admin");
     }
     setIsLoading(false);
   }

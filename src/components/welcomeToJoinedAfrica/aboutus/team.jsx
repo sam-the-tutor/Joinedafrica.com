@@ -15,7 +15,7 @@ export const team = [
     name: "Josephine Obani",
     image: "./team/Josephine_Obani.jpg",
     style: { width: "150px", height: "150px" },
-    role: "Social media manager",
+    role: "Social media strategist",
   },
   {
     name: "Samuel Atwebembeire",
