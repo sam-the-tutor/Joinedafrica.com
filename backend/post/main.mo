@@ -105,7 +105,7 @@ shared ({ caller = initializer }) actor class () {
   };
 
   /**
-    Only posts that have been reviewed by Joined Africa team can be published to the marketplace. 
+    Only posts that have been reviewed by Joined Africa team can be published to the marketplace.
   */
   public shared func publishPost(post : Post) : async Result.Result<(), Error> {
     //getting the correct category the post is associated to
@@ -129,16 +129,8 @@ shared ({ caller = initializer }) actor class () {
     #ok();
   };
 
-  // public shared func toArray() : async [Post] {
-  //   Trie.toArray<Text, Nat, Nat>(
-  //     publishedPosts,
-  //     func(k, v) = v,
-  //   );
-  //   return [];
-  // };
-
   /**
-    Only posts that have been reviewed by Joined Africa team can be published to the marketplace. 
+    Only posts that have been reviewed by Joined Africa team can be published to the marketplace.
   */
   public shared func removePostFromReview(post : Post) : async () {
     postsOnReview := List.filter(
