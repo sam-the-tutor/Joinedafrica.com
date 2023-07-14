@@ -24,7 +24,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const currentBrowserPathname = window.location.pathname;
-
+  // console.log(getFromSessionStorage("principalId", true));
   async function getUserProfile() {
     setIsLoading(true);
     const actor = await createAuthenticatedActor(canisterId, createActor);
