@@ -20,8 +20,8 @@ export default function ViewPost() {
   const [postImages, setPostImages] = useState([]);
   const [productSpecification, setProductSpecification] = useState({});
 
-  const isUserAdmin = isAdmin(getFromSessionStorage("principalId", true));
   const [adminAction, setAdminAction] = useState(false);
+  var isUserAdmin = false;
 
   async function publishPostToMarketplace() {
     setAdminAction(true);
@@ -33,6 +33,11 @@ export default function ViewPost() {
     await rejectPost(post);
     setAdminAction(false);
   }
+
+  if (sessionStorage.getItem("principalId")) {
+    isUserAdmin = isAdmin(getFromSessionStorage("principalId", true));
+  }
+
   useEffect(() => {
     async function getPost() {
       setLoading(true);
