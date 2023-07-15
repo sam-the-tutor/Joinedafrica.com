@@ -1,14 +1,12 @@
-# Vite + React + Motoko
+# Joined Africa
 
-### Get started directly in your browser:
+### Joined Africa is a marketplace where sellers advertise products in crypto currency, connecting buyers directly with sellers within Africa.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/rvanasa/vite-react-motoko)
+## Who we are
 
-This project template gives you everything you need to build a Web3 application on the [Internet Computer](https://internetcomputer.org/).
+At Joined Africa, we are dedicated to providing a seamless online marketplace that connects sellers and buyers, locally and globally within Africa. Our platform empowers sellers to advertise their products, expand their reach, and effortlessly connect with potential buyers. Meanwhile, buyers can explore a wide range of categories, including properties, electronics, fashion, vehicles, and more.
 
-## Create a New Project
-
-Make sure that [Node.js](https://nodejs.org/en/) `>= 16.x` and [`dfx`](https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove) `>= 0.12.x` are installed on your system.
+Communication between buyers and sellers is essential, and we've made it convenient through our built-in messaging application. When a seller lists a product on our site, interested buyers can contact them directly using our chat application.
 
 Run the following commands in a new, empty project directory:
 
