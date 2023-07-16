@@ -40,7 +40,7 @@ export function isAdmin(principal) {
   return (
     (process.env.NETWORK === "local" &&
       import.meta.env.VITE_APP_LOCALHOSTADMINID === principal) ||
-    (process.env.NETWORK === "production" &&
+    (process.env.NETWORK === "ic" &&
       import.meta.env.VITE_APP_LIVENETWORKADMINID === principal)
   );
 }
