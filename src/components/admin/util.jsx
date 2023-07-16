@@ -4,9 +4,7 @@ import { getErrorMessage } from "../../util/ErrorMessages";
 
 export async function publishPost(post) {
   const actor = await createAuthenticatedActor(canisterId, createActor);
-  console.log(post);
   post.IsPublished = true;
-  console.log(post);
   const [publishedResult, removedResult] = await Promise.all([
     actor.publishPost(post),
     actor.removePostFromReview(post),
