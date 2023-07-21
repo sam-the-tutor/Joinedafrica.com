@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context";
 import { getErrorMessage } from "../../../util/ErrorMessages";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
+import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 import { internet_identity } from "../Login";
 import { updateSessionStorage } from "../util";
 import { IdentitySetup, Image, ImageContainer, ParentContainer } from "./style";
@@ -23,13 +24,25 @@ export default function CreateProfile() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState(null);
 
   const { setIsUserLoggedIn } = useContext(AppContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (principal.length == 0) {
-      alert("You have to set up your identity");
+      setSnackbar(
+        <SnackbarCmp
+          message="You have to set up your identity"
+          severity="error"
+          handleClose={(event, reason) => {
+            //the user has to click on the alert to close it.
+            if (reason != "clickaway") {
+              setSnackbar(null);
+            }
+          }}
+        />
+      );
       return;
     }
     setIsLoading(true);
@@ -63,6 +76,7 @@ export default function CreateProfile() {
             type="file"
             accept="image/jpeg, image/png"
             required
+            role="image"
             onChange={(e) => {
               setProfile({
                 ...userProfile,
@@ -76,7 +90,10 @@ export default function CreateProfile() {
           fullWidth
           label="Enter your first name"
           variant="outlined"
+          role="firstName"
+          data-testid="sdasdf"
           style={{ marginTop: "30px" }}
+          value={userProfile.firstName}
           required
           onChange={(e) =>
             setProfile({ ...userProfile, firstName: e.target.value })
@@ -86,6 +103,8 @@ export default function CreateProfile() {
           fullWidth
           label="Enter your last name"
           variant="outlined"
+          role="lastName"
+          value={userProfile.lastName}
           style={{ margin: "30px 0" }}
           required
           onChange={(e) =>
@@ -97,6 +116,8 @@ export default function CreateProfile() {
           fullWidth
           type="email"
           variant="outlined"
+          role="email"
+          value={userProfile.email}
           required
           onChange={(e) =>
             setProfile({ ...userProfile, email: e.target.value })
@@ -105,9 +126,11 @@ export default function CreateProfile() {
         <TextField
           label="Enter your location (Country)"
           fullWidth
+          role="location"
           placeholder="Nigeria"
           style={{ margin: "30px 0" }}
           variant="outlined"
+          value={userProfile.location}
           required
           onChange={(e) =>
             setProfile({ ...userProfile, location: e.target.value })
@@ -123,12 +146,18 @@ export default function CreateProfile() {
           <OpenInNewIcon />
         </IdentitySetup>
         <Box style={{ marginTop: "40px" }}>
-          <Button variant="outlined" endIcon={<SendIcon />} type="submit">
+          <Button
+            variant="outlined"
+            endIcon={<SendIcon />}
+            type="submit"
+            role="submitBtn"
+          >
             Create Profile
           </Button>
         </Box>
       </ParentContainer>
       {LoadingCmp(isLoading)}
+      {snackbar}
     </>
   );
 }
