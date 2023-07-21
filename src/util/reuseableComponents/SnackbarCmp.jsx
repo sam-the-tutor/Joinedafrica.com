@@ -22,21 +22,19 @@ export default function SnackbarCmp({
     }
   }
   return (
-    <div role="snackbar">
-      <Snackbar open={true} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          sx={{
-            width: "100%",
-            backgroundColor: getBackgroundColour(severity),
-            color: "white",
-            fontWeight: "bold",
-          }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-    </div>
+    <Snackbar open={true} onClose={handleClose}>
+      <Alert
+        onClose={handleClose}
+        severity={severity}
+        sx={{
+          width: "100%",
+          backgroundColor: getBackgroundColour(severity),
+          color: "white",
+          fontWeight: "bold",
+        }}
+      >
+        {message}
+      </Alert>
+    </Snackbar>
   );
 }
