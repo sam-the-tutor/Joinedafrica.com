@@ -17,6 +17,9 @@ export default function SnackbarCmp({
     if (severity === "success") {
       return "#2e7d32";
     }
+    if (severity === "error") {
+      return "rgb(211, 47, 47)";
+    }
   }
   return (
     <Snackbar open={true} onClose={handleClose}>

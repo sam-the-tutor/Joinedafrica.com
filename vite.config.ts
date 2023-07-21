@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
@@ -52,6 +53,11 @@ export default defineConfig({
         global: "globalThis",
       },
     },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "src/setupTests.ts",
   },
   server: {
     // Local IC replica proxy
