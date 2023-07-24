@@ -5,7 +5,6 @@ import {
   createActor as profileCreateActor,
 } from "../../../declarations/profile";
 import { getFromSessionStorage, getUniqueId } from "../../../util/functions";
-import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
 
 async function updateProfilePicture(profile, profileImagePath) {
   const assetId = getFromSessionStorage("profilePicture", true);
@@ -62,18 +61,4 @@ async function getUserProfilePicture() {
   const actor = await createAuthenticatedActor(canisterId, createActor);
   const imageFile = await actor.getAsset(assetId);
   return imageFile;
-}
-
-export function updateSnackBarCmp(setShowSnackbarCmp) {
-  setShowSnackbarCmp(
-    <SnackbarCmp
-      message="Your profile has been updated!"
-      handleClose={(event, reason) => {
-        //the user has to click on the alert to close it.
-        if (reason != "clickaway") {
-          setShowSnackbarCmp(null);
-        }
-      }}
-    />
-  );
 }
