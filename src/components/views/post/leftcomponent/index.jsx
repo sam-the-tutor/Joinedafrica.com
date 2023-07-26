@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Paper } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 import { PropTypes } from "prop-types";
 import React from "react";
 import ReactImageGallery from "react-image-gallery";
@@ -7,7 +7,7 @@ import CreateSpecification from "./createSpecification";
 export default function LeftComponent({
   post,
   postImages,
-  ProductSpecification,
+  productSpecification,
   isUserAdmin,
 }) {
   return (
@@ -42,7 +42,8 @@ export default function LeftComponent({
                 attribute == "Subcategory"
             )
           )}
-        {CreateSpecification(Object.entries(ProductSpecification))}
+
+        {CreateSpecification(Object.entries(productSpecification))}
         <Box>
           <Typography
             variant="h6"

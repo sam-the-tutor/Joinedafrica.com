@@ -1,17 +1,18 @@
-import { Box, Container, Grid, Toolbar, Button } from "@mui/material";
+import { Box, Button, Container, Grid, Toolbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useParams } from "react-router";
 
 import { post as postCanister } from "../../../declarations/post";
 import { getErrorMessage } from "../../../util/ErrorMessages";
-import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import LeftComponent from "./leftcomponent";
-import RightComponent from "./rightcomponent";
-import { getPostImages } from "./leftcomponent/util";
-import { extractProductSpecification } from "./util";
 import { getFromSessionStorage, isAdmin } from "../../../util/functions";
+import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
 import { publishPost, rejectPost } from "../../admin/util";
+import LeftComponent from "./leftcomponent";
+import { getPostImages } from "./leftcomponent/util";
+import RightComponent from "./rightcomponent";
+import SimilarProducts from "./similarproducts";
+import { extractProductSpecification } from "./util";
 
 export default function ViewPost() {
   const [post, setPost] = useState({});
@@ -20,8 +21,9 @@ export default function ViewPost() {
   const [postImages, setPostImages] = useState([]);
   const [productSpecification, setProductSpecification] = useState({});
 
+  const [shouldReloadViewPostCmp, setShouldReloadViewPostCmp] = useState(false);
   const [adminAction, setAdminAction] = useState(false);
-  var isUserAdmin = false;
+  let isUserAdmin = false;
 
   async function publishPostToMarketplace() {
     setAdminAction(true);
@@ -55,7 +57,7 @@ export default function ViewPost() {
       setLoading(false);
     }
     getPost();
-  }, []);
+  }, [shouldReloadViewPostCmp]);
 
   return (
     <Box>
@@ -75,11 +77,11 @@ export default function ViewPost() {
                 post={post}
                 isUserAdmin={isUserAdmin}
                 postImages={postImages}
-                ProductSpecification={productSpecification}
+                productSpecification={productSpecification}
               />
               {!isUserAdmin && <RightComponent post={post} />}
             </Grid>
-            {isUserAdmin && (
+            {isUserAdmin ? (
               <>
                 <Button
                   style={{ color: "#37a864" }}
@@ -96,6 +98,16 @@ export default function ViewPost() {
                 </Button>
                 {LoadingCmp(adminAction)}
               </>
+            ) : (
+              post && (
+                <SimilarProducts
+                  posts={post}
+                  category={post.Category}
+                  subcategory={post.Subcategory}
+                  currentPostId={post.PostId}
+                  setShouldReloadViewPostCmp={setShouldReloadViewPostCmp}
+                />
+              )
             )}
           </>
         )}
