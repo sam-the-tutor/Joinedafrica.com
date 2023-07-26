@@ -8,7 +8,7 @@ export default function LeftComponent({
   post,
   postImages,
   productSpecification,
-  isUserAdmin,
+  isUserAdmin = false,
 }) {
   return (
     <Grid item md={9} xs={12}>
