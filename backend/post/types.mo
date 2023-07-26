@@ -196,6 +196,7 @@ module {
     #UserAlreadyExists;
     #UserNotFound;
     #UnAuthorizedUser;
+    #PostIsAlreadyInReview;
   };
 
   public type Top10Posts = {

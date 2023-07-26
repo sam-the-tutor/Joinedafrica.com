@@ -37,9 +37,9 @@ export default function WelcomePage() {
                   margin: { xs: "20px 0", md: "initial" },
                 }}
               >
-                Joined Africa is marketplace where sellers advertise products in
-                crypto currency, connecting buyers directly with sellers within
-                Africa.
+                Joined Africa is a marketplace where sellers advertise products
+                in crypto currency, connecting buyers directly with sellers
+                within Africa.
               </Typography>
             </Box>
           </Box>
@@ -145,6 +145,9 @@ export default function WelcomePage() {
         <Box>
           <Button sx={{ color: "black" }} onClick={() => navigate("./aboutus")}>
             About us
+          </Button>
+          <Button sx={{ color: "black" }} onClick={() => navigate("./faq")}>
+            FAQs
           </Button>
           <Button
             sx={{ color: "black" }}

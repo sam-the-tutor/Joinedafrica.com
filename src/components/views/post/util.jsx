@@ -1,17 +1,3 @@
-import { Principal } from "@dfinity/principal";
-import { push, ref, set } from "firebase/database";
-
-import { createAuthenticatedActor } from "../../../canisters/createActor";
-import { canisterId, createActor } from "../../../declarations/assets";
-import {
-  canisterId as conversationCanisterId,
-  createActor as conversationCreateActor,
-} from "../../../declarations/conversation";
-import {
-  createObjectURLFromArrayOfBytes,
-  getFromSessionStorage,
-} from "../../../util/functions";
-
 /**
  * Exact produduct specification extacts the product specification details provided by the user
  * @param {*} response Response is the post we get from the backend
@@ -55,41 +41,4 @@ export function extractProductSpecification(response) {
     }
   }
   return null;
-}
-
-export async function getPostImages(response) {
-  const actor = await createAuthenticatedActor(canisterId, createActor);
-  return await Promise.all(
-    response.Images.map(async (image) => {
-      const imageFile = await actor.getAsset(image);
-      const url = createObjectURLFromArrayOfBytes(imageFile.ok);
-      return {
-        original: url,
-        thumbnail: url,
-      };
-    })
-  );
-}
-
-export async function sendMessage(message, firebaseDB, post) {
-  const chatMessage = createChatMessage(message, post);
-  const actor = await createAuthenticatedActor(
-    conversationCanisterId,
-    conversationCreateActor
-  );
-  const result = await actor.sendMessage(chatMessage);
-  //send message notification to the receiver
-  const messageRef = ref(firebaseDB, post.CreatorOfPostId.toText());
-  set(push(messageRef), chatMessage);
-  return result;
-}
-
-function createChatMessage(userMessage, post) {
-  return {
-    messageContent: userMessage,
-    sender: Principal.fromText(getFromSessionStorage("principalId", true)),
-    receiver: post.CreatorOfPostId,
-    time: new Date().toLocaleTimeString(),
-    date: new Date().toLocaleDateString(),
-  };
 }

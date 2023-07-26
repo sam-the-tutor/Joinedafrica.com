@@ -5,16 +5,18 @@ import { join } from "path";
 import { defineConfig } from "vite";
 
 const localNetwork = "local";
-const APPLICATION_NAME = "Joined Africa";
-const AUTH_PATH =
-  "/authenticate/?applicationName=" + APPLICATION_NAME + "#authorize";
-const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
 const network = process.env["DFX_NETWORK"] || localNetwork;
-const liveInternetIdentity = "https://identity.ic0.app/#authorize"
+const liveInternetIdentity = "https://identity.ic0.app/#authorize";
 const internetIdentityUrl =
+<<<<<<< HEAD
   network === "local"
     ? `http://localhost:4943?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai`
     : NFID_AUTH_URL;
+=======
+  network === localNetwork
+    ? `http://localhost:4943?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai`
+    : liveInternetIdentity;
+>>>>>>> d86bcf533b3550304617bc1ff13b519ec1ea23a2
 
 let canisterIdPath: string;
 if (network === localNetwork) {
@@ -38,6 +40,7 @@ export default defineConfig({
   define: {
     "process.env": {
       DFX_NETWORK: process.env["DFX_NETWORK"],
+      NETWORK: network,
       INTERNET_IDENTITY_URL: internetIdentityUrl,
       // Expose canister IDs provided by `dfx deploy`
       ...Object.fromEntries(
@@ -58,8 +61,9 @@ export default defineConfig({
     },
   },
   test: {
+    globals: true,
     environment: "jsdom",
-    setupFiles: "./src/setupTests.jsx",
+    setupFiles: "src/setupTests.ts",
   },
   server: {
     // Local IC replica proxy

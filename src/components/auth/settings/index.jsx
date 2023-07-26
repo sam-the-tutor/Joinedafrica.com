@@ -1,97 +1,34 @@
-import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import SendIcon from "@mui/icons-material/Send";
 
 import { AppContext } from "../../../context";
-import { getErrorMessage } from "../../../util/ErrorMessages";
 import { createObjectURLFromArrayOfBytes } from "../../../util/functions";
 import { LoadingCmp } from "../../../util/reuseableComponents/LoadingCmp";
-import { updateSessionStorage } from "../util";
+import SnackbarCmp from "../../../util/reuseableComponents/SnackbarCmp";
+
+import useHandleSubmit from "./hooks/useHandleSubmit";
+import useStateHandler from "./hooks/useStateHandler";
 import { Image, ImageContainer } from "./style";
-import {
-  convertImageFileToNat8,
-  getUserProfileFromSessionStorage,
-  updateSnackBarCmp,
-  updateUserProfile,
-} from "./util";
 
 export default function Settings() {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [principal, setPrincipal] = useState("");
-  const [location, setLocation] = useState("");
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [savingUserProfile, setSavingUserProfile] = useState(false);
-  const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
-
+  const { handleSubmit, loadingProgress, setLoadingProgress } =
+    useHandleSubmit();
+  const { profile, setProfile, componentMount } = useStateHandler();
   const { reloadProfileIcon, setReloadProfileIcon } = useContext(AppContext);
 
-  async function handleSubmit(e) {
+  async function submitProfile(e) {
     e.preventDefault();
-    if (
-      location.length == 0 ||
-      firstName.length == 0 ||
-      lastName.length == 0 ||
-      email.length == 0
-    ) {
-      alert("Fill in all the required fields");
-      return;
-    }
-    setSavingUserProfile(true);
-    //the profilePicture could be a File type or Uint8Array type. We need to convert it to Unit8Array.
-    const profile = {
-      profilePicture:
-        profilePicture instanceof Uint8Array
-          ? profilePicture
-          : await convertImageFileToNat8(profilePicture),
-      principal,
-      firstName,
-      lastName,
-      email,
-      location,
-    };
-    const newProfile = await updateUserProfile(profile);
-
-    if (newProfile?.err) {
-      alert(getErrorMessage(newProfile.err));
-      setSavingUserProfile(false);
-    } else {
-      updateSessionStorage({ ...newProfile.ok, principal });
-      setSavingUserProfile(false);
-      setReloadProfileIcon(!reloadProfileIcon);
-      updateSnackBarCmp(setShowSnackbarCmp);
-    }
+    await handleSubmit(profile);
+    setReloadProfileIcon(!reloadProfileIcon);
   }
-
-  useEffect(() => {
-    async function init() {
-      setIsLoading(true);
-      const profile = await getUserProfileFromSessionStorage();
-      if (profile?.err) {
-        alert(getErrorMessage(profile.err));
-      } else {
-        setPrincipal(profile.principal);
-        setFirstName(profile.firstName);
-        setLastName(profile.lastName);
-        setEmail(profile.email);
-        setProfilePicture(profile.profilePicture);
-        setLocation(profile.location);
-        setIsLoading(false);
-      }
-    }
-    init();
-  }, []);
-
   return (
     <>
       <Box>
-        {isLoading ? (
+        {componentMount ? (
           <Typography>Loading...</Typography>
         ) : (
-          <Box component="form" onSubmit={handleSubmit}>
+          <Box component="form" onSubmit={(e) => submitProfile(e)}>
             <Typography
               variant="h5"
               gutterBottom
@@ -102,14 +39,22 @@ export default function Settings() {
             <Box>
               <ImageContainer>
                 <Image
-                  src={createObjectURLFromArrayOfBytes(profilePicture)}
+                  src={createObjectURLFromArrayOfBytes(profile.profilePicture)}
                   alt="User selected profile"
+                  role="pro"
                 />
               </ImageContainer>
               <input
                 type="file"
+                role="image"
+                name="profilePicture"
                 accept="image/jpeg, image/png"
-                onChange={(e) => setProfilePicture(e.target.files[0])}
+                onChange={(e) => {
+                  setProfile({
+                    ...profile,
+                    [e.target.name]: e.target.files[0],
+                  });
+                }}
               />
               <Typography>Choose profile image</Typography>
             </Box>
@@ -117,44 +62,76 @@ export default function Settings() {
               fullWidth
               label="Enter your first name"
               variant="outlined"
+              role="firstName"
+              name="firstName"
               style={{ marginTop: "30px" }}
-              defaultValue={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              defaultValue={profile.firstName}
+              onChange={(e) => {
+                setProfile({ ...profile, [e.target.name]: e.target.value });
+              }}
             />
             <TextField
               fullWidth
               label="Enter your last name"
               variant="outlined"
+              role="lastName"
               style={{ margin: "30px 0" }}
-              defaultValue={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              name="lastName"
+              defaultValue={profile.lastName}
+              onChange={(e) => {
+                setProfile({ ...profile, [e.target.name]: e.target.value });
+              }}
             />
             <TextField
               label="Enter your email address"
               fullWidth
               type="email"
+              role="email"
               style={{ marginBottom: "30px" }}
               variant="outlined"
-              defaultValue={email}
-              onChange={(e) => setEmail(e.target.value)}
+              defaultValue={profile.email}
+              name="email"
+              onChange={(e) => {
+                setProfile({ ...profile, [e.target.name]: e.target.value });
+              }}
             />
             <TextField
               label="Enter your location (Country)"
               fullWidth
               type="text"
+              role="location"
               variant="outlined"
-              defaultValue={location}
-              onChange={(e) => setLocation(e.target.value)}
+              defaultValue={profile.location}
+              name="location"
+              onChange={(e) => {
+                setProfile({ ...profile, [e.target.name]: e.target.value });
+              }}
             />
             <Box style={{ marginTop: "40px" }}>
-              <Button variant="outlined" endIcon={<SendIcon />} type="submit">
+              <Button
+                role="submitBtn"
+                type="submit"
+                variant="outlined"
+                endIcon={<SendIcon />}
+              >
                 Save Changes
               </Button>
             </Box>
           </Box>
         )}
-        {LoadingCmp(savingUserProfile)}
-        {showSnackbarCmp}
+
+        {LoadingCmp(loadingProgress == "loading")}
+        {loadingProgress == "completedLoading" && (
+          <SnackbarCmp
+            message="Your profile has been updated!"
+            handleClose={(event, reason) => {
+              //the user has to click on the alert to close it.
+              if (reason != "clickaway") {
+                setLoadingProgress("notLoading");
+              }
+            }}
+          />
+        )}
       </Box>
     </>
   );

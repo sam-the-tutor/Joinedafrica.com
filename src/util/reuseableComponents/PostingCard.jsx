@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-
+import { PropTypes } from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { createAuthenticatedActor } from "../../canisters/createActor";
 import { canisterId, createActor } from "../../declarations/assets";
@@ -31,6 +31,7 @@ export default function PostingCard({
   canOnlyMeSeeThisPost,
   setShowDeletePostPopup,
   setSelectedPostId,
+  setShouldReloadViewPostCmp = () => {},
 }) {
   //maximum length of characters for description and title
   const MAX_LENGTH_OF_DESCRIPTION = 150;
@@ -38,7 +39,7 @@ export default function PostingCard({
   //sets the position of the popup for each post card
   const [popupPosition, setPopupPosition] = useState(null);
   //post can be updated by pushlishing the post and any other edit that can be made on a post
-  const [updatedPost, setUpdatedPost] = useState(post);
+  // const [post, setpost] = useState(post);
   //after marking the post as published, we want to show a success message.
   const [showSnackbarCmp, setShowSnackbarCmp] = useState(null);
 
@@ -46,11 +47,11 @@ export default function PostingCard({
   //front page image of a posting card
   const [postCardDisplayImage, setPostCardDisplayImage] = useState(null);
   const navigate = useNavigate();
-
-  function updateSnackBarCmp(message) {
+  function updateSnackBarCmp(message, severity) {
     setShowSnackbarCmp(
       <SnackbarCmp
         message={message}
+        severity={severity}
         handleClose={(event, reason) => {
           //the user has to click on the alert to close it.
           if (reason != "clickaway") {
@@ -62,51 +63,48 @@ export default function PostingCard({
   }
   async function markPostAsPublished() {
     setLoading(true);
-    updatedPost.IsPublished = true;
-    await markPostAsPublishedInPostCanister(updatedPost);
+    const result = await markPostAsPublishedInPostCanister(post);
+    if (result?.err) {
+      alert(getErrorMessage(result.err));
+    } else {
+      const message = "We are currently reviewing this post";
+      updateSnackBarCmp(message, "info");
+    }
     setLoading(false);
-    const message = "Your post has been to the marketplace";
-    updateSnackBarCmp(message);
   }
-  async function markPostAsPublishedInPostCanister(updatedPost) {
+  async function markPostAsPublishedInPostCanister(post) {
     const actor = await createAuthenticatedActor(
       postCanisterId,
       postCreateActor
     );
-    const post = await actor.markPostAsPublished(updatedPost);
+    const result = await actor.markPostAsPublished(post);
+    return result;
+  }
+  async function updatePostDetailsInPostCanister(post) {
+    const actor = await createAuthenticatedActor(
+      postCanisterId,
+      postCreateActor
+    );
+    await actor.removePostFromMarketplace(post);
     if (post?.err) {
       alert(getErrorMessage(post.err));
       setLoading(false);
       return;
     }
-    setUpdatedPost(updatedPost);
-  }
-  async function updatePostDetailsInPostCanister(updatedPost) {
-    const actor = await createAuthenticatedActor(
-      postCanisterId,
-      postCreateActor
-    );
-    await actor.removePostFromMarketplace(updatedPost);
-    if (post?.err) {
-      alert(getErrorMessage(post.err));
-      setLoading(false);
-      return;
-    }
-    setUpdatedPost(updatedPost);
   }
   async function removePostFromMarketplace() {
     setLoading(true);
-    updatedPost.IsPublished = false;
-    await updatePostDetailsInPostCanister(updatedPost);
+    post.IsPublished = false;
+    await updatePostDetailsInPostCanister(post);
     setLoading(false);
     const message = "Your post has been removed from the marketplace";
     updateSnackBarCmp(message);
   }
 
-  //update the post if/when the user interacts with the post like publishing to market place or removing from the market place
-  useEffect(() => {
-    setUpdatedPost(post);
-  }, [post]);
+  // //update the post if/when the user interacts with the post like publishing to market place or removing from the market place
+  // useEffect(() => {
+  //   setpost(post);
+  // }, [post]);
 
   useEffect(() => {
     async function loadPost() {
@@ -123,13 +121,18 @@ export default function PostingCard({
 
   return (
     <Box>
-      {updatedPost && (
+      {post && (
         <>
           <Card
-            onClick={() =>
-              !canOnlyMeSeeThisPost &&
-              navigate("../view/post/" + updatedPost.PostId)
-            }
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              if (!canOnlyMeSeeThisPost) {
+                navigate("../view/post/" + post.PostId);
+                setShouldReloadViewPostCmp(
+                  (setShouldReloadViewPostCmp) => !setShouldReloadViewPostCmp
+                );
+              }
+            }}
           >
             <CardHeader
               action={
@@ -142,13 +145,11 @@ export default function PostingCard({
                 )
               }
               title={
-                updatedPost.Title.length > MAX_lENGTH_OF_TITLE
-                  ? updatedPost.Title.substring(0, MAX_lENGTH_OF_TITLE) + "..."
-                  : updatedPost.Title
+                post.Title.length > MAX_lENGTH_OF_TITLE
+                  ? post.Title.substring(0, MAX_lENGTH_OF_TITLE) + "..."
+                  : post.Title
               }
-              subheader={
-                canOnlyMeSeeThisPost ? "Posted at " + updatedPost.Date : ""
-              }
+              subheader={canOnlyMeSeeThisPost ? "Posted at " + post.Date : ""}
             />
 
             <CardMedia
@@ -172,7 +173,7 @@ export default function PostingCard({
                   alignItems: "center",
                 }}
               >
-                {updatedPost.Amount} BTC
+                {post.Amount} BTC
               </Typography>
               {loading && <CircularProgress size={35} />}
             </Box>
@@ -181,8 +182,8 @@ export default function PostingCard({
           <PopoverCmp
             setPopupPosition={setPopupPosition}
             popupPosition={popupPosition}
-            isPublished={updatedPost.IsPublished}
-            postId={updatedPost.PostId}
+            isPublished={post.IsPublished}
+            postId={post.PostId}
             markPostAsPublished={markPostAsPublished}
             canOnlyMeSeeThisPost={canOnlyMeSeeThisPost}
             setShowDeletePostPopup={setShowDeletePostPopup}
@@ -197,3 +198,11 @@ export default function PostingCard({
     </Box>
   );
 }
+
+PostingCard.propTypes = {
+  post: PropTypes.object,
+  canOnlyMeSeeThisPost: PropTypes.bool,
+  setShowDeletePostPopup: PropTypes.func,
+  setSelectedPostId: PropTypes.func,
+  setShouldReloadViewPostCmp: PropTypes.func,
+};

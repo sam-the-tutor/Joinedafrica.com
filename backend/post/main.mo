@@ -40,6 +40,9 @@ shared ({ caller = initializer }) actor class Main() {
   //stores all personal postings created by the unique principal
   stable var myPostings : Trie.Trie<UserId, List.List<PostId>> = Trie.empty();
 
+  //posts currently on review.
+  stable var postsOnReview : List.List<PostId> = List.nil<PostId>();
+
   //----------------------------------------------------------------------------------------
   // update calls
   //---------------------------------------------------------------------------------------
@@ -85,18 +88,30 @@ shared ({ caller = initializer }) actor class Main() {
     };
     #ok();
   };
+
+  private func postIsAlreadyInReview(postId : PostId) : Bool {
+    return List.some(
+      postsOnReview,
+      func(id : PostId) : Bool {
+        return postId == id;
+      },
+    );
+  };
+
   public shared ({ caller }) func markPostAsPublished(updatedPost : Post) : async Result<(), Error> {
     let authorized = await ProfileCanister.isUserAuthorized(caller);
     if (not authorized) return #err(#UnAuthorizedUser);
-    postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(updatedPost.PostId), Text.equal, Option.make(updatedPost)).0;
-    return switch (_publishPost(updatedPost)) {
-      case (#err(error)) #err(error);
-      case (#ok()) #ok();
-    };
+    if (postIsAlreadyInReview(updatedPost.PostId)) return #err(#PostIsAlreadyInReview);
+    postsOnReview := List.push(updatedPost.PostId, postsOnReview);
+    #ok();
   };
-  //based on the category and sub category, add this post id in the list
-  private func _publishPost(post : Post) : Result.Result<(), Error> {
+
+  /**
+    Only posts that have been reviewed by Joined Africa team can be published to the marketplace.
+  */
+  public shared func publishPost(post : Post) : async Result.Result<(), Error> {
     //getting the correct category the post is associated to
+    Debug.print(debug_show (post));
     switch (Trie.get(publishedPosts, categoryKey(post.Category), Text.equal)) {
       case null return #err(#CategoryNotFound);
       case (?subTrie) {
@@ -107,13 +122,25 @@ shared ({ caller = initializer }) actor class Main() {
             var subcategoryTrie = subTrie;
             subcategoryTrie := Trie.put(subcategoryTrie, categoryKey(post.Subcategory), Text.equal, List.push(post.PostId, list)).0;
             publishedPosts := Trie.put(publishedPosts, categoryKey(post.Category), Text.equal, subcategoryTrie).0;
-
+            postsLedger := Trie.replace<PostId, Post>(postsLedger, textHash(post.PostId), Text.equal, Option.make(post)).0;
           };
         };
 
       };
     };
     #ok();
+  };
+
+  /**
+    Only posts that have been reviewed by Joined Africa team can be published to the marketplace.
+  */
+  public shared func removePostFromReview(post : Post) : async () {
+    postsOnReview := List.filter(
+      postsOnReview,
+      func(postId : PostId) : Bool {
+        return postId != post.PostId;
+      },
+    );
   };
   public shared ({ caller }) func removePostFromMarketplace(post : Post) : async Result<(), Error> {
     let authorized = await ProfileCanister.isUserAuthorized(caller);
@@ -170,6 +197,19 @@ shared ({ caller = initializer }) actor class Main() {
       };
     };
     #ok(result);
+  };
+
+  public shared query ({ caller }) func getPostsOnReview() : async Result<[Post], Error> {
+    var result : List.List<Post> = List.nil();
+    for (postId in List.toArray(postsOnReview).vals()) {
+      switch (getPostById(postId)) {
+        case (#err(errorValue)) return #err(errorValue);
+        case (#ok(post)) {
+          result := List.push(post, result);
+        };
+      };
+    };
+    return #ok(List.toArray(result));
   };
 
   /**
