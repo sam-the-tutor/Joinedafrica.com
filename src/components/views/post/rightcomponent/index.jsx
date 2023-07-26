@@ -18,7 +18,7 @@ import { AppContext } from "../../../../context";
 import { getFromSessionStorage } from "../../../../util/functions";
 import { sendMessage } from "./util";
 import { Principal } from "@dfinity/principal";
-Principal;
+
 export default function RightComponent({ post }) {
   const [userMessage, setUserMessage] = useState("");
   const { firebaseDB } = useContext(AppContext);

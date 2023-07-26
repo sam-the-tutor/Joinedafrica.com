@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-
+import { PropTypes } from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { createAuthenticatedActor } from "../../canisters/createActor";
 import { canisterId, createActor } from "../../declarations/assets";
@@ -31,6 +31,7 @@ export default function PostingCard({
   canOnlyMeSeeThisPost,
   setShowDeletePostPopup,
   setSelectedPostId,
+  setShouldReloadViewPostCmp = () => {},
 }) {
   //maximum length of characters for description and title
   const MAX_LENGTH_OF_DESCRIPTION = 150;
@@ -123,9 +124,15 @@ export default function PostingCard({
       {post && (
         <>
           <Card
-            onClick={() =>
-              !canOnlyMeSeeThisPost && navigate("../view/post/" + post.PostId)
-            }
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              if (!canOnlyMeSeeThisPost) {
+                navigate("../view/post/" + post.PostId);
+                setShouldReloadViewPostCmp(
+                  (setShouldReloadViewPostCmp) => !setShouldReloadViewPostCmp
+                );
+              }
+            }}
           >
             <CardHeader
               action={
@@ -191,3 +198,11 @@ export default function PostingCard({
     </Box>
   );
 }
+
+PostingCard.propTypes = {
+  post: PropTypes.object,
+  canOnlyMeSeeThisPost: PropTypes.bool,
+  setShowDeletePostPopup: PropTypes.func,
+  setSelectedPostId: PropTypes.func,
+  setShouldReloadViewPostCmp: PropTypes.func,
+};
