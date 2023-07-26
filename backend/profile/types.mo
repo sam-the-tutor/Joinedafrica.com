@@ -1,4 +1,11 @@
 module {
+     public type Result<T, E> = {
+        #Ok  : T;
+        #Err : E;
+    };
+
+      public type Friend = Text;
+
     public type Profile = {
         firstName : Text;
         lastName : Text;
@@ -16,4 +23,15 @@ module {
     };
 
     public type UserId = Principal;
+    public let CANISTER_ID : Text = "by6od-j4aaa-aaaaa-qaadq-cai";
+
+    public type Interface = actor {
+        createUserProfile: (Profile) -> async Result<Profile,Error>;
+        getUserProfile: () -> async Result<Profile,Error>;
+        getUserProfilePicture: (UserId) -> async Result<Profile,Error>;
+        isUserAuthorized: (UserId) -> async Bool;
+        resetAll: () -> ();
+        updateUserProfile: (Profile) -> async Result<Profile,Error>;
+
+    };
 };

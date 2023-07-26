@@ -13,7 +13,9 @@
     "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\" \"backend/**/*.mo\"",
     "sources": "mops sources",
     "test": "vitest",
-    "postinstall": "mops install"
+    "postinstall": "mops install",
+    "backendtest": "mops test",
+    "backendtest:profile": "mo-test -C backend/profile --testmode interpreter --verbose"
   },
   "dependencies": {
     "buffer": "^6.0.3",

@@ -1,22 +1,26 @@
-//this line gies an error. You have to deploy the canisters to remove the error
-import ProfileCanister "canister:profile";
-
+import Profile "../profile/main";
+import Interface "../profile/types";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
-
 import types "types";
 import utils "utils";
 
-shared ({ caller = initializer }) actor class () {
+
+
+shared ({ caller = initializer }) actor class Conversation() {
 
   type Friend = types.Friend;
   type Message = types.Message;
   type Error = types.Error;
   type UserId = types.UserId;
+
+
+  var ProfileCanister : Profile.ProfileCanister = actor(Interface.CANISTER_ID);
+  
 
   //conversations between two people
   stable var conversations : Trie.Trie<Friend, List.List<Message>> = Trie.empty();
@@ -28,9 +32,17 @@ shared ({ caller = initializer }) actor class () {
   // update calls
   //---------------------------------------------------------------------------------------
 
+//initialize the actor class with the real actor
+public func intialize() : async (){
+  ProfileCanister := await Profile.ProfileCanister();
+};
+
+
+
+
   //user has to be authorized to make this function
   public shared ({ caller }) func sendMessage(message : Message) : async Result.Result<(), Error> {
-    let authorized = await ProfileCanister.isUserAuthorized(caller);
+   let authorized =  await ProfileCanister.isUserAuthorized(caller);
     if (not authorized) return #err(#UnAuthorizedUser);
     if (Principal.equal(message.sender, message.receiver)) {
       return #err(#UnAuthorizedUser);
@@ -75,9 +87,9 @@ shared ({ caller = initializer }) actor class () {
   // query calls
   //---------------------------------------------------------------------------------------
 
-  public shared query ({ caller }) func getAllMyFriends() : async Result.Result<[UserId], Error> {
-    // let authorized = await ProfileCanister.isUserAuthorized(caller);
-    // if (not authorized) return #err(#UnAuthorizedUser);
+  public shared ({ caller }) func getAllMyFriends() : async Result.Result<[UserId], Error> {
+     let authorized =  await ProfileCanister.isUserAuthorized(caller);
+     if (not authorized) return #err(#UnAuthorizedUser);
     let result = switch (Trie.get(friendList, hashKey(caller), Principal.equal)) {
       case null [];
       case (?list) List.toArray(list);
@@ -85,9 +97,9 @@ shared ({ caller = initializer }) actor class () {
     #ok(result);
   };
 
-  public shared query ({ caller }) func getMyMessages(friend : Friend) : async Result.Result<[Message], Error> {
-    // let authorized = await ProfileCanister.isUserAuthorized(caller);
-    // if (not authorized) return #err(#UnAuthorizedUser);
+  public shared ({ caller }) func getMyMessages(friend : Friend) : async Result.Result<[Message], Error> {
+      let authorized =  await ProfileCanister.isUserAuthorized(caller);
+     if (not authorized) return #err(#UnAuthorizedUser);
     var sortedPrincipals = utils.sortPrincipals(caller, Principal.fromText(friend));
     let result = switch (Trie.get(conversations, key(sortedPrincipals), Text.equal)) {
       case null [];

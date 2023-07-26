@@ -1,4 +1,6 @@
-# Motoko dependencies (https://mops.one/)
-
 [dependencies]
-base = "0.7.4"
+base = "0.8.8"
+mo-spec = "https://github.com/MoSpec/mo-spec#v0.1.0"
+
+[dev-dependencies]
+test = "1.0.1"

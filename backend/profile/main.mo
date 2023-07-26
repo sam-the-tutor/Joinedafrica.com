@@ -7,12 +7,13 @@ import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Error "mo:base/Error";
 
-actor Profile {
+
+actor class ProfileCanister(){
     type UserId = Type.UserId;
     type Profile = Type.Profile;
     type Result<T, E> = Result.Result<T, E>;
     type Error = Type.Error;
-
+       
     stable var userProfiles : Trie.Trie<UserId, Profile> = Trie.empty();
 
     //----------------------------------------------------------------------------------------
@@ -81,4 +82,8 @@ actor Profile {
         { hash = Principal.hash(t); key = t };
     };
 
+
+  public shared({caller}) func whoami(): async Text{
+    return Principal.toText(caller)
+  }
 };

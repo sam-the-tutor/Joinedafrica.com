@@ -1,5 +1,5 @@
 //this line gies an error. You have to deploy the canisters to remove the error
-import ProfileCanister "canister:profile";
+import Profile "../profile/types";
 
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
@@ -17,7 +17,9 @@ import DatabaseStructure "databasestructure";
 import Type "types";
 import Util "utils";
 
-shared ({ caller = initializer }) actor class () {
+shared ({ caller = initializer }) actor class Main() {
+
+  let ProfileCanister : Profile.Interface= actor(Profile.CANISTER_ID);
 
   type Category = Text;
   type Post = Type.Post;
